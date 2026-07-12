@@ -8,87 +8,97 @@
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         :root {
-            --primary-color: #0ea5e9; /* آبی فوتونیکی */
-            --bg-dark: #0f172a;
-            --box-bg: #1e293b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
+            /* استخراج رنگ‌ها دقیقاً از لوگوی شرکت */
+            --primary-navy: #1b263b; /* سرمه‌ای تیره متن لوگو */
+            --laser-purple: #6366f1; /* بنفش پرتوهای نوری */
+            --bg-page: #f4f7f9; /* پس‌زمینه بسیار ملایم برای جلوه دادن به فرم‌ها */
+            --bg-box: #ffffff; /* پس‌زمینه سفید برای ترکیب شدن یکپارچه با عکس لوگو */
+            --text-main: #334155;
+            --text-light: #64748b;
+            --border-line: #e2e8f0;
         }
         body {
             font-family: 'Vazirmatn', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
+            background-color: var(--bg-page);
+            color: var(--text-main);
             margin: 0;
             padding: 0;
             line-height: 1.8;
         }
+        /* نوار اطلاع‌رسانی رسمی */
+        .notice-bar {
+            background: linear-gradient(90deg, var(--primary-navy), #312e81, var(--primary-navy));
+            color: #ffffff;
+            text-align: center;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
         .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 50px 20px;
+            padding: 40px 20px;
         }
         .header {
             text-align: center;
             margin-bottom: 40px;
         }
-        .header h1 {
-            color: var(--primary-color);
-            font-size: 2.8rem;
-            margin-bottom: 10px;
+        .logo {
+            max-width: 280px;
+            height: auto;
+            margin: 0 auto 5px;
+            display: block;
         }
         .header p {
             font-size: 1.2rem;
-            color: var(--text-muted);
-        }
-        .mission-box {
-            background-color: var(--box-bg);
-            border-right: 4px solid var(--primary-color);
-            padding: 30px;
-            border-radius: 12px;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-        }
-        .mission-box h2 {
-            margin-top: 0;
             color: var(--text-light);
+            margin-top: 5px;
+            font-weight: bold;
         }
-        .form-section {
-            background-color: var(--box-bg);
-            padding: 40px;
+        .card {
+            background-color: var(--bg-box);
+            padding: 35px;
             border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-line);
+            border-top: 4px solid var(--primary-navy);
         }
-        .form-section h2 {
-            text-align: center;
-            color: var(--primary-color);
-            margin-bottom: 15px;
+        .card h2 {
+            margin-top: 0;
+            color: var(--primary-navy);
+            border-bottom: 2px solid var(--bg-page);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         label {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #cbd5e1;
+            color: var(--primary-navy);
         }
         input, select {
             width: 100%;
             padding: 12px;
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            color: #f8fafc;
+            background-color: #f8fafc;
+            border: 1px solid var(--border-line);
+            color: var(--text-main);
             border-radius: 8px;
             font-family: 'Vazirmatn', sans-serif;
             box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
         }
         input:focus, select:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border-color: var(--laser-purple);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
         .btn-submit {
-            background-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-navy), var(--laser-purple));
             color: white;
             border: none;
             padding: 15px;
@@ -98,89 +108,98 @@
             width: 100%;
             font-family: 'Vazirmatn', sans-serif;
             font-weight: bold;
-            transition: background 0.3s ease;
+            transition: opacity 0.3s ease, transform 0.1s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(27, 38, 59, 0.3);
         }
         .btn-submit:hover {
-            background-color: #0284c7;
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
         .note {
             font-size: 0.85rem;
-            color: #94a3b8;
+            color: var(--text-light);
             margin-top: 8px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header class="header">
-        <h1>آذرخش فوتونیک</h1>
-        <p>توسعه فناوری‌های نوین اپتیک و فوتونیک</p>
-    </header>
+    <!-- نوار اطلاع‌رسانی رسمی -->
+    <div class="notice-bar">
+        <strong>اطلاعیه:</strong> پایگاه رسمی شرکت آذرخش فوتونیک در فاز نخستِ راه‌اندازی قرار داشته و زیرساخت‌های جامع خدمات الکترونیکِ آن به تدریج تکمیل و در دسترس قرار خواهد گرفت.
+    </div>
 
-    <section class="mission-box">
-        <h2>رسالت ما</h2>
-        <p>
-            شرکت <strong>آذرخش فوتونیک</strong> با هدف ایجاد پلی قدرتمند میان دانش آکادمیک و صنعت مدرن تأسیس شده است. رسالت ما، بومی‌سازی فناوری‌های پیشرفته، توسعه تجهیزات دقیق فوتونیکی و ارائه راهکارهای نوآورانه است. ما بر این باوریم که تحول در تکنولوژی، تنها با اتکا به نخبگان و استعدادهای درخشان دانشگاهی امکان‌پذیر است.
-        </p>
-    </section>
+    <div class="container">
+        <header class="header">
+            <!-- فراخوانی تصویر لوگو -->
+            <img src="logo.jpg" alt="لوگوی شرکت آذرخش فوتونیک" class="logo">
+            <p>توسعه فناوری‌های نوین اپتیک و فوتونیک</p>
+        </header>
 
-    <section class="form-section">
-        <h2>دعوت به همکاری از استعدادهای درخشان</h2>
-        <p style="text-align: center; margin-bottom: 30px; color: #94a3b8;">
-            از دانشجویان استعداد درخشان (ترم ۶ به بالای کارشناسی) و دانشجویان تحصیلات تکمیلی دعوت می‌شود جهت بررسی زمینه‌های همکاری، مشخصات خود را ارسال نمایند.
-        </p>
+        <section class="card">
+            <h2>رسالت ما</h2>
+            <p style="text-align: justify; line-height: 2;">
+                شرکت <strong>آذرخش فوتونیک</strong> با هدف ایجاد پلی قدرتمند میان دانش آکادمیک و صنعت مدرن تأسیس شده است. رسالت ما، بومی‌سازی فناوری‌های پیشرفته، توسعه تجهیزات دقیق فوتونیکی و ارائه راهکارهای نوآورانه است. ما بر این باوریم که تحول در تکنولوژی، تنها با اتکا به نخبگان و استعدادهای درخشان دانشگاهی امکان‌پذیر است.
+            </p>
+        </section>
 
-        <!-- فرم دریافت اطلاعات -->
-        <form action="#" method="POST">
-            <div class="form-group">
-                <label for="fullname">نام و نام خانوادگی:</label>
-                <input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ...">
-            </div>
+        <!-- خط بالای این باکس با رنگ بنفش لیزری هماهنگ شده است -->
+        <section class="card" style="border-top-color: var(--laser-purple);">
+            <h2>دعوت به همکاری از استعدادهای درخشان</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: var(--text-light);">
+                از دانشجویان استعداد درخشان (ترم ۶ به بالای کارشناسی) و دانشجویان تحصیلات تکمیلی دعوت می‌شود جهت بررسی زمینه‌های همکاری، مشخصات خود را ارسال نمایند.
+            </p>
 
-            <div class="form-group">
-                <label for="phone">شماره تماس:</label>
-                <input type="tel" id="phone" name="phone" required placeholder="0912...">
-            </div>
+            <form action="#" method="POST">
+                <div class="form-group">
+                    <label for="fullname">نام و نام خانوادگی:</label>
+                    <input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ...">
+                </div>
 
-            <div class="form-group">
-                <label for="email">پست الکترونیک (ایمیل):</label>
-                <input type="email" id="email" name="email" required placeholder="example@email.com">
-            </div>
+                <div class="form-group">
+                    <label for="phone">شماره تماس:</label>
+                    <input type="tel" id="phone" name="phone" required placeholder="0912...">
+                </div>
 
-            <div class="form-group">
-                <label for="major">رشته تحصیلی:</label>
-                <select id="major" name="major" required>
-                    <option value="">انتخاب کنید...</option>
-                    <option value="physics">فیزیک (تمامی گرایش‌ها)</option>
-                    <option value="chemistry">شیمی</option>
-                    <option value="electrical">مهندسی برق</option>
-                    <option value="materials">مهندسی مواد و متالورژی</option>
-                    <option value="computer">مهندسی کامپیوتر</option>
-                    <option value="mechanical">مهندسی مکانیک</option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label for="email">پست الکترونیک (ایمیل):</label>
+                    <input type="email" id="email" name="email" required placeholder="example@email.com">
+                </div>
 
-            <div class="form-group">
-                <label for="degree">مقطع تحصیلی:</label>
-                <select id="degree" name="degree" required>
-                    <option value="">انتخاب کنید...</option>
-                    <option value="bsc">کارشناسی (ترم ۶ به بالا)</option>
-                    <option value="msc">کارشناسی ارشد</option>
-                    <option value="phd">دکتری</option>
-                </select>
-            </div>
+                <div class="form-group">
+                    <label for="major">رشته تحصیلی:</label>
+                    <select id="major" name="major" required>
+                        <option value="">انتخاب کنید...</option>
+                        <option value="physics">فیزیک (تمامی گرایش‌ها)</option>
+                        <option value="chemistry">شیمی</option>
+                        <option value="electrical">مهندسی برق</option>
+                        <option value="materials">مهندسی مواد و متالورژی</option>
+                        <option value="computer">مهندسی کامپیوتر</option>
+                        <option value="mechanical">مهندسی مکانیک</option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-                <label for="certificate">آپلود رزومه و گواهی رتبه:</label>
-                <input type="file" id="certificate" name="certificate" accept=".pdf,.jpg,.jpeg,.png">
-                <p class="note">لطفاً مدارک خود را در قالب یک فایل PDF یا تصویر (حداکثر ۵ مگابایت) انتخاب کنید.</p>
-            </div>
+                <div class="form-group">
+                    <label for="degree">مقطع تحصیلی:</label>
+                    <select id="degree" name="degree" required>
+                        <option value="">انتخاب کنید...</option>
+                        <option value="bsc">کارشناسی (ترم ۶ به بالا)</option>
+                        <option value="msc">کارشناسی ارشد</option>
+                        <option value="phd">دکتری</option>
+                    </select>
+                </div>
 
-            <button type="submit" class="btn-submit">ارسال اطلاعات</button>
-        </form>
-    </section>
-</div>
+                <div class="form-group">
+                    <label for="certificate">آپلود رزومه و گواهی رتبه:</label>
+                    <input type="file" id="certificate" name="certificate" accept=".pdf,.jpg,.jpeg,.png">
+                    <p class="note">لطفاً مدارک خود را در قالب یک فایل PDF یا تصویر (حداکثر ۵ مگابایت) انتخاب کنید.</p>
+                </div>
+
+                <button type="submit" class="btn-submit">ارسال اطلاعات</button>
+            </form>
+        </section>
+    </div>
 
 </body>
 </html>
