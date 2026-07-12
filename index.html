@@ -47,12 +47,15 @@
             margin-bottom: 40px;
         }
 
-        .logo {
-            max-width: 250px;
+    .logo {
+            max-width: 280px;
             height: auto;
             margin: 0 auto 15px;
             display: block;
-            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.15));
+            /* حذف افکت سایه که باعث نمایش مربع می‌شد */
+            /* افکت برای محو کردن لبه‌های عکس و ترکیب نرم با پس‌زمینه سایت */
+            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%);
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%);
         }
 
         .brand-title {
