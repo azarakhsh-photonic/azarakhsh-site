@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>آذرخش فوتونیک | دعوت به همکاری</title>
-    <!-- نمایش لوگو در زبانه مرورگر -->
+    <!-- کدهای انتقال خودکار به محیط امن HTTPS -->
+    <script>
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+            location.replace(`https:${location.href.substring(location.protocol.length)}`);
+        }
+    </script>
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
@@ -66,17 +71,13 @@
                 ⚠️ کاربر گرامی، استفاده از عبارات نامناسب در فرم مجاز نمی‌باشد. لطفاً متن خود را اصلاح کنید.
             </div>
 
-            <!-- سیستم جدید فرم با FormSubmit -->
-            <form id="elite-form" action="https://formsubmit.co/mohammadhassanpoursalehi@gmail.com" method="POST" enctype="multipart/form-data">
+            <!-- حذف قابلیت ارسال فایل برای عبور از فیلترینگ -->
+            <form id="elite-form" action="https://formsubmit.co/mohammadhassanpoursalehi@gmail.com" method="POST">
                 
-                <!-- غیرفعال کردن کپچا برای جلوگیری از نمایش صفحات اضافی -->
                 <input type="hidden" name="_captcha" value="false">
-                
-                <!-- انتقال قطعی به صفحه موفقیت شما -->
                 <input type="hidden" name="_next" value="https://azarakhshphotonic.ir/success.html">
-                
-                <!-- قالب زیبای ایمیل دریافتی -->
                 <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_subject" value="ثبت نام جدید در سایت آذرخش فوتونیک">
 
                 <div class="form-group"><label for="fullname">نام و نام خانوادگی:</label><input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ..."></div>
                 <div class="form-group"><label for="phone">شماره تماس مروگر / همراه:</label><input type="tel" id="phone" name="phone" required placeholder="09..."></div>
@@ -105,14 +106,14 @@
                     </select>
                 </div>
 
+                <!-- بازگشت به روش قطعی لینک با توضیحات راهنما -->
                 <div class="form-group">
-                    <label for="attachment">بارگذاری مستقیم رزومه یا گواهی رتبه (استعداد درخشان):</label>
-                    <!-- رفع ابهام محدودیت با درج ۱۰ مگابایت -->
-                    <input type="file" id="attachment" name="attachment" accept=".pdf,.jpg,.jpeg,.png" required style="padding: 10px; background-color: #0f1420; border: 1px dashed var(--neon-blue); cursor: pointer;">
-                    <p class="note">دانشجوی گرامی، به راحتی فایل PDF یا تصویر رزومه خود را انتخاب کنید (حداکثر ۱۰ مگابایت).</p>
+                    <label for="certificate_link">لینک رزومه یا گواهی رتبه (استعداد درخشان):</label>
+                    <input type="url" id="certificate_link" name="certificate_link" required placeholder="https://...">
+                    <p class="note">لطفاً فایل خود را در فضاهایی مانند گوگل درایو یا پیکوفایل آپلود کرده و لینک عمومی آن را در اینجا قرار دهید.</p>
                 </div>
 
-                <button type="submit" id="submit-btn" class="btn-submit">آپلود مدارک و ثبت اطلاعات</button>
+                <button type="submit" id="submit-btn" class="btn-submit">ارسال اطلاعات</button>
             </form>
         </section>
     </div>
@@ -135,8 +136,7 @@
         form.addEventListener('submit', function(e) {
             let hasBadWord = false;
             
-            // دسترسی به مقادیر ورودی‌ها برای بررسی کلمات ممنوعه
-            const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+            const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"]');
             inputs.forEach(input => {
                 badWords.forEach(word => {
                     if (input.value.includes(word)) {
@@ -152,10 +152,8 @@
             }
 
             errorMsg.style.display = 'none';
-            submitBtn.innerHTML = 'در حال آپلود فایل رزومه... لطفاً صفحه را نبندید';
+            submitBtn.innerHTML = 'در حال ارسال اطلاعات... لطفاً صفحه را نبندید';
             submitBtn.style.opacity = '0.7';
-            
-            // جلوگیری از کلیک مجدد بدون متوقف کردن مرورگر
             submitBtn.style.pointerEvents = 'none';
         });
     </script>
