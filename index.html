@@ -199,10 +199,15 @@
                 ⚠️ کاربر گرامی، استفاده از عبارات نامناسب در فرم مجاز نمی‌باشد. لطفاً متن خود را اصلاح کنید.
             </div>
 
-            <!-- فرم هوشمند -->
-            <form id="elite-form" action="https://formspree.io/f/xeeyjyld" method="POST">
-                <!-- دستور انتقال اجباری به صفحه موفقیت شما -->
-                <input type="hidden" name="_next" value="https://azarakhshphotonic.ir/success.html">
+            <!-- فرم هوشمند با قابلیت آپلود مستقیم فایل -->
+            <form id="elite-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+                
+                <!-- کلید اختصاصی شما برای دریافت ایمیل‌ها -->
+                <input type="hidden" name="access_key" value="fa835a26-ef12-426e-8b9c-9f27adb423c6">
+                
+                <!-- دستور انتقال به صفحه موفقیت شما -->
+                <input type="hidden" name="redirect" value="https://azarakhshphotonic.ir/success.html">
+
                 <div class="form-group">
                     <label for="fullname">نام و نام خانوادگی:</label>
                     <input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ...">
@@ -241,18 +246,57 @@
                     </select>
                 </div>
 
+                <!-- دکمه جدید و راحت برای آپلود مستقیم رزومه -->
                 <div class="form-group">
-                    <label for="certificate_link">لینک رزومه یا گواهی رتبه (استعداد درخشان):</label>
-                    <input type="url" id="certificate_link" name="certificate_link" required placeholder="https://...">
-                    <p class="note">لطفاً فایل خود را در فضاهایی مانند گوگل درایو یا بیان‌باکس آپلود کرده و لینک عمومی آن را در اینجا قرار دهید.</p>
+                    <label for="attachment">بارگذاری مستقیم رزومه یا گواهی رتبه (استعداد درخشان):</label>
+                    <input type="file" id="attachment" name="attachment" accept=".pdf,.jpg,.jpeg,.png" required style="padding: 10px; background-color: #0f1420; border: 1px dashed var(--neon-blue); cursor: pointer;">
+                    <p class="note">دانشجوی گرامی، به راحتی فایل PDF یا تصویر رزومه خود را انتخاب کنید (حداکثر ۵ مگابایت).</p>
                 </div>
 
-                <button type="submit" id="submit-btn" class="btn-submit">ارسال و ثبت اطلاعات نخبگان</button>
+                <button type="submit" id="submit-btn" class="btn-submit">آپلود مدارک و ثبت اطلاعات</button>
             </form>
         </section>
 
-        <!-- کدهای جاوااسکریپت برای فیلتر کلمات و انتقال هوشمند -->
+        <!-- کدهای جاوااسکریپت برای فیلتر کلمات -->
         <script>
+            const form = document.getElementById('elite-form');
+            const errorMsg = document.getElementById('error-msg');
+            const submitBtn = document.getElementById('submit-btn');
+
+            const badWords = ['احمق', 'بیشعور', 'کثافت', 'آشغال', 'نفهم', 'دیوانه', 'روانی', 'مسخره'];
+
+            form.addEventListener('submit', function(e) {
+                // بررسی فیلتر کلمات
+                const formData = new FormData(form);
+                let hasBadWord = false;
+
+                for (let [key, value] of formData.entries()) {
+                    if (typeof value === 'string') {
+                        badWords.forEach(word => {
+                            if (value.includes(word)) {
+                                hasBadWord = true;
+                            }
+                        });
+                    }
+                }
+
+                if (hasBadWord) {
+                    e.preventDefault();
+                    errorMsg.style.display = 'block';
+                    return; 
+                }
+
+                // اگر کلمه‌ای مشکل نداشت، دکمه به حالت آپلود درمی‌آید و فرم ارسال می‌شود
+                errorMsg.style.display = 'none';
+                submitBtn.innerHTML = 'در حال آپلود فایل و ارتباط با سرور... لطفاً صبر کنید';
+                submitBtn.style.opacity = '0.7';
+                
+                // از آنجایی که آپلود فایل کمی زمان می‌برد، دکمه را پس از کلیک قفل می‌کنیم تا کاربر چند بار کلیک نکند
+                setTimeout(() => {
+                    submitBtn.disabled = true;
+                }, 50);
+            });
+        </script>
             const form = document.getElementById('elite-form');
             const errorMsg = document.getElementById('error-msg');
             const submitBtn = document.getElementById('submit-btn');
