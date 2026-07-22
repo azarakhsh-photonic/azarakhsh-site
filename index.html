@@ -9,164 +9,31 @@
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
         :root {
-            /* پالت رنگی استخراج شده از لوگوی تاریک */
-            --bg-deep: #0b0f19;       /* رنگ پس‌زمینه عمیق لبه‌های لوگو */
-            --bg-card: #131a26;       /* رنگ زغالی بدنه کارت‌ها */
-            --neon-blue: #38bdf8;     /* پرتو آبی/آسمانی */
-            --neon-purple: #818cf8;   /* پرتو بنفش لیزر */
-            --metallic-silver: #475569;/* نقره‌ای تیره المان‌های مکانیکی و متالورژی */
-            --text-primary: #f8fafc;  /* متن روشن و خوانا */
-            --text-secondary: #94a3b8;/* متن کم‌رنگ‌تر برای توضیحات */
+            --bg-deep: #0b0f19;
+            --bg-card: #131a26;
+            --neon-blue: #38bdf8;
+            --neon-purple: #818cf8;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
         }
-
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background-color: var(--bg-deep);
-            color: var(--text-primary);
-            margin: 0;
-            padding: 0;
-            line-height: 1.8;
-        }
-
-        /* نوار اطلاع‌رسانی رسمی با افکت گرادینت لیزری ملایم */
-        .notice-bar {
-            background: linear-gradient(90deg, #1e1b4b, #312e81, #1e1b4b);
-            color: #e0e7ff;
-            text-align: center;
-            padding: 12px 20px;
-            font-size: 0.95rem;
-            border-bottom: 1px solid rgba(129, 140, 248, 0.2);
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-    .logo {
-            max-width: 280px;
-            height: auto;
-            margin: 0 auto 15px;
-            display: block;
-            /* حذف افکت سایه که باعث نمایش مربع می‌شد */
-            /* افکت برای محو کردن لبه‌های عکس و ترکیب نرم با پس‌زمینه سایت */
-            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%);
-            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%);
-        }
-
-        .brand-title {
-            color: var(--text-primary);
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin: 10px 0 5px 0;
-            letter-spacing: -0.5px;
-            background: linear-gradient(to left, #ffffff, #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            color: var(--neon-blue);
-            margin-top: 5px;
-            font-weight: 500;
-        }
-
-        .card {
-            background-color: var(--bg-card);
-            padding: 35px;
-            border-radius: 16px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* خط نئونی بالای باکس رسالت */
-        .card.mission {
-            border-top: 3px solid var(--neon-blue);
-        }
-
-        /* خط نئونی بالای باکس فرم */
-        .card.form-box {
-            border-top: 3px solid var(--neon-purple);
-        }
-
-        .card h2 {
-            margin-top: 0;
-            color: #ffffff;
-            font-size: 1.5rem;
-            padding-bottom: 12px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .form-group {
-            margin-bottom: 22px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #cbd5e1;
-            font-size: 0.95rem;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 12px 16px;
-            background-color: #0f1420;
-            border: 1px solid #243146;
-            color: var(--text-primary);
-            border-radius: 8px;
-            font-family: 'Vazirmatn', sans-serif;
-            box-sizing: border-box;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--neon-blue);
-            background-color: #111827;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
-        }
-
-        /* دکمه ارسال با افکت گرادینت پرتوهای لوگو */
-        .btn-submit {
-            background: linear-gradient(135deg, #1e40af, #4f46e5);
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 1.1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-family: 'Vazirmatn', sans-serif;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3);
-        }
-
-        .btn-submit:hover {
-            background: linear-gradient(135deg, #2563eb, #6366f1);
-            box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4);
-            transform: translateY(-1px);
-        }
-
-        .note {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-top: 8px;
-        }
+        body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg-deep); color: var(--text-primary); margin: 0; padding: 0; line-height: 1.8; }
+        .notice-bar { background: linear-gradient(90deg, #1e1b4b, #312e81, #1e1b4b); color: #e0e7ff; text-align: center; padding: 12px 20px; font-size: 0.95rem; border-bottom: 1px solid rgba(129, 140, 248, 0.2); }
+        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        .header { text-align: center; margin-bottom: 40px; }
+        .logo { max-width: 250px; height: auto; margin: 0 auto 15px; display: block; -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%); mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%); }
+        .brand-title { color: var(--text-primary); font-size: 2.2rem; font-weight: 800; margin: 10px 0 5px 0; letter-spacing: -0.5px; background: linear-gradient(to left, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .header p { font-size: 1.1rem; color: var(--neon-blue); margin-top: 5px; font-weight: 500; }
+        .card { background-color: var(--bg-card); padding: 35px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .card.mission { border-top: 3px solid var(--neon-blue); }
+        .card.form-box { border-top: 3px solid var(--neon-purple); }
+        .card h2 { margin-top: 0; color: #ffffff; font-size: 1.5rem; padding-bottom: 12px; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+        .form-group { margin-bottom: 22px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #cbd5e1; font-size: 0.95rem; }
+        input, select { width: 100%; padding: 12px 16px; background-color: #0f1420; border: 1px solid #243146; color: var(--text-primary); border-radius: 8px; font-family: 'Vazirmatn', sans-serif; box-sizing: border-box; transition: all 0.3s ease; }
+        input:focus, select:focus { outline: none; border-color: var(--neon-blue); background-color: #111827; box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15); }
+        .btn-submit { background: linear-gradient(135deg, #1e40af, #4f46e5); color: white; border: none; padding: 15px; font-size: 1.1rem; border-radius: 8px; cursor: pointer; width: 100%; font-family: 'Vazirmatn', sans-serif; font-weight: bold; transition: all 0.3s ease; margin-top: 10px; box-shadow: 0 4px 20px rgba(79, 70, 229, 0.3); }
+        .btn-submit:hover { background: linear-gradient(135deg, #2563eb, #6366f1); box-shadow: 0 4px 25px rgba(99, 102, 241, 0.4); transform: translateY(-1px); }
+        .note { font-size: 0.85rem; color: var(--text-secondary); margin-top: 8px; }
     </style>
 </head>
 <body>
@@ -177,7 +44,7 @@
 
     <div class="container">
         <header class="header">
-<img src="logo.jpg?v=2" alt="لوگوی شرکت آذرخش فوتونیک" class="logo">
+            <img src="logo.jpg" alt="لوگوی شرکت آذرخش فوتونیک" class="logo">
             <h1 class="brand-title">آذرخش فوتونیک</h1>
             <p>توسعه فناوری‌های نوین اپتیک و فوتونیک</p>
         </header>
@@ -188,41 +55,28 @@
                 مجموعه <strong>آذرخش فوتونیک</strong> با هدف تکوین بستری پویا میان دانش پیشرفته آکادمیک و صنایع نوین تکنولوژیک پایه‌گذاری شده است. رسالت بنیادین ما، بومی‌سازی فناوری‌های راهبردی، ساخت تجهیزات دقیق نوری و ارائه راهکارهای دانش‌بنیان در حوزه اپتیک و فوتونیک است. ما عمیقاً باور داریم که تحول خلاقانه در اکوسیستم فناوری کشور، تنها با تکیه بر توانمندی نخبگان و استعدادهای درخشان دانشگاهی محقق می‌شود.
             </p>
         </section>
-<section class="card form-box">
+
+        <section class="card form-box">
             <h2>فرصت همکاری ویژه استعدادهای درخشان</h2>
             <p style="text-align: center; margin-bottom: 30px; color: var(--text-secondary);">
                 از دانشجویان واجد شرایط استعداد درخشان (ترم ۶ به بالای مقطع کارشناسی) و دانشجویان تحصیلات تکمیلی مقاطع ارشد و دکتری دعوت به عمل می‌آید فرم زیر را تکمیل نمایند.
             </p>
 
-            <!-- اخطار کلمات نامناسب -->
             <div id="error-msg" style="display: none; background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid #ef4444; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold;">
                 ⚠️ کاربر گرامی، استفاده از عبارات نامناسب در فرم مجاز نمی‌باشد. لطفاً متن خود را اصلاح کنید.
             </div>
 
-            <!-- فرم هوشمند با قابلیت آپلود مستقیم فایل -->
             <form id="elite-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
                 
-                <!-- کلید اختصاصی شما برای دریافت ایمیل‌ها -->
+                <!-- کلید اختصاصی را اینجا قرار دهید -->
                 <input type="hidden" name="access_key" value="fa835a26-ef12-426e-8b9c-9f27adb423c6">
                 
-                <!-- دستور انتقال به صفحه موفقیت شما -->
                 <input type="hidden" name="redirect" value="https://azarakhshphotonic.ir/success.html">
 
-                <div class="form-group">
-                    <label for="fullname">نام و نام خانوادگی:</label>
-                    <input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ...">
-                </div>
-
-                <div class="form-group">
-                    <label for="phone">شماره تماس مروگر / همراه:</label>
-                    <input type="tel" id="phone" name="phone" required placeholder="09...">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">نشانی پست الکترونیک (ایمیل):</label>
-                    <input type="email" id="email" name="email" required placeholder="name@example.com">
-                </div>
-
+                <div class="form-group"><label for="fullname">نام و نام خانوادگی:</label><input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ..."></div>
+                <div class="form-group"><label for="phone">شماره تماس مروگر / همراه:</label><input type="tel" id="phone" name="phone" required placeholder="09..."></div>
+                <div class="form-group"><label for="email">نشانی پست الکترونیک (ایمیل):</label><input type="email" id="email" name="email" required placeholder="name@example.com"></div>
+                
                 <div class="form-group">
                     <label for="major">رشته تحصیلی:</label>
                     <select id="major" name="major" required>
@@ -246,7 +100,6 @@
                     </select>
                 </div>
 
-                <!-- دکمه جدید و راحت برای آپلود مستقیم رزومه -->
                 <div class="form-group">
                     <label for="attachment">بارگذاری مستقیم رزومه یا گواهی رتبه (استعداد درخشان):</label>
                     <input type="file" id="attachment" name="attachment" accept=".pdf,.jpg,.jpeg,.png" required style="padding: 10px; background-color: #0f1420; border: 1px dashed var(--neon-blue); cursor: pointer;">
@@ -256,122 +109,53 @@
                 <button type="submit" id="submit-btn" class="btn-submit">آپلود مدارک و ثبت اطلاعات</button>
             </form>
         </section>
-
-        <!-- کدهای جاوااسکریپت برای فیلتر کلمات -->
-        <script>
-            const form = document.getElementById('elite-form');
-            const errorMsg = document.getElementById('error-msg');
-            const submitBtn = document.getElementById('submit-btn');
-
-            const badWords = ['احمق', 'بیشعور', 'کثافت', 'آشغال', 'نفهم', 'دیوانه', 'روانی', 'مسخره'];
-
-            form.addEventListener('submit', function(e) {
-                // بررسی فیلتر کلمات
-                const formData = new FormData(form);
-                let hasBadWord = false;
-
-                for (let [key, value] of formData.entries()) {
-                    if (typeof value === 'string') {
-                        badWords.forEach(word => {
-                            if (value.includes(word)) {
-                                hasBadWord = true;
-                            }
-                        });
-                    }
-                }
-
-                if (hasBadWord) {
-                    e.preventDefault();
-                    errorMsg.style.display = 'block';
-                    return; 
-                }
-
-                // اگر کلمه‌ای مشکل نداشت، دکمه به حالت آپلود درمی‌آید و فرم ارسال می‌شود
-                errorMsg.style.display = 'none';
-                submitBtn.innerHTML = 'در حال آپلود فایل و ارتباط با سرور... لطفاً صبر کنید';
-                submitBtn.style.opacity = '0.7';
-                
-                // از آنجایی که آپلود فایل کمی زمان می‌برد، دکمه را پس از کلیک قفل می‌کنیم تا کاربر چند بار کلیک نکند
-                setTimeout(() => {
-                    submitBtn.disabled = true;
-                }, 50);
-            });
-        </script>
-            const form = document.getElementById('elite-form');
-            const errorMsg = document.getElementById('error-msg');
-            const submitBtn = document.getElementById('submit-btn');
-
-            // لیست کلمات ممنوعه (می‌توانید کلمات توهین‌آمیز بیشتری را با علامت ویرگول بین علائم ' ' به این لیست اضافه کنید)
-            const badWords = ['احمق', 'بیشعور', 'کثافت', 'آشغال', 'نفهم', 'دیوانه', 'روانی', 'مسخره', 'کص', 'مصنوعی'];
-
-            form.addEventListener('submit', function(e) {
-                e.preventDefault(); // جلوگیری از رفتن به صفحه سایت Formspree
-
-                const formData = new FormData(form);
-                let hasBadWord = false;
-
-                // بررسی تمام فیلدها برای پیدا کردن کلمات ممنوعه
-                for (let [key, value] of formData.entries()) {
-                    if (typeof value === 'string') {
-                        badWords.forEach(word => {
-                            if (value.includes(word)) {
-                                hasBadWord = true;
-                            }
-                        });
-                    }
-                }
-
-                // اگر کلمه بدی پیدا شد، فرم ارسال نمی‌شود و اخطار می‌دهد
-                if (hasBadWord) {
-                    errorMsg.style.display = 'block';
-                    return; 
-                } else {
-                    errorMsg.style.display = 'none';
-                }
-
-                // تغییر ظاهر دکمه در زمان ارسال
-                submitBtn.innerHTML = 'در حال ارتباط با سرور مرکزی...';
-                submitBtn.style.opacity = '0.7';
-                submitBtn.disabled = true;
-
-                // ارسال اطلاعات به صورت کاملاً مخفیانه (AJAX)
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                }).then(response => {
-                    if (response.ok) {
-                        // انتقال صددرصدی و قطعی به صفحه موفقیت سایت خودتان
-                        window.location.href = 'success.html';
-                    } else {
-                        errorMsg.style.display = 'block';
-                        errorMsg.innerHTML = 'خطایی در سرور رخ داد. لطفاً مجدداً تلاش کنید.';
-                        submitBtn.innerHTML = 'ارسال و ثبت اطلاعات نخبگان';
-                        submitBtn.style.opacity = '1';
-                        submitBtn.disabled = false;
-                    }
-                }).catch(error => {
-                    errorMsg.style.display = 'block';
-                    errorMsg.innerHTML = 'خطا در برقراری ارتباط با اینترنت.';
-                    submitBtn.innerHTML = 'ارسال و ثبت اطلاعات نخبگان';
-                    submitBtn.style.opacity = '1';
-                    submitBtn.disabled = false;
-                });
-            });
-        </script>
-     
     </div>
-<!-- فوتر و شبکه‌های اجتماعی -->
-        <footer style="text-align: center; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
-            <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 15px;">آخرین اخبار و دستاوردهای ما را دنبال کنید:</p>
-            <a href="https://eitaa.com/azarakhshphotonic" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; background-color: rgba(56, 189, 248, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: 'Vazirmatn', sans-serif; transition: all 0.3s ease;">
-                <svg style="width: 20px; height: 20px; margin-left: 8px;" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.699 1.201-1.205 1.249-.538.05-1.067-.323-1.898-.869-1.284-.842-2.023-1.353-3.21-2.132-1.373-.896-.483-1.391.272-2.17.198-.204 3.633-3.328 3.7-3.606.008-.035.016-.164-.06-.231-.077-.066-.188-.043-.27-.024-.114.025-1.936 1.229-5.466 3.616-.516.35-1.023.517-1.48.508-.501-.01-1.464-.282-2.182-.516-.884-.288-1.584-.44-1.536-.931.025-.252.378-.508 1.054-.768 4.123-1.796 6.874-2.982 8.25-3.558 3.92-1.637 4.733-1.921 5.263-1.93z"/>
-                </svg>
-                کانال رسمی آذرخش فوتونیک
-            </a>
-        </footer>
+
+    <footer style="text-align: center; margin-top: 40px; padding-bottom: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.08);">
+        <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 15px;">آخرین اخبار و دستاوردهای ما را دنبال کنید:</p>
+        <a href="https://eitaa.com/azarakhshphotonic" target="_blank" style="display: inline-flex; align-items: center; justify-content: center; background-color: rgba(56, 189, 248, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; font-family: 'Vazirmatn', sans-serif; transition: all 0.3s ease;">
+            <svg style="width: 20px; height: 20px; margin-left: 8px;" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.699 1.201-1.205 1.249-.538.05-1.067-.323-1.898-.869-1.284-.842-2.023-1.353-3.21-2.132-1.373-.896-.483-1.391.272-2.17.198-.204 3.633-3.328 3.7-3.606.008-.035.016-.164-.06-.231-.077-.066-.188-.043-.27-.024-.114.025-1.936 1.229-5.466 3.616-.516.35-1.023.517-1.48.508-.501-.01-1.464-.282-2.182-.516-.884-.288-1.584-.44-1.536-.931.025-.252.378-.508 1.054-.768 4.123-1.796 6.874-2.982 8.25-3.558 3.92-1.637 4.733-1.921 5.263-1.93z"/></svg>
+            کانال رسمی آذرخش فوتونیک
+        </a>
+    </footer>
+
+    <!-- کدهای هوشمند پنهان شده در تگ اسکریپت -->
+    <script>
+        const form = document.getElementById('elite-form');
+        const errorMsg = document.getElementById('error-msg');
+        const submitBtn = document.getElementById('submit-btn');
+
+        const badWords = ['احمق', 'بیشعور', 'کثافت', 'آشغال', 'نفهم', 'دیوانه', 'روانی', 'مسخره'];
+
+        form.addEventListener('submit', function(e) {
+            const formData = new FormData(form);
+            let hasBadWord = false;
+
+            for (let [key, value] of formData.entries()) {
+                if (typeof value === 'string') {
+                    badWords.forEach(word => {
+                        if (value.includes(word)) {
+                            hasBadWord = true;
+                        }
+                    });
+                }
+            }
+
+            if (hasBadWord) {
+                e.preventDefault();
+                errorMsg.style.display = 'block';
+                return; 
+            }
+
+            errorMsg.style.display = 'none';
+            submitBtn.innerHTML = 'در حال آپلود فایل... لطفاً صبر کنید';
+            submitBtn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                submitBtn.disabled = true;
+            }, 50);
+        });
+    </script>
+
 </body>
 </html>
