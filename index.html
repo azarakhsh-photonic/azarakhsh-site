@@ -71,16 +71,16 @@
                 ⚠️ کاربر گرامی، استفاده از عبارات نامناسب در فرم مجاز نمی‌باشد. لطفاً متن خود را اصلاح کنید.
             </div>
 
-            <!-- حذف قابلیت ارسال فایل برای عبور از فیلترینگ -->
-            <form id="elite-form" action="https://formsubmit.co/mohammadhassanpoursalehi@gmail.com" method="POST">
+            <!-- بازگشت به سرویس سریع و مطمئن Formspree -->
+            <form id="elite-form" action="https://formspree.io/f/https://formspree.io/f/xeeyjyld" method="POST">
                 
-                <input type="hidden" name="_captcha" value="false">
+                <!-- انتقال قطعی به صفحه موفقیت شما -->
                 <input type="hidden" name="_next" value="https://azarakhshphotonic.ir/success.html">
-                <input type="hidden" name="_template" value="table">
                 <input type="hidden" name="_subject" value="ثبت نام جدید در سایت آذرخش فوتونیک">
 
                 <div class="form-group"><label for="fullname">نام و نام خانوادگی:</label><input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ..."></div>
-                <div class="form-group"><label for="phone">شماره تماس مروگر / همراه:</label><input type="tel" id="phone" name="phone" required placeholder="09..."></div>
+                <!-- اعمال چپ‌چین (dir="ltr") به کادرهای شماره تماس و ایمیل -->
+                <div class="form-group"><label for="phone">شماره تماس موبایل / همراه:</label><input type="tel" id="phone" name="phone" required placeholder="09..." dir="ltr"></div>
                 <div class="form-group"><label for="email">نشانی پست الکترونیک (ایمیل):</label><input type="email" id="email" name="email" required placeholder="name@example.com" dir="ltr"></div>
                 
                 <div class="form-group">
@@ -106,7 +106,7 @@
                     </select>
                 </div>
 
-                <!-- بازگشت به روش قطعی لینک با توضیحات راهنما -->
+                <!-- اعمال چپ‌چین به کادر لینک رزومه -->
                 <div class="form-group">
                     <label for="certificate_link">لینک رزومه یا گواهی رتبه (استعداد درخشان):</label>
                     <input type="url" id="certificate_link" name="certificate_link" required placeholder="https://..." dir="ltr">
@@ -154,6 +154,8 @@
             errorMsg.style.display = 'none';
             submitBtn.innerHTML = 'در حال ارسال اطلاعات... لطفاً صفحه را نبندید';
             submitBtn.style.opacity = '0.7';
+            
+            // جلوگیری از کلیک مجدد
             submitBtn.style.pointerEvents = 'none';
         });
     </script>
