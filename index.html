@@ -120,6 +120,7 @@
     </footer>
 
     <!-- کدهای هوشمند پنهان شده در تگ اسکریپت -->
+   <!-- کدهای هوشمند پنهان شده در تگ اسکریپت -->
     <script>
         const form = document.getElementById('elite-form');
         const errorMsg = document.getElementById('error-msg');
@@ -147,13 +148,13 @@
                 return; 
             }
 
+            // اگر خطایی نبود، ظاهر دکمه عوض می‌شود اما مرورگر متوقف نمی‌شود
             errorMsg.style.display = 'none';
-            submitBtn.innerHTML = 'در حال آپلود فایل... لطفاً صبر کنید';
+            submitBtn.innerHTML = 'در حال آپلود و ارسال... لطفاً صفحه را نبندید';
             submitBtn.style.opacity = '0.7';
             
-            setTimeout(() => {
-                submitBtn.disabled = true;
-            }, 50);
+            // به جای غیرفعال کردن کامل، فقط قابلیت کلیک مجدد را از دکمه می‌گیریم
+            submitBtn.style.pointerEvents = 'none';
         });
     </script>
 
