@@ -134,6 +134,9 @@
         const badWords = ['احمق', 'بیشعور', 'کثافت', 'آشغال', 'نفهم', 'دیوانه', 'روانی', 'مسخره'];
 
         form.addEventListener('submit', function(e) {
+            // این دستور طلایی جلوی باز شدن صفحه Formspree را کاملاً می‌گیرد
+            e.preventDefault(); 
+            
             let hasBadWord = false;
             
             const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"]');
@@ -146,17 +149,42 @@
             });
 
             if (hasBadWord) {
-                e.preventDefault();
                 errorMsg.style.display = 'block';
                 return; 
             }
 
             errorMsg.style.display = 'none';
-            submitBtn.innerHTML = 'در حال ارسال اطلاعات... لطفاً صفحه را نبندید';
+            submitBtn.innerHTML = 'در حال ارسال اطلاعات... لطفاً صبر کنید';
             submitBtn.style.opacity = '0.7';
-            
-            // جلوگیری از کلیک مجدد
             submitBtn.style.pointerEvents = 'none';
+
+            const formData = new FormData(form);
+
+            // ارسال اطلاعات در پس‌زمینه و بدون باز شدن صفحات اضافی
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    // انتقال قطعی و مستقیم به صفحه ثبت موفق سایت آذرخش فوتونیک
+                    window.location.href = 'success.html';
+                } else {
+                    errorMsg.style.display = 'block';
+                    errorMsg.innerHTML = 'خطایی در سمت سرور رخ داد. لطفاً مجدداً تلاش کنید.';
+                    submitBtn.innerHTML = 'ارسال اطلاعات';
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.pointerEvents = 'auto';
+                }
+            }).catch(error => {
+                errorMsg.style.display = 'block';
+                errorMsg.innerHTML = 'خطا در ارتباط با اینترنت.';
+                submitBtn.innerHTML = 'ارسال اطلاعات';
+                submitBtn.style.opacity = '1';
+                submitBtn.style.pointerEvents = 'auto';
+            });
         });
     </script>
 
