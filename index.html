@@ -66,12 +66,17 @@
                 ⚠️ کاربر گرامی، استفاده از عبارات نامناسب در فرم مجاز نمی‌باشد. لطفاً متن خود را اصلاح کنید.
             </div>
 
-            <form id="elite-form" action="https://api.web3forms.com/submit" method="POST" enctype="multipart/form-data">
+            <!-- سیستم جدید فرم با FormSubmit -->
+            <form id="elite-form" action="https://formsubmit.co/mohammadhassanpoursalehi@gmail.com" method="POST" enctype="multipart/form-data">
                 
-                <!-- کلید اختصاصی را اینجا قرار دهید -->
-                <input type="hidden" name="access_key" value="fa835a26-ef12-426e-8b9c-9f27adb423c6">
+                <!-- غیرفعال کردن کپچا برای جلوگیری از نمایش صفحات اضافی -->
+                <input type="hidden" name="_captcha" value="false">
                 
-                <input type="hidden" name="redirect" value="https://azarakhshphotonic.ir/success.html">
+                <!-- انتقال قطعی به صفحه موفقیت شما -->
+                <input type="hidden" name="_next" value="https://azarakhshphotonic.ir/success.html">
+                
+                <!-- قالب زیبای ایمیل دریافتی -->
+                <input type="hidden" name="_template" value="table">
 
                 <div class="form-group"><label for="fullname">نام و نام خانوادگی:</label><input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ..."></div>
                 <div class="form-group"><label for="phone">شماره تماس مروگر / همراه:</label><input type="tel" id="phone" name="phone" required placeholder="09..."></div>
@@ -102,8 +107,9 @@
 
                 <div class="form-group">
                     <label for="attachment">بارگذاری مستقیم رزومه یا گواهی رتبه (استعداد درخشان):</label>
+                    <!-- رفع ابهام محدودیت با درج ۱۰ مگابایت -->
                     <input type="file" id="attachment" name="attachment" accept=".pdf,.jpg,.jpeg,.png" required style="padding: 10px; background-color: #0f1420; border: 1px dashed var(--neon-blue); cursor: pointer;">
-                    <p class="note">فایل PDF یا تصویر رزومه خود را انتخاب کنید (حداکثر ۵ مگابایت).</p>
+                    <p class="note">دانشجوی گرامی، به راحتی فایل PDF یا تصویر رزومه خود را انتخاب کنید (حداکثر ۱۰ مگابایت).</p>
                 </div>
 
                 <button type="submit" id="submit-btn" class="btn-submit">آپلود مدارک و ثبت اطلاعات</button>
@@ -119,8 +125,6 @@
         </a>
     </footer>
 
-    <!-- کدهای هوشمند پنهان شده در تگ اسکریپت -->
-   <!-- کدهای هوشمند پنهان شده در تگ اسکریپت -->
     <script>
         const form = document.getElementById('elite-form');
         const errorMsg = document.getElementById('error-msg');
@@ -129,18 +133,17 @@
         const badWords = ['احمق', 'بیشعور', 'کثافت', 'آشغال', 'نفهم', 'دیوانه', 'روانی', 'مسخره'];
 
         form.addEventListener('submit', function(e) {
-            const formData = new FormData(form);
             let hasBadWord = false;
-
-            for (let [key, value] of formData.entries()) {
-                if (typeof value === 'string') {
-                    badWords.forEach(word => {
-                        if (value.includes(word)) {
-                            hasBadWord = true;
-                        }
-                    });
-                }
-            }
+            
+            // دسترسی به مقادیر ورودی‌ها برای بررسی کلمات ممنوعه
+            const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+            inputs.forEach(input => {
+                badWords.forEach(word => {
+                    if (input.value.includes(word)) {
+                        hasBadWord = true;
+                    }
+                });
+            });
 
             if (hasBadWord) {
                 e.preventDefault();
@@ -148,12 +151,11 @@
                 return; 
             }
 
-            // اگر خطایی نبود، ظاهر دکمه عوض می‌شود اما مرورگر متوقف نمی‌شود
             errorMsg.style.display = 'none';
-            submitBtn.innerHTML = 'در حال آپلود و ارسال... لطفاً صفحه را نبندید';
+            submitBtn.innerHTML = 'در حال آپلود فایل رزومه... لطفاً صفحه را نبندید';
             submitBtn.style.opacity = '0.7';
             
-            // به جای غیرفعال کردن کامل، فقط قابلیت کلیک مجدد را از دکمه می‌گیریم
+            // جلوگیری از کلیک مجدد بدون متوقف کردن مرورگر
             submitBtn.style.pointerEvents = 'none';
         });
     </script>
