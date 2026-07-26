@@ -13,6 +13,18 @@
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
+        /* استایل‌های بخش دانلود نرم‌افزار */
+        .card.download-box { border-top: 3px solid #10b981; }
+        .dl-title { font-size: 1.4rem; margin-bottom: 10px; color: #10b981; display: flex; align-items: center; gap: 10px; }
+        .dl-btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; text-decoration: none; font-family: 'Vazirmatn', sans-serif; font-weight: bold; transition: all 0.3s ease; box-sizing: border-box; }
+        .dl-btn-win { background-color: rgba(56, 189, 248, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
+        .dl-btn-win:hover { background-color: var(--neon-blue); color: #0b0f19; transform: translateY(-2px); }
+        .dl-btn-uni { background-color: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #10b981; }
+        .dl-btn-uni:hover { background-color: #10b981; color: #0b0f19; transform: translateY(-2px); }
+        .dl-btn-arch { background-color: rgba(129, 140, 248, 0.1); border: 1px solid var(--neon-purple); color: var(--neon-purple); font-size: 0.9rem; }
+        .dl-btn-arch:hover { background-color: var(--neon-purple); color: #0b0f19; transform: translateY(-2px); }
+        .dl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 15px; }
+        @media (max-width: 600px) { .dl-grid { grid-template-columns: 1fr; } }
         :root {
             --bg-deep: #0b0f19;
             --bg-card: #131a26;
@@ -60,7 +72,42 @@
                 مجموعه <strong>آذرخش فوتونیک</strong> با هدف تکوین بستری پویا میان دانش پیشرفته آکادمیک و صنایع نوین تکنولوژیک پایه‌گذاری شده است. رسالت بنیادین ما، بومی‌سازی فناوری‌های راهبردی، ساخت تجهیزات دقیق نوری و ارائه راهکارهای دانش‌بنیان در حوزه اپتیک و فوتونیک است. ما عمیقاً باور داریم که تحول خلاقانه در اکوسیستم فناوری کشور، تنها با تکیه بر توانمندی نخبگان و استعدادهای درخشان دانشگاهی محقق می‌شود.
             </p>
         </section>
+<!-- بخش دانلود نرم‌افزار -->
+        <section class="card download-box">
+            <h2>مرکز دانلود نرم‌افزار</h2>
+            <h3 class="dl-title">
+                <svg style="width: 28px; height: 28px;" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>
+                آذرخش آنالایزر (Azarakhsh Analyzer)
+            </h3>
+            <p style="text-align: justify; color: var(--text-secondary); margin-bottom: 25px; font-size: 0.95rem;">
+                نرم‌افزار اختصاصی تحلیل و پردازش داده‌های اپتیکی؛ توسعه‌یافته با معماری قدرتمند فلاتر (Flutter) جهت ارائه بالاترین سرعت و دقت. لطفاً نسخه متناسب با سیستم‌عامل و پلتفرم دستگاه خود را دریافت نمایید.
+            </p>
 
+            <!-- دکمه نسخه ویندوز -->
+            <a href="https://s34.picofile.com/file/8491044442/Azarakhsh_Photonic_v1_0_Windows.zip.html" target="_blank" class="dl-btn dl-btn-win" dir="ltr">
+                📥 Download for Windows (.exe)
+            </a>
+
+            <h4 style="margin-top: 25px; margin-bottom: 15px; color: #e2e8f0; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px;">نسخه‌های اندروید (Android)</h4>
+            
+            <!-- دکمه نسخه جامع اندروید -->
+            <a href="https://s34.picofile.com/file/8491044642/Azarakhsh_Photonic_v1_0_Universal.apk.html" target="_blank" class="dl-btn dl-btn-uni" dir="ltr">
+                📥 Download Universal (.apk) - پیشنهادی
+            </a>
+
+            <!-- دکمه‌های معماری‌های مختلف اندروید -->
+            <div class="dl-grid">
+                <a href="https://s34.picofile.com/file/8491044492/Azarakhsh_Photonic_v1_0_ARM64.apk.html" target="_blank" class="dl-btn dl-btn-arch" dir="ltr">
+                    ARM64 (v8a)
+                </a>
+                <a href="https://s34.picofile.com/file/8491044542/Azarakhsh_Photonic_v1_0_ARMv7.apk.html" target="_blank" class="dl-btn dl-btn-arch" dir="ltr">
+                    ARM (v7a)
+                </a>
+                <a href="https://s34.picofile.com/file/8491044742/Azarakhsh_Photonic_v1_0_x86_64.apk.html" target="_blank" class="dl-btn dl-btn-arch" dir="ltr">
+                    x86_64
+                </a>
+            </div>
+        </section>
         <section class="card form-box">
             <h2>فرصت همکاری ویژه استعدادهای درخشان</h2>
             <p style="text-align: center; margin-bottom: 30px; color: var(--text-secondary);">
