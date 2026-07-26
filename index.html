@@ -13,6 +13,11 @@
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
+        /* استایل منوی بالای صفحه */
+        .navbar { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; font-weight: bold; font-size: 1.05rem; transition: color 0.3s ease; padding: 5px 10px; border-radius: 6px; }
+        .nav-link:hover { color: var(--neon-blue); background-color: rgba(56, 189, 248, 0.05); }
+        .nav-link.active { color: var(--text-primary); border-bottom: 2px solid var(--neon-blue); border-radius: 0; }
         :root {
             --bg-deep: #0b0f19;
             --bg-card: #131a26;
@@ -48,6 +53,11 @@
     </div>
 
     <div class="container">
+        <!-- منوی دسترسی سریع -->
+        <nav class="navbar">
+            <a href="index.html" class="nav-link active">صفحه اصلی (دعوت به همکاری)</a>
+            <a href="download.html" class="nav-link">مرکز دانلود نرم‌افزار</a>
+        </nav>
         <header class="header">
             <img src="logo.jpg" alt="لوگوی شرکت آذرخش فوتونیک" class="logo">
             <h1 class="brand-title">آذرخش فوتونیک</h1>
