@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مرکز دانلود | آذرخش فوتونیک</title>
+    <script>
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+            location.replace(`https:${location.href.substring(location.protocol.length)}`);
+        }
+    </script>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --bg-deep: #0b0f19; --bg-card: #131a26; --neon-blue: #38bdf8; --neon-purple: #818cf8; --neon-emerald: #10b981; --text-primary: #f8fafc; --text-secondary: #94a3b8; }
+        body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg-deep); color: var(--text-primary); margin: 0; padding: 0; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        
+        .navbar { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; font-weight: bold; font-size: 1.05rem; transition: color 0.3s ease; padding: 5px 10px; border-radius: 6px; }
+        .nav-link:hover { color: var(--neon-blue); background-color: rgba(56, 189, 248, 0.05); }
+        .nav-link.active { color: var(--text-primary); border-bottom: 2px solid var(--neon-blue); border-radius: 0; }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .logo { max-width: 150px; height: auto; margin: 0 auto 15px; display: block; -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%); mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%); }
+        .brand-title { color: var(--text-primary); font-size: 1.6rem; font-weight: 800; margin: 10px 0 5px 0; letter-spacing: -0.5px; background: linear-gradient(to left, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .card { background-color: var(--bg-card); padding: 35px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .card-intro { border-top: 3px solid var(--neon-blue); }
+        .card-demo { border-top: 3px solid #f59e0b; }
+        .card-dl { border-top: 3px solid var(--neon-emerald); }
+        .card-guide { border-top: 3px solid #ef4444; }
+        
+        .card h2 { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; }
+        .feature-list { list-style: none; padding: 0; margin: 0; }
+        .feature-list li { position: relative; padding-right: 25px; margin-bottom: 15px; color: #e2e8f0; text-align: justify; }
+        .feature-list li::before { content: "🔹"; position: absolute; right: 0; top: 2px; font-size: 0.9rem; }
+        .en-term { display: inline-block; direction: ltr; color: var(--neon-blue); font-family: monospace; font-size: 1rem; }
+        
+        .demo-box { background-color: rgba(245, 158, 11, 0.1); border: 1px dashed #f59e0b; padding: 15px; border-radius: 8px; text-align: center; margin: 20px 0; }
+        .demo-code { font-size: 1.5rem; color: #f59e0b; font-weight: bold; letter-spacing: 2px; direction: ltr; display: inline-block; }
+        
+        .dl-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; text-decoration: none; font-family: 'Vazirmatn', sans-serif; transition: all 0.3s ease; box-sizing: border-box; }
+        .dl-title { font-weight: bold; font-size: 1.05rem; margin-bottom: 5px; }
+        .dl-size { font-size: 0.85rem; opacity: 0.8; }
+        
+        .dl-btn-win { background-color: rgba(56, 189, 248, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
+        .dl-btn-win:hover { background-color: var(--neon-blue); color: #0b0f19; transform: translateY(-2px); }
+        
+        .dl-btn-uni { background-color: rgba(16, 185, 129, 0.1); border: 1px solid var(--neon-emerald); color: var(--neon-emerald); }
+        .dl-btn-uni:hover { background-color: var(--neon-emerald); color: #0b0f19; transform: translateY(-2px); }
+        
+        .dl-btn-arch { background-color: rgba(129, 140, 248, 0.1); border: 1px solid var(--neon-purple); color: var(--neon-purple); }
+        .dl-btn-arch:hover { background-color: var(--neon-purple); color: #0b0f19; transform: translateY(-2px); }
+        
+        .dl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 15px; }
+        @media (max-width: 768px) { .dl-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <nav class="navbar">
+            <a href="index.html" class="nav-link">صفحه اصلی (دعوت به همکاری)</a>
+            <a href="download.html" class="nav-link active">مرکز دانلود نرم‌افزار</a>
+        </nav>
+
+        <header class="header">
+            <img src="logo.jpg" alt="لوگوی شرکت آذرخش فوتونیک" class="logo">
+            <h1 class="brand-title">دانلود پلتفرم تخصصی تحلیل سنسورهای آذرخش فوتونیک (نسخه ۱.۰)</h1>
+        </header>
+
+        <!-- معرفی و قابلیت‌ها -->
+        <section class="card card-intro">
+            <h2 style="color: var(--neon-blue);">⚙️ قابلیت‌ها و موتورهای محاسباتی نرم‌افزار</h2>
+            <p style="text-align: justify; margin-bottom: 25px; font-size: 1.05rem;">
+                مجموعه <strong>آذرخش فوتونیک</strong> با افتخار نخستین نرم‌افزار تخصصی در زمینه محاسبات، شبیه‌سازی و ارزیابی عملکرد سنسورهای پلاسمونیکی و ادوات متامتریال را معرفی می‌کند. این پلتفرم مهندسی با هدف تسهیل فرآیند تحقیق و توسعه برای پژوهشگران، مهندسان اپتیک و صنایع پیشرفته طراحی شده است تا تحلیل‌های پیچیده‌ی نوری را با بالاترین دقت و در سریع‌ترین زمان ممکن انجام دهد.
+            </p>
+            <ul class="feature-list">
+                <li><strong>تحلیلگر مدل کلاسیک (کرچمن):</strong> محاسبه دقیق زاویه تشدید پلاسمون سطحی <span class="en-term">(SPR)</span> بر اساس ضرایب شکست محیط و منشور.</li>
+                <li><strong>تحلیلگر متامتریال (مدل RLC):</strong> استخراج فرکانس تشدید ساختارهای نانویی با استفاده از مدل مدار معادل <span class="en-term">(RLC)</span> بر اساس پارامترهای هندسی دقیق.</li>
+                <li><strong>موتور درون‌یابی داده‌محور (PoC):</strong> استخراج پاسخ مطلق و هوشمند بر اساس دیتابیس‌های شبیه‌سازی شده.</li>
+                <li><strong>ارزیاب هوشمند عملکرد سنسور:</strong> محاسبه‌ی آنی پارامترهای کلیدی شامل حساسیت <span class="en-term">(Sensitivity)</span>، فاکتور شایستگی <span class="en-term">(FOM)</span> و دقت تشخیص <span class="en-term">(DA)</span> در هر دو حالت بازجویی طول‌موجی و زاویه‌ای.</li>
+            </ul>
+        </section>
+
+        <!-- دمو و لایسنس -->
+        <section class="card card-demo">
+            <h2 style="color: #f59e0b;">🎁 نسخه دمو و راهنمای دریافت لایسنس</h2>
+            <p style="text-align: justify;">برای آشنایی شما با محیط کاربری و قابلیت‌های پردازشی این پلتفرم، امکان دسترسی موقت فراهم شده است. پس از نصب برنامه، می‌توانید با وارد کردن کد زیر، از یک نشست کاری ۲۰ دقیقه‌ای بهره‌مند شوید (پس از اتمام زمان مقرر، نرم‌افزار به صورت خودکار قفل خواهد شد):</p>
+            
+            <div class="demo-box">
+                <span style="display: block; font-size: 0.95rem; margin-bottom: 5px; color: #fcd34d;">🔑 رمز ورود نسخه دمو:</span>
+                <span class="demo-code">12345</span>
+            </div>
+
+            <h3 style="font-size: 1.1rem; color: #e2e8f0; margin-top: 30px;">🔒 فعال‌سازی دائمی و نامحدود</h3>
+            <p style="text-align: justify; font-size: 0.95rem;">این نرم‌افزار یک محصول تجاری و اختصاصی است که توسط سیستم قفل سخت‌افزاری (DRM) محافظت می‌شود. جهت خرید لایسنس دائمی:</p>
+            <ol style="color: var(--text-secondary); line-height: 2; font-size: 0.95rem;">
+                <li>نرم‌افزار را روی سیستم یا گوشی خود نصب و اجرا کنید.</li>
+                <li>در صفحه اول، «شناسه سیستم» اختصاصی خود را کپی کنید.</li>
+                <li>شناسه را از طریق راه‌های ارتباطی (پشتیبانی تلگرام/ایمیل شرکت) برای ما ارسال کنید تا کد فعال‌سازیِ منحصر‌به‌فرد شما صادر گردد.</li>
+            </ol>
+        </section>
+
+        <!-- لینک‌های دانلود -->
+        <section class="card card-dl">
+            <h2 style="color: var(--neon-emerald);">📥 لینک‌های دانلود مستقیم</h2>
+            
+            <h4 style="color: #e2e8f0; margin-bottom: 15px;">💻 سیستم‌عامل ویندوز</h4>
+            <a href="https://s34.picofile.com/file/8491044442/Azarakhsh_Photonic_v1_0_Windows.zip.html" target="_blank" class="dl-btn dl-btn-win">
+                <span class="dl-title">📥 دانلود فایل اجرایی ویندوز (.exe)</span>
+                <span class="dl-size">حجم: ۱۶.۴ مگابایت</span>
+            </a>
+
+            <h4 style="color: #e2e8f0; margin-top: 30px; margin-bottom: 10px;">📱 سیستم‌عامل اندروید</h4>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">(لطفاً نسخه متناسب با پردازنده گوشی خود را دانلود نمایید. در صورت عدم اطلاع از نوع پردازنده، نسخه جامع را نصب کنید).</p>
+            
+            <a href="https://s34.picofile.com/file/8491044642/Azarakhsh_Photonic_v1_0_Universal.apk.html" target="_blank" class="dl-btn dl-btn-uni">
+                <span class="dl-title">📥 دانلود نسخه جامع و پرکاربرد (Universal)</span>
+                <span class="dl-size">حجم: ۵۰.۹ مگابایت</span>
+            </a>
+
+            <div class="dl-grid">
+                <a href="https://s34.picofile.com/file/8491044492/Azarakhsh_Photonic_v1_0_ARM64.apk.html" target="_blank" class="dl-btn dl-btn-arch">
+                    <span class="dl-title">نسخه ARM64</span>
+                    <span class="dl-size">حجم: ۲۱ مگابایت</span>
+                </a>
+                <a href="https://s34.picofile.com/file/8491044542/Azarakhsh_Photonic_v1_0_ARMv7.apk.html" target="_blank" class="dl-btn dl-btn-arch">
+                    <span class="dl-title">نسخه ARM (v7a)</span>
+                    <span class="dl-size">حجم: ۱۸.۴ مگابایت</span>
+                </a>
+                <a href="https://s34.picofile.com/file/8491044742/Azarakhsh_Photonic_v1_0_x86_64.apk.html" target="_blank" class="dl-btn dl-btn-arch">
+                    <span class="dl-title">شبیه‌سازها (x86_64)</span>
+                    <span class="dl-size">حجم: ۲۲.۳ مگابایت</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- راهنمای نصب اندروید -->
+        <section class="card card-guide">
+            <h2 style="color: #ef4444;">💡 راهنمای مهم برای نصب نسخه اندروید</h2>
+            <p style="text-align: justify; font-size: 0.95rem;">
+                از آنجایی که این پلتفرم یک محصول تخصصی و شرکتی است و مستقیماً از طریق سرورهای وب‌سایت آذرخش فوتونیک (و نه مارکت‌های عمومی مانند گوگل‌پلی) عرضه می‌شود، سیستم‌عامل اندروید به صورت پیش‌فرض یک هشدار امنیتی برای برنامه‌های ناشناس صادر می‌کند.
+            </p>
+            <p style="text-align: justify; font-size: 0.95rem;">
+                در هنگام نصب، اگر با پیغام <strong>Google Play Protect (App blocked)</strong> مواجه شدید، جای هیچ‌گونه نگرانی نیست. نصب این نرم‌افزار کاملاً ایمن است. برای تکمیل فرآیند نصب، مراحل زیر را طی کنید:
+            </p>
+            <ol style="color: var(--text-secondary); line-height: 2; font-size: 0.95rem;">
+                <li>در پنجره‌ی اخطار، روی عبارت <strong>More details</strong> (جزئیات بیشتر) لمس کنید.</li>
+                <li>سپس گزینه‌ی <strong>Install anyway</strong> (در هر صورت نصب شود) را انتخاب نمایید تا نرم‌افزار با موفقیت روی دستگاه شما مستقر شود.</li>
+            </ol>
+        </section>
+
+    </div>
+
+</body>
+</html>
