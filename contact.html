@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ارتباط با ما | آذرخش فوتونیک</title>
+    <script>
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+            location.replace(`https:${location.href.substring(location.protocol.length)}`);
+        }
+    </script>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        :root { --bg-deep: #0b0f19; --bg-card: #131a26; --neon-blue: #38bdf8; --neon-purple: #818cf8; --neon-pink: #ec4899; --text-primary: #f8fafc; --text-secondary: #94a3b8; }
+        body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg-deep); color: var(--text-primary); margin: 0; padding: 0; line-height: 1.8; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        
+        /* استایل منو (هماهنگ با بقیه صفحات و ریسپانسیو برای موبایل) */
+        .navbar { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; }
+        .nav-link { color: var(--text-secondary); text-decoration: none; font-weight: bold; font-size: 1.05rem; transition: all 0.3s ease; padding: 8px 15px; border-radius: 8px; }
+        .nav-link:hover { color: var(--neon-blue); background-color: rgba(56, 189, 248, 0.05); }
+        .nav-link.active { color: var(--text-primary); border-bottom: 2px solid var(--neon-blue); background-color: rgba(56, 189, 248, 0.05); border-radius: 8px 8px 0 0; }
+        @media (max-width: 600px) {
+            .navbar { flex-direction: column; gap: 10px; border-bottom: none; padding-bottom: 5px; }
+            .nav-link { width: 100%; text-align: center; background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); box-sizing: border-box; }
+            .nav-link.active { border: 1px solid var(--neon-blue); border-bottom: 1px solid var(--neon-blue); border-radius: 8px; }
+        }
+
+        .header { text-align: center; margin-bottom: 40px; }
+        .logo { max-width: 150px; height: auto; margin: 0 auto 15px; display: block; -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%); mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%); }
+        .brand-title { color: var(--text-primary); font-size: 1.8rem; font-weight: 800; margin: 10px 0 5px 0; letter-spacing: -0.5px; background: linear-gradient(to left, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .card { background-color: var(--bg-card); padding: 35px; border-radius: 16px; margin-bottom: 30px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); border-top: 3px solid var(--neon-pink); }
+        .card h2 { margin-top: 0; color: #ffffff; font-size: 1.4rem; padding-bottom: 12px; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); text-align: center;}
+        
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .contact-item { background-color: #0f1420; border: 1px solid #243146; padding: 25px 20px; border-radius: 12px; text-align: center; transition: transform 0.3s ease; }
+        .contact-item:hover { transform: translateY(-5px); border-color: var(--neon-pink); box-shadow: 0 5px 15px rgba(236, 72, 153, 0.1); }
+        
+        .icon-box { display: inline-flex; justify-content: center; align-items: center; width: 60px; height: 60px; background-color: rgba(236, 72, 153, 0.1); color: var(--neon-pink); border-radius: 50%; margin-bottom: 15px; }
+        .contact-title { font-weight: bold; font-size: 1.1rem; margin-bottom: 10px; color: #e2e8f0; }
+        .contact-desc { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 15px; }
+        .contact-action { display: inline-block; direction: ltr; font-weight: bold; color: var(--neon-blue); text-decoration: none; font-size: 1.05rem; }
+        .contact-action:hover { color: #ffffff; text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        
+        <!-- منوی سایت یکپارچه -->
+        <nav class="navbar">
+            <a href="index.html" class="nav-link">صفحه اصلی (همکاری)</a>
+            <a href="download.html" class="nav-link">مرکز دانلود</a>
+            <a href="contact.html" class="nav-link active">ارتباط با ما</a>
+        </nav>
+
+        <header class="header">
+            <img src="logo.jpg" alt="لوگوی شرکت آذرخش فوتونیک" class="logo">
+            <h1 class="brand-title">راه‌های ارتباط با آذرخش فوتونیک</h1>
+            <p style="color: var(--text-secondary); font-size: 1.05rem;">ما همواره آماده‌ی شنیدن ایده‌ها و پاسخگویی به نخبگان و صنایع هستیم.</p>
+        </header>
+
+        <section class="card">
+            <h2>پاسخگویی سریع و پشتیبانی</h2>
+            
+            <div class="contact-grid">
+                
+                <!-- باکس ایمیل -->
+                <div class="contact-item">
+                    <div class="icon-box">
+                        <svg style="width: 30px; height: 30px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div class="contact-title">پست الکترونیک (Email)</div>
+                    <div class="contact-desc">جهت ارسال مکاتبات رسمی، پروپوزال‌ها و درخواست‌های سازمانی.</div>
+                    <a href="mailto:mohammadhassanpoursalehi@gmail.com" class="contact-action">mohammadhassanpoursalehi<br>@gmail.com</a>
+                </div>
+
+                <!-- باکس کانال ایتا -->
+                <div class="contact-item">
+                    <div class="icon-box">
+                        <svg style="width: 30px; height: 30px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div class="contact-title">شبکه‌های اجتماعی</div>
+                    <div class="contact-desc">عضویت در کانال رسمی ایتا جهت اطلاع از آخرین اخبار و دستاوردها.</div>
+                    <a href="https://eitaa.com/azarakhshphotonic" target="_blank" class="contact-action" style="direction: rtl;">@azarakhshphotonic</a>
+                </div>
+
+                <!-- باکس تلفن پشتیبانی (قابل ویرایش) -->
+                <div class="contact-item">
+                    <div class="icon-box">
+                        <svg style="width: 30px; height: 30px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    </div>
+                    <div class="contact-title">پشتیبانی و هماهنگی</div>
+                    <div class="contact-desc">ساعات پاسخگویی: شنبه تا چهارشنبه (۹ صبح الی ۱۷ عصر).</div>
+                    <div class="contact-action">09123456789</div>
+                </div>
+
+                <!-- باکس آدرس -->
+                <div class="contact-item">
+                    <div class="icon-box">
+                        <svg style="width: 30px; height: 30px;" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <div class="contact-title">آدرس استقرار (مکاتبات)</div>
+                    <div class="contact-desc">رفسنجان، دانشگاه ولی‌عصر (عج)، دپارتمان فیزیک، گروه فوتونیک.</div>
+                    <div class="contact-action" style="direction: rtl; font-size: 0.9rem;">مراجعه با هماهنگی قبلی</div>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
