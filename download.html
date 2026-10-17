@@ -1,155 +1,316 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl">
+<html lang="fa" dir="rtl" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مرکز دانلود | آذرخش فوتونیک</title>
     <script>
-        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.protocol !== 'file:') {
             location.replace(`https:${location.href.substring(location.protocol.length)}`);
         }
     </script>
     <link rel="icon" type="image/jpeg" href="logo.jpg">
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.0.0/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <style>
-        /* تنظیمات اختصاصی برای زیبایی در صفحه نمایش موبایل */
-        @media (max-width: 600px) {
-            /* ستونی کردن منوی بالا */
-            .navbar { flex-direction: column; gap: 10px; border-bottom: none; padding-bottom: 5px; }
-            .nav-link { width: 100%; text-align: center; background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); box-sizing: border-box; border-radius: 8px; }
-            .nav-link.active { border: 1px solid var(--neon-blue); border-bottom: 1px solid var(--neon-blue); border-radius: 8px; }
-            /* تنظیم سایز عنوان برای جلوگیری از فشردگی */
-            .brand-title { font-size: 1.25rem; line-height: 1.7; }
-        }
-        :root { --bg-deep: #0b0f19; --bg-card: #131a26; --neon-blue: #38bdf8; --neon-purple: #818cf8; --neon-emerald: #10b981; --text-primary: #f8fafc; --text-secondary: #94a3b8; }
-        body { font-family: 'Vazirmatn', sans-serif; background-color: var(--bg-deep); color: var(--text-primary); margin: 0; padding: 0; line-height: 1.8; }
-        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
-        
-        .navbar { display: flex; justify-content: center; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 15px; }
-        .nav-link { color: var(--text-secondary); text-decoration: none; font-weight: bold; font-size: 1.05rem; transition: color 0.3s ease; padding: 5px 10px; border-radius: 6px; }
-        .nav-link:hover { color: var(--neon-blue); background-color: rgba(56, 189, 248, 0.05); }
-        .nav-link.active { color: var(--text-primary); border-bottom: 2px solid var(--neon-blue); border-radius: 0; }
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-        .header { text-align: center; margin-bottom: 40px; }
-        .logo { max-width: 150px; height: auto; margin: 0 auto 15px; display: block; -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%); mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%); }
-        .brand-title { color: var(--text-primary); font-size: 1.6rem; font-weight: 800; margin: 10px 0 5px 0; letter-spacing: -0.5px; background: linear-gradient(to left, #ffffff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .card { background-color: var(--bg-card); padding: 35px; border-radius: 16px; margin-bottom: 25px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .card-intro { border-top: 3px solid var(--neon-blue); }
-        .card-demo { border-top: 3px solid #f59e0b; }
-        .card-dl { border-top: 3px solid var(--neon-emerald); }
-        .card-guide { border-top: 3px solid #ef4444; }
-        
-        .card h2 { display: flex; align-items: center; gap: 10px; font-size: 1.3rem; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; }
-        .feature-list { list-style: none; padding: 0; margin: 0; }
-        .feature-list li { position: relative; padding-right: 25px; margin-bottom: 15px; color: #e2e8f0; text-align: justify; }
-        .feature-list li::before { content: "🔹"; position: absolute; right: 0; top: 2px; font-size: 0.9rem; }
-        .en-term { display: inline-block; direction: ltr; color: var(--neon-blue); font-family: monospace; font-size: 1rem; }
-        
-        .demo-box { background-color: rgba(245, 158, 11, 0.1); border: 1px dashed #f59e0b; padding: 15px; border-radius: 8px; text-align: center; margin: 20px 0; }
-        .demo-code { font-size: 1.5rem; color: #f59e0b; font-weight: bold; letter-spacing: 2px; direction: ltr; display: inline-block; }
-        
-        .dl-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; padding: 12px; margin-bottom: 12px; border-radius: 8px; text-decoration: none; font-family: 'Vazirmatn', sans-serif; transition: all 0.3s ease; box-sizing: border-box; }
-        .dl-title { font-weight: bold; font-size: 1.05rem; margin-bottom: 5px; }
-        .dl-size { font-size: 0.85rem; opacity: 0.8; }
-        
-        .dl-btn-win { background-color: rgba(56, 189, 248, 0.1); border: 1px solid var(--neon-blue); color: var(--neon-blue); }
-        .dl-btn-win:hover { background-color: var(--neon-blue); color: #0b0f19; transform: translateY(-2px); }
-        
-        .dl-btn-uni { background-color: rgba(16, 185, 129, 0.1); border: 1px solid var(--neon-emerald); color: var(--neon-emerald); }
-        .dl-btn-uni:hover { background-color: var(--neon-emerald); color: #0b0f19; transform: translateY(-2px); }
-        
-        .dl-btn-arch { background-color: rgba(129, 140, 248, 0.1); border: 1px solid var(--neon-purple); color: var(--neon-purple); }
-        .dl-btn-arch:hover { background-color: var(--neon-purple); color: #0b0f19; transform: translateY(-2px); }
-        
-        .dl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 15px; }
-        @media (max-width: 768px) { .dl-grid { grid-template-columns: 1fr; } }
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { sans: ['Vazirmatn', 'sans-serif'] } } }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #060913;
+            color: #f8fafc;
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+        .glass {
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+        .logo-mask {
+            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%);
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%);
+        }
+        .dl-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .dl-card:hover {
+            transform: translateY(-4px);
+        }
     </style>
 </head>
-<body>
+<body class="antialiased selection:bg-emerald-500 selection:text-slate-950">
 
-    <div class="container">
-        
-        <nav class="navbar">
-            <a href="index.html" class="nav-link">صفحه اصلی (دعوت به همکاری)</a>
-            <a href="download.html" class="nav-link active">مرکز دانلود نرم‌افزار</a>
+    <!-- بوم پس‌زمینه تعاملی ذرات فوتون -->
+    <canvas id="photonCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-55"></canvas>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8">
+
+        <!-- منوی سایت یکپارچه (همراه با لینک ارتباط با ما) -->
+        <nav class="glass rounded-2xl p-2 mb-10 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 shadow-lg">
+            <a href="index.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base text-slate-300 hover:text-sky-400 hover:bg-white/5 flex items-center justify-center gap-2 transition">
+                <i data-lucide="sparkles" class="w-4 h-4"></i>
+                <span>صفحه اصلی (همکاری)</span>
+            </a>
+            <a href="download.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base text-white bg-emerald-500/15 border border-emerald-400/50 shadow-[0_0_15px_rgba(16,185,129,0.2)] flex items-center justify-center gap-2 transition">
+                <i data-lucide="download-cloud" class="w-4 h-4 text-emerald-400"></i>
+                <span>مرکز دانلود نرم‌افزار</span>
+            </a>
+            <a href="contact.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base text-slate-300 hover:text-sky-400 hover:bg-white/5 flex items-center justify-center gap-2 transition">
+                <i data-lucide="headset" class="w-4 h-4"></i>
+                <span>ارتباط با ما</span>
+            </a>
         </nav>
 
-        <header class="header">
-            <img src="logo.jpg" alt="لوگوی شرکت آذرخش فوتونیک" class="logo">
-<h1 class="brand-title">دانلود پلتفرم تخصصی تحلیل سنسورهای آذرخش فوتونیک <span style="white-space: nowrap;">(نسخه ۱.۰)</span></h1>        </header>
+        <!-- هدر صفحه دانلود -->
+        <header class="text-center mb-12">
+            <img src="logo.jpg" alt="لوگوی شرکت آذرخش فوتونیک" class="w-36 sm:w-44 h-auto mx-auto mb-4 block logo-mask">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono mb-3" dir="ltr">
+                <span>RELEASE v1.0</span>
+                <span>•</span>
+                <span>Windows & Android</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white leading-relaxed">
+                دانلود پلتفرم تخصصی تحلیل سنسورهای آذرخش فوتونیک <span class="text-sky-400 whitespace-nowrap">(نسخه ۱.۰)</span>
+            </h1>
+        </header>
 
-        <!-- معرفی و قابلیت‌ها -->
-        <section class="card card-intro">
-            <h2 style="color: var(--neon-blue);">⚙️ قابلیت‌ها و موتورهای محاسباتی نرم‌افزار</h2>
-            <p style="text-align: justify; margin-bottom: 25px; font-size: 1.05rem;">
-                مجموعه <strong>آذرخش فوتونیک</strong> با افتخار نخستین نرم‌افزار تخصصی در زمینه محاسبات، شبیه‌سازی و ارزیابی عملکرد سنسورهای پلاسمونیکی و ادوات متامتریال را معرفی می‌کند. این پلتفرم مهندسی با هدف تسهیل فرآیند تحقیق و توسعه برای پژوهشگران، مهندسان اپتیک و صنایع پیشرفته طراحی شده است تا تحلیل‌های پیچیده‌ی نوری را با بالاترین دقت و در سریع‌ترین زمان ممکن انجام دهد.
+        <!-- بخش ۱: معرفی و قابلیت‌ها -->
+        <section class="glass rounded-3xl p-6 sm:p-9 mb-8 border-t-4 border-t-sky-400 shadow-2xl">
+            <h2 class="text-xl sm:text-2xl font-extrabold text-sky-400 flex items-center gap-2.5 pb-4 mb-5 border-b border-white/10">
+                <i data-lucide="cpu" class="w-6 h-6"></i>
+                <span>قابلیت‌ها و موتورهای محاسباتی نرم‌افزار</span>
+            </h2>
+            <p class="text-slate-200 text-justify mb-6 text-sm sm:text-base leading-loose">
+                مجموعه <strong class="text-white">آذرخش فوتونیک</strong> با افتخار نخستین نرم‌افزار تخصصی در زمینه محاسبات، شبیه‌سازی و ارزیابی عملکرد سنسورهای پلاسمونیکی و ادوات متامتریال را معرفی می‌کند. این پلتفرم مهندسی با هدف تسهیل فرآیند تحقیق و توسعه برای پژوهشگران، مهندسان اپتیک و صنایع پیشرفته طراحی شده است تا تحلیل‌های پیچیده‌ی نوری را با بالاترین دقت و در سریع‌ترین زمان ممکن انجام دهد.
             </p>
-            <ul class="feature-list">
-                <li><strong>تحلیلگر مدل کلاسیک (کرچمن):</strong> محاسبه دقیق زاویه تشدید پلاسمون سطحی <span class="en-term">(SPR)</span> بر اساس ضرایب شکست محیط و منشور.</li>
-                <li><strong>تحلیلگر متامتریال (مدل RLC):</strong> استخراج فرکانس تشدید ساختارهای نانویی با استفاده از مدل مدار معادل <span class="en-term">(RLC)</span> بر اساس پارامترهای هندسی دقیق.</li>
-                <li><strong>موتور درون‌یابی داده‌محور (PoC):</strong> استخراج پاسخ مطلق و هوشمند بر اساس دیتابیس‌های شبیه‌سازی شده.</li>
-                <li><strong>ارزیاب هوشمند عملکرد سنسور:</strong> محاسبه‌ی آنی پارامترهای کلیدی شامل حساسیت <span class="en-term">(Sensitivity)</span>، فاکتور شایستگی <span class="en-term">(FOM)</span> و دقت تشخیص <span class="en-term">(DA)</span> در هر دو حالت بازجویی طول‌موجی و زاویه‌ای.</li>
-            </ul>
-        </section>
 
-        <!-- دمو و لایسنس -->
-        <section class="card card-demo">
-            <h2 style="color: #f59e0b;">🎁 نسخه دمو و راهنمای دریافت لایسنس</h2>
-            <p style="text-align: justify;">برای آشنایی شما با محیط کاربری و قابلیت‌های پردازشی این پلتفرم، امکان دسترسی موقت فراهم شده است. پس از نصب برنامه، می‌توانید با وارد کردن کد زیر، از یک نشست کاری ۲۰ دقیقه‌ای بهره‌مند شوید (پس از اتمام زمان مقرر، نرم‌افزار به صورت خودکار قفل خواهد شد):</p>
-            
-            <div class="demo-box">
-                <span style="display: block; font-size: 0.95rem; margin-bottom: 5px; color: #fcd34d;">🔑 رمز ورود نسخه دمو:</span>
-                <span class="demo-code">12345</span>
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-slate-900/75 p-5 rounded-2xl border border-slate-800 hover:border-sky-500/40 transition">
+                    <div class="flex items-center gap-2 text-white font-bold mb-2">
+                        <span class="w-2 h-2 rounded-full bg-sky-400"></span>
+                        <span>تحلیلگر مدل کلاسیک (کرچمن)</span>
+                        <span class="mr-auto text-xs font-mono text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded" dir="ltr">SPR</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 text-justify">
+                        محاسبه دقیق زاویه تشدید پلاسمون سطحی بر اساس ضرایب شکست محیط و منشور.
+                    </p>
+                </div>
 
-            <h3 style="font-size: 1.1rem; color: #e2e8f0; margin-top: 30px;">🔒 فعال‌سازی دائمی و نامحدود</h3>
-            <p style="text-align: justify; font-size: 0.95rem;">این نرم‌افزار یک محصول تجاری و اختصاصی است که توسط سیستم قفل سخت‌افزاری (DRM) محافظت می‌شود. جهت خرید لایسنس دائمی:</p>
-            <ol style="color: var(--text-secondary); line-height: 2; font-size: 0.95rem;">
-                <li>نرم‌افزار را روی سیستم یا گوشی خود نصب و اجرا کنید.</li>
-                <li>در صفحه اول، «شناسه سیستم» اختصاصی خود را کپی کنید.</li>
-                <li>شناسه را از طریق راه‌های ارتباطی (پشتیبانی تلگرام/ایمیل شرکت) برای ما ارسال کنید تا کد فعال‌سازیِ منحصر‌به‌فرد شما صادر گردد.</li>
-            </ol>
-        </section>
+                <div class="bg-slate-900/75 p-5 rounded-2xl border border-slate-800 hover:border-indigo-500/40 transition">
+                    <div class="flex items-center gap-2 text-white font-bold mb-2">
+                        <span class="w-2 h-2 rounded-full bg-indigo-400"></span>
+                        <span>تحلیلگر متامتریال (مدل مدار معادل)</span>
+                        <span class="mr-auto text-xs font-mono text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded" dir="ltr">RLC</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 text-justify">
+                        استخراج فرکانس تشدید ساختارهای نانویی با استفاده از مدل مدار معادل بر اساس پارامترهای هندسی دقیق.
+                    </p>
+                </div>
 
-        <!-- لینک‌های دانلود -->
-        <section class="card card-dl">
-            <h2 style="color: var(--neon-emerald);">📥 لینک‌های دانلود مستقیم</h2>
-            
-            <h4 style="color: #e2e8f0; margin-bottom: 15px;">💻 سیستم‌عامل ویندوز</h4>
-            <a href="https://s34.picofile.com/file/8491044442/Azarakhsh_Photonic_v1_0_Windows.zip.html" target="_blank" class="dl-btn dl-btn-win">
-                <span class="dl-title">📥 دانلود فایل اجرایی ویندوز (exe.)</span>
-                <span class="dl-size">حجم: ۱۶.۴ مگابایت</span>
-            </a>
+                <div class="bg-slate-900/75 p-5 rounded-2xl border border-slate-800 hover:border-emerald-500/40 transition">
+                    <div class="flex items-center gap-2 text-white font-bold mb-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                        <span>موتور درون‌یابی داده‌محور</span>
+                        <span class="mr-auto text-xs font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded" dir="ltr">PoC</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 text-justify">
+                        استخراج پاسخ مطلق و هوشمند بر اساس دیتابیس‌های شبیه‌سازی شده.
+                    </p>
+                </div>
 
-            <h4 style="color: #e2e8f0; margin-top: 30px; margin-bottom: 10px;">📱 سیستم‌عامل اندروید</h4>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 15px;">(لطفاً نسخه متناسب با پردازنده گوشی خود را دانلود نمایید. در صورت عدم اطلاع از نوع پردازنده، نسخه جامع را نصب کنید).</p>
-            
-            <a href="https://s34.picofile.com/file/8491049934/Azarakhsh_Photonic_v1_0_Universal.apk.html" target="_blank" class="dl-btn dl-btn-uni">
-                <span class="dl-title">📥 دانلود نسخه جامع و پرکاربرد (Universal)</span>
-                <span class="dl-size">حجم: ۵۰.۹ مگابایت</span>
-            </a>
-
-            <div class="dl-grid">
-                <a href="https://s34.picofile.com/file/8491049818/Azarakhsh_Photonic_v1_0_ARM64.apk.html" target="_blank" class="dl-btn dl-btn-arch">
-                    <span class="dl-title">نسخه ARM64</span>
-                    <span class="dl-size">حجم: ۲۱ مگابایت</span>
-                </a>
-                <a href="https://s34.picofile.com/file/8491049850/Azarakhsh_Photonic_v1_0_ARMv7.apk.html" target="_blank" class="dl-btn dl-btn-arch">
-                    <span class="dl-title">نسخه ARM (v7a)</span>
-                    <span class="dl-size">حجم: ۱۸.۴ مگابایت</span>
-                </a>
-                <a href="https://s34.picofile.com/file/8491049992/Azarakhsh_Photonic_v1_0_x86_64.apk.html" target="_blank" class="dl-btn dl-btn-arch">
-                    <span class="dl-title">شبیه‌سازها (x86_64)</span>
-                    <span class="dl-size">حجم: ۲۲.۳ مگابایت</span>
-                </a>
+                <div class="bg-slate-900/75 p-5 rounded-2xl border border-slate-800 hover:border-amber-500/40 transition">
+                    <div class="flex items-center gap-2 text-white font-bold mb-2">
+                        <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                        <span>ارزیاب هوشمند عملکرد سنسور</span>
+                        <span class="mr-auto text-xs font-mono text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded" dir="ltr">S | FOM | DA</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-300 text-justify">
+                        محاسبه‌ی آنی پارامترهای کلیدی شامل حساسیت <span class="font-mono text-sky-400" dir="ltr">(Sensitivity)</span>، فاکتور شایستگی <span class="font-mono text-sky-400" dir="ltr">(FOM)</span> و دقت تشخیص <span class="font-mono text-sky-400" dir="ltr">(DA)</span> در هر دو حالت بازجویی طول‌موجی و زاویه‌ای.
+                    </p>
+                </div>
             </div>
         </section>
 
-        <!-- راهنمای نصب اندروید -->
-      
+        <!-- بخش ۲: نسخه دمو و راهنمای دریافت لایسنس -->
+        <section class="glass rounded-3xl p-6 sm:p-9 mb-8 border-t-4 border-t-amber-400 shadow-2xl">
+            <h2 class="text-xl sm:text-2xl font-extrabold text-amber-400 flex items-center gap-2.5 pb-4 mb-5 border-b border-white/10">
+                <i data-lucide="key-round" class="w-6 h-6"></i>
+                <span>نسخه دمو و راهنمای دریافت لایسنس</span>
+            </h2>
+            <p class="text-slate-200 text-justify text-sm sm:text-base mb-6">
+                برای آشنایی شما با محیط کاربری و قابلیت‌های پردازشی این پلتفرم، امکان دسترسی موقت فراهم شده است. پس از نصب برنامه، می‌توانید با وارد کردن کد زیر، از یک نشست کاری ۲۰ دقیقه‌ای بهره‌مند شوید (پس از اتمام زمان مقرر، نرم‌افزار به صورت خودکار قفل خواهد شد):
+            </p>
+
+            <!-- باکس کد دمو با قابلیت کپی -->
+            <div onclick="copyDemoCode()" class="cursor-pointer group bg-amber-500/10 border-2 border-dashed border-amber-400/60 hover:border-amber-400 rounded-2xl p-5 text-center my-6 transition">
+                <span class="block text-sm text-amber-200 mb-1">🔑 رمز ورود نسخه دمو (برای کپی کلیک کنید):</span>
+                <div class="inline-flex items-center gap-3">
+                    <span class="text-3xl font-black text-amber-400 tracking-widest font-mono" dir="ltr">12345</span>
+                    <i data-lucide="copy" class="w-5 h-5 text-amber-300 group-hover:scale-110 transition"></i>
+                </div>
+                <span id="copyStatus" class="block text-xs text-emerald-400 mt-1 hidden">✅ کد ۱۲۳۴۵ در حافظه کپی شد!</span>
+            </div>
+
+            <div class="bg-slate-900/80 rounded-2xl p-6 border border-slate-800 mt-6">
+                <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2 mb-3">
+                    <i data-lucide="lock" class="w-5 h-5 text-amber-400"></i>
+                    <span>فعال‌سازی دائمی و نامحدود (قفل سخت‌افزاری DRM)</span>
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-300 text-justify mb-4">
+                    این نرم‌افزار یک محصول تجاری و اختصاصی است که توسط سیستم قفل سخت‌افزاری (DRM) محافظت می‌شود. جهت خرید لایسنس دائمی:
+                </p>
+                <ol class="space-y-3 text-xs sm:text-sm text-slate-300 list-decimal list-inside">
+                    <li class="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">نرم‌افزار را روی سیستم یا گوشی خود نصب و اجرا کنید.</li>
+                    <li class="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">در صفحه اول، <strong class="text-amber-300">«شناسه سیستم»</strong> اختصاصی خود را کپی کنید.</li>
+                    <li class="bg-slate-950/60 p-3 rounded-xl border border-slate-800/80">شناسه را از طریق راه‌های ارتباطی (<a href="contact.html" class="text-sky-400 underline hover:text-sky-300">صفحه ارتباط با ما</a>) برای ما ارسال کنید تا کد فعال‌سازیِ منحصر‌به‌فرد شما صادر گردد.</li>
+                </ol>
+            </div>
+        </section>
+
+        <!-- بخش ۳: لینک‌های دانلود مستقیم -->
+        <section class="glass rounded-3xl p-6 sm:p-9 mb-8 border-t-4 border-t-emerald-400 shadow-2xl">
+            <h2 class="text-xl sm:text-2xl font-extrabold text-emerald-400 flex items-center gap-2.5 pb-4 mb-6 border-b border-white/10">
+                <i data-lucide="download" class="w-6 h-6"></i>
+                <span>لینک‌های دانلود مستقیم</span>
+            </h2>
+
+            <!-- ویندوز -->
+            <div class="mb-8">
+                <h4 class="text-white font-bold text-base mb-3 flex items-center gap-2">
+                    <i data-lucide="monitor" class="w-5 h-5 text-sky-400"></i>
+                    <span>سیستم‌عامل ویندوز (Windows 10 / 11)</span>
+                </h4>
+                <a href="https://s34.picofile.com/file/8491044442/Azarakhsh_Photonic_v1_0_Windows.zip.html" target="_blank" class="dl-card flex flex-col sm:flex-row items-center justify-between w-full p-5 rounded-2xl bg-sky-500/10 hover:bg-sky-500 hover:text-slate-950 border border-sky-400/50 text-sky-300 shadow-[0_0_25px_rgba(56,189,248,0.15)] group">
+                    <div class="flex items-center gap-3 mb-2 sm:mb-0">
+                        <i data-lucide="file-archive" class="w-7 h-7"></i>
+                        <div class="text-center sm:text-right">
+                            <div class="font-extrabold text-base sm:text-lg">دانلود فایل اجرایی ویندوز (.exe در قالب فشرده)</div>
+                            <div class="text-xs opacity-80">مناسب تمامی لپ‌تاپ‌ها و کامپیوترهای شخصی</div>
+                        </div>
+                    </div>
+                    <span class="px-4 py-1.5 rounded-xl bg-slate-950/40 group-hover:bg-slate-950 group-hover:text-sky-400 font-mono text-sm font-bold">حجم: ۱۶.۴ مگابایت</span>
+                </a>
+            </div>
+
+            <!-- اندروید -->
+            <div>
+                <h4 class="text-white font-bold text-base mb-1 flex items-center gap-2">
+                    <i data-lucide="smartphone" class="w-5 h-5 text-emerald-400"></i>
+                    <span>سیستم‌عامل اندروید (Android)</span>
+                </h4>
+                <p class="text-xs text-slate-400 mb-4">
+                    (لطفاً نسخه متناسب با پردازنده گوشی خود را دانلود نمایید. در صورت عدم اطلاع از نوع پردازنده، نسخه جامع را نصب کنید).
+                </p>
+
+                <!-- نسخه جامع -->
+                <a href="https://s34.picofile.com/file/8491049934/Azarakhsh_Photonic_v1_0_Universal.apk.html" target="_blank" class="dl-card flex flex-col sm:flex-row items-center justify-between w-full p-5 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500 hover:text-slate-950 border border-emerald-400/50 text-emerald-300 shadow-[0_0_25px_rgba(16,185,129,0.15)] mb-4 group">
+                    <div class="flex items-center gap-3 mb-2 sm:mb-0">
+                        <i data-lucide="package-check" class="w-7 h-7"></i>
+                        <div class="text-center sm:text-right">
+                            <div class="font-extrabold text-base sm:text-lg">دانلود نسخه جامع و پرکاربرد (Universal APK)</div>
+                            <div class="text-xs opacity-80">سازگار با تمامی گوشی‌ها و تبلت‌های اندرویدی</div>
+                        </div>
+                    </div>
+                    <span class="px-4 py-1.5 rounded-xl bg-slate-950/40 group-hover:bg-slate-950 group-hover:text-emerald-400 font-mono text-sm font-bold">حجم: ۵۰.۹ مگابایت</span>
+                </a>
+
+                <!-- نسخه‌های تفکیک شده معماری پردازنده -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                    <a href="https://s34.picofile.com/file/8491049818/Azarakhsh_Photonic_v1_0_ARM64.apk.html" target="_blank" class="dl-card flex flex-col items-center justify-center p-4 rounded-2xl bg-indigo-500/10 hover:bg-indigo-500 hover:text-slate-950 border border-indigo-400/40 text-indigo-300 text-center">
+                        <span class="font-bold text-base mb-1">نسخه ARM64</span>
+                        <span class="text-xs opacity-80">گوشی‌های جدید (۶۴ بیتی)</span>
+                        <span class="mt-2 px-3 py-0.5 rounded-lg bg-slate-950/40 text-xs font-mono">حجم: ۲۱ مگابایت</span>
+                    </a>
+
+                    <a href="https://s34.picofile.com/file/8491049850/Azarakhsh_Photonic_v1_0_ARMv7.apk.html" target="_blank" class="dl-card flex flex-col items-center justify-center p-4 rounded-2xl bg-indigo-500/10 hover:bg-indigo-500 hover:text-slate-950 border border-indigo-400/40 text-indigo-300 text-center">
+                        <span class="font-bold text-base mb-1">نسخه ARM (v7a)</span>
+                        <span class="text-xs opacity-80">گوشی‌ها و تبلت‌های ۳۲ بیتی</span>
+                        <span class="mt-2 px-3 py-0.5 rounded-lg bg-slate-950/40 text-xs font-mono">حجم: ۱۸.۴ مگابایت</span>
+                    </a>
+
+                    <a href="https://s34.picofile.com/file/8491049992/Azarakhsh_Photonic_v1_0_x86_64.apk.html" target="_blank" class="dl-card flex flex-col items-center justify-center p-4 rounded-2xl bg-indigo-500/10 hover:bg-indigo-500 hover:text-slate-950 border border-indigo-400/40 text-indigo-300 text-center">
+                        <span class="font-bold text-base mb-1">نسخه x86_64</span>
+                        <span class="text-xs opacity-80">ویژه شبیه‌سازها</span>
+                        <span class="mt-2 px-3 py-0.5 rounded-lg bg-slate-950/40 text-xs font-mono">حجم: ۲۲.۳ مگابایت</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- بخش ۴: راهنمای نصب اندروید (تکمیل شده) -->
+        <section class="glass rounded-3xl p-6 sm:p-8 mb-10 border-t-4 border-t-rose-500 shadow-2xl">
+            <h2 class="text-lg sm:text-xl font-extrabold text-rose-400 flex items-center gap-2 pb-3 mb-4 border-b border-white/10">
+                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                <span>نکته مهم هنگام نصب در اندروید و ویندوز</span>
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-300 text-justify leading-relaxed">
+                از آنجا که این نرم‌افزار تخصصی به‌صورت مستقیم از سرورهای آذرخش فوتونیک (خارج از گوگل‌پلی و مایکروسافت استور) عرضه می‌شود، در صورت مشاهده پیغام امنیتی <span class="font-mono text-rose-300" dir="ltr">Google Play Protect</span> در اندروید گزینه <strong class="text-white">Install Anyway (نصب در هر صورت)</strong> و در ویندوز گزینه <strong class="text-white">More info / Run anyway</strong> را انتخاب فرمایید.
+            </p>
+        </section>
+
+        <footer class="text-center text-xs text-slate-500 pt-4 pb-8 border-t border-white/5">
+            © تمامی حقوق برای <strong class="text-slate-300">آذرخش فوتونیک (Azarakhshphotonic.ir)</strong> محفوظ است.
+        </footer>
 
     </div>
 
+    <script>
+        lucide.createIcons();
+
+        function copyDemoCode() {
+            navigator.clipboard.writeText('12345');
+            const st = document.getElementById('copyStatus');
+            st.classList.remove('hidden');
+            setTimeout(() => st.classList.add('hidden'), 3000);
+        }
+
+        // شبکه فوتونی پس‌زمینه
+        const pCanvas = document.getElementById('photonCanvas');
+        const pCtx = pCanvas.getContext('2d');
+        let particles = [];
+        function resizeBg() { pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeBg);
+        resizeBg();
+
+        for (let i = 0; i < 60; i++) {
+            particles.push({
+                x: Math.random() * pCanvas.width,
+                y: Math.random() * pCanvas.height,
+                vx: (Math.random() - 0.5) * 0.8,
+                vy: (Math.random() - 0.5) * 0.8,
+                r: Math.random() * 2 + 1,
+                c: ['#10b981', '#38bdf8', '#818cf8'][Math.floor(Math.random() * 3)]
+            });
+        }
+        function animateBg() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > pCanvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > pCanvas.height) p.vy *= -1;
+                pCtx.beginPath(); pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                pCtx.fillStyle = p.c; pCtx.fill();
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = p.x - particles[j].x, dy = p.y - particles[j].y;
+                    let d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < 110) {
+                        pCtx.beginPath();
+                        pCtx.strokeStyle = `rgba(16, 185, 129, ${(1 - d / 110) * 0.22})`;
+                        pCtx.moveTo(p.x, p.y); pCtx.lineTo(particles[j].x, particles[j].y);
+                        pCtx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
+    </script>
 </body>
 </html>
