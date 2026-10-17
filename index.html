@@ -3,35 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آذرخش فوتونیک | Azarakhsh Photonic - پیشگام در حسگرهای نوری و فرامواد</title>
-    <meta name="description" content="آذرخش فوتونیک؛ طراحی، شبیه‌سازی و توسعه نسل جدید حسگرهای نوری، پلاسمونیکی و ادوات فوتونیکی پیشرفته">
-    
-    <!-- فونت وزیرمتن -->
+    <title>آذرخش فوتونیک | توسعه فناوری‌های نوین اپتیک و دعوت به همکاری</title>
+    <!-- کدهای انتقال خودکار به محیط امن HTTPS -->
+    <script>
+        if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.protocol !== 'file:') {
+            location.replace(`https:${location.href.substring(location.protocol.length)}`);
+        }
+    </script>
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- آیکون‌های Lucide -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Vazirmatn', 'sans-serif'],
-                    },
-                    colors: {
-                        photon: {
-                            dark: '#030712',
-                            card: '#0b1120',
-                            cyan: '#06b6d4',
-                            violet: '#8b5cf6',
-                            laser: '#10b981',
-                            crimson: '#f43f5e'
-                        }
-                    }
+                    fontFamily: { sans: ['Vazirmatn', 'sans-serif'] },
                 }
             }
         }
@@ -39,746 +27,483 @@
 
     <style>
         body {
-            background-color: #030712;
+            background-color: #060913;
             color: #f8fafc;
             overflow-x: hidden;
+            line-height: 1.8;
         }
-
-        /* افکت شیشه‌ای مدرن */
         .glass {
-            background: rgba(15, 23, 42, 0.65);
+            background: rgba(15, 23, 42, 0.72);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(56, 189, 248, 0.15);
         }
-
-        /* درخشش نئونی و لیزری کارت‌ها */
         .photon-card {
             position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
-        }
-        .photon-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #06b6d4, #8b5cf6, transparent);
-            transition: left 0.7s ease;
-        }
-        .photon-card:hover::before {
-            left: 100%;
+            transition: all 0.35s ease;
         }
         .photon-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 35px -10px rgba(6, 182, 212, 0.25), 0 0 15px rgba(139, 92, 246, 0.15);
-            border-color: rgba(6, 182, 212, 0.4);
+            border-color: rgba(56, 189, 248, 0.35);
+            box-shadow: 0 12px 35px -10px rgba(56, 189, 248, 0.2);
         }
-
-        /* متن با گرادیان طیفی متحرک */
-        .spectral-text {
-            background: linear-gradient(to left, #22d3ee, #818cf8, #c084fc, #34d399, #22d3ee);
+        .logo-mask {
+            -webkit-mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%);
+            mask-image: radial-gradient(circle at center, rgba(0,0,0,1) 55%, rgba(0,0,0,0) 95%);
+        }
+        .spectral-title {
+            background: linear-gradient(to left, #ffffff, #38bdf8, #818cf8, #ffffff);
             background-size: 200% auto;
-            color: transparent;
             -webkit-background-clip: text;
-            background-clip: text;
+            -webkit-text-fill-color: transparent;
             animation: shine 6s linear infinite;
         }
-
         @keyframes shine {
-            to {
-                background-position: 200% center;
-            }
+            to { background-position: 200% center; }
         }
-
-        /* پرتو لیزر متحرک زیر هدر */
-        .laser-line {
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, rgba(6,182,212,0.8) 50%, transparent 100%);
-            box-shadow: 0 0 12px #06b6d4;
+        .input-photon {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: rgba(9, 13, 24, 0.85);
+            border: 1px solid #1e293b;
+            color: #f8fafc;
+            border-radius: 12px;
+            transition: all 0.3s ease;
         }
-
-        /* استایل اسلایدر سفارشی */
+        .input-photon:focus {
+            outline: none;
+            border-color: #38bdf8;
+            background-color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15), 0 0 15px rgba(56, 189, 248, 0.1);
+        }
         input[type=range] {
             -webkit-appearance: none;
             background: transparent;
         }
         input[type=range]::-webkit-slider-runnable-track {
-            height: 8px;
+            height: 6px;
             border-radius: 4px;
-            background: linear-gradient(90deg, #06b6d4, #8b5cf6, #f43f5e);
+            background: linear-gradient(90deg, #38bdf8, #818cf8, #10b981);
         }
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 22px;
-            width: 22px;
+            height: 20px;
+            width: 20px;
             border-radius: 50%;
             background: #ffffff;
-            box-shadow: 0 0 12px #06b6d4;
+            box-shadow: 0 0 10px #38bdf8;
             margin-top: -7px;
             cursor: pointer;
-            transition: transform 0.2s;
-        }
-        input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
         }
     </style>
 </head>
-<body class="antialiased selection:bg-cyan-500 selection:text-slate-950">
+<body class="antialiased selection:bg-sky-500 selection:text-slate-950">
 
-    <!-- بوم پس‌زمینه تعاملی شبکه فوتونی -->
-    <canvas id="photonCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-60"></canvas>
+    <!-- بوم پس‌زمینه تعاملی ذرات فوتون -->
+    <canvas id="photonCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-55"></canvas>
 
-    <!-- نوار ناوبری (Navbar) -->
-    <header class="fixed top-0 inset-x-0 z-50 glass">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-            <!-- لوگو -->
-            <a href="#" class="flex items-center gap-3 group">
-                <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-cyan-500/20 to-violet-600/20 border border-cyan-400/40 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.3)] group-hover:scale-105 transition">
-                    <i data-lucide="zap" class="w-6 h-6 text-cyan-400"></i>
-                </div>
-                <div>
-                    <span class="text-xl font-black tracking-tight text-white block">آذرخش <span class="text-cyan-400">فوتونیک</span></span>
-                    <span class="text-[11px] text-slate-400 tracking-widest uppercase font-mono block" dir="ltr">Azarakhsh Photonic</span>
-                </div>
-            </a>
-
-            <!-- منوی دسکتاپ -->
-            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-                <a href="#home" class="hover:text-cyan-400 transition">صفحه اصلی</a>
-                <a href="#simulator" class="hover:text-cyan-400 transition flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    شبیه‌ساز زنده حسگر
-                </a>
-                <a href="#technologies" class="hover:text-cyan-400 transition">حوزه‌های تخصصی</a>
-                <a href="#features" class="hover:text-cyan-400 transition">ویژگی‌های ساختار</a>
-                <a href="#contact" class="hover:text-cyan-400 transition">ارتباط با ما</a>
-            </nav>
-
-            <!-- دکمه فراخوان -->
-            <div class="flex items-center gap-3">
-                <a href="#simulator" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-violet-600 text-white font-semibold text-sm shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:shadow-[0_0_30px_rgba(139,92,246,0.6)] hover:scale-105 transition flex items-center gap-2">
-                    <i data-lucide="activity" class="w-4 h-4"></i>
-                    <span>آزمایشگاه نوری</span>
-                </a>
-            </div>
+    <!-- نوار اطلاعیه رسمی بالای صفحه -->
+    <div class="relative z-20 bg-gradient-to-r from-indigo-950 via-slate-900 to-indigo-950 text-indigo-200 text-center py-3 px-4 text-xs sm:text-sm border-b border-indigo-500/30 shadow-lg">
+        <div class="max-w-5xl mx-auto flex items-center justify-center gap-2 flex-wrap">
+            <span class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span>
+            <strong class="text-sky-300">اطلاعیه رسمی:</strong>
+            <span>پایگاه الکترونیکی آذرخش فوتونیک در فاز نخستِ راه‌اندازی قرار داشته و زیرساخت‌های جامع آن به تدریج تکمیل خواهد شد.</span>
         </div>
-        <div class="laser-line"></div>
-    </header>
+    </div>
 
-    <!-- بخش اول: Hero Section -->
-    <section id="home" class="relative z-10 pt-36 pb-20 lg:pt-44 lg:pb-28 px-4">
-        <div class="max-w-7xl mx-auto text-center">
-            <!-- نشانگر بالای تیتر -->
-            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-medium mb-8 shadow-[0_0_15px_rgba(6,182,212,0.2)]">
-                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span>مهندسی نور در مقیاس نانو و زیرطول‌موج</span>
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-8">
+
+        <!-- منوی سایت یکپارچه و واکنش‌گرا -->
+        <nav class="glass rounded-2xl p-2 mb-10 flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 shadow-lg">
+            <a href="index.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base text-white bg-sky-500/15 border border-sky-400/50 shadow-[0_0_15px_rgba(56,189,248,0.2)] flex items-center justify-center gap-2 transition">
+                <i data-lucide="sparkles" class="w-4 h-4 text-sky-400"></i>
+                <span>صفحه اصلی (همکاری)</span>
+            </a>
+            <a href="download.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base text-slate-300 hover:text-sky-400 hover:bg-white/5 flex items-center justify-center gap-2 transition">
+                <i data-lucide="download-cloud" class="w-4 h-4"></i>
+                <span>مرکز دانلود نرم‌افزار</span>
+            </a>
+            <a href="contact.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl font-bold text-sm sm:text-base text-slate-300 hover:text-sky-400 hover:bg-white/5 flex items-center justify-center gap-2 transition">
+                <i data-lucide="headset" class="w-4 h-4"></i>
+                <span>ارتباط با ما</span>
+            </a>
+        </nav>
+
+        <!-- هدر و لوگوی اصلی -->
+        <header class="text-center mb-12">
+            <div class="relative inline-block mb-4">
+                <div class="absolute -inset-2 rounded-full bg-gradient-to-r from-sky-500/20 via-indigo-500/20 to-sky-500/20 blur-xl animate-pulse"></div>
+                <img src="logo.jpg" alt="لوگوی شرکت آذرخش فوتونیک" class="relative w-48 sm:w-60 h-auto mx-auto block logo-mask">
             </div>
+            <h1 class="text-3xl sm:text-5xl font-black tracking-tight spectral-title mb-2">آذرخش فوتونیک</h1>
+            <p class="text-sky-400 text-base sm:text-lg font-medium flex items-center justify-center gap-2">
+                <i data-lucide="activity" class="w-5 h-5 text-indigo-400"></i>
+                <span>توسعه فناوری‌های نوین اپتیک، حسگرهای نوری و فوتونیک</span>
+            </p>
+        </header>
 
-            <!-- تیتر اصلی -->
-            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-tight mb-6">
-                مهار امواج نوری برای <br class="hidden sm:block" />
-                <span class="spectral-text">حسگری فوق‌دقیق آینده</span>
-            </h1>
-
-            <!-- توضیحات -->
-            <p class="max-w-3xl mx-auto text-slate-300 text-base sm:text-lg lg:text-xl leading-relaxed mb-10 font-light">
-                در <strong class="text-white font-semibold">آذرخش فوتونیک</strong>، ما با بهره‌گیری از فرامواد نوری، تشدیدهای پلاسمونیکی و مواد هوشمند تغییر فازدهنده، نسل نوینی از حسگرهای ضریب شکست و بیوسنسورهای فوق‌حساس را طراحی و شبیه‌سازی می‌کنیم.
+        <!-- کارت اول: رسالت ما -->
+        <section class="glass photon-card rounded-3xl p-6 sm:p-9 mb-8 border-t-4 border-t-sky-400 shadow-2xl">
+            <div class="flex items-center gap-3 pb-4 mb-5 border-b border-white/10">
+                <div class="w-10 h-10 rounded-xl bg-sky-500/15 border border-sky-400/30 flex items-center justify-center text-sky-400">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                </div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-white m-0">رسالت ما</h2>
+            </div>
+            <p class="text-slate-200 text-justify text-sm sm:text-base leading-loose">
+                مجموعه <strong class="text-sky-300 font-bold">آذرخش فوتونیک</strong> با هدف تکوین بستری پویا میان دانش پیشرفته آکادمیک و صنایع نوین تکنولوژیک پایه‌گذاری شده است. رسالت بنیادین ما، بومی‌سازی فناوری‌های راهبردی، ساخت تجهیزات دقیق نوری و ارائه راهکارهای دانش‌بنیان در حوزه اپتیک و فوتونیک است. ما عمیقاً باور داریم که تحول خلاقانه در اکوسیستم فناوری کشور، تنها با تکیه بر توانمندی نخبگان و استعدادهای درخشان دانشگاهی محقق می‌شود.
             </p>
 
-            <!-- دکمه‌ها -->
-            <div class="flex flex-wrap items-center justify-center gap-4 mb-16">
-                <a href="#simulator" class="px-8 py-4 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-base shadow-[0_0_30px_rgba(6,182,212,0.5)] transition flex items-center gap-2">
-                    <i data-lucide="sliders" class="w-5 h-5"></i>
-                    <span>اجرای شبیه‌ساز طیف نوری</span>
-                </a>
-                <a href="#technologies" class="px-8 py-4 rounded-2xl glass hover:bg-slate-800/80 text-white font-semibold text-base border border-slate-700 hover:border-cyan-400/50 transition flex items-center gap-2">
-                    <i data-lucide="layers" class="w-5 h-5 text-cyan-400"></i>
-                    <span>کاوش در فناوری‌ها</span>
-                </a>
-            </div>
-
-            <!-- شاخص‌های آماری و فنی -->
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-                <div class="glass p-5 rounded-2xl text-center photon-card">
-                    <div class="text-2xl sm:text-3xl font-black text-cyan-400 font-mono" dir="ltr">nm / RIU</div>
-                    <div class="text-xs sm:text-sm text-slate-400 mt-1">حساسیت طیفی بالا (S)</div>
+            <!-- نوار ویژگی‌های تخصصی -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-6 pt-5 border-t border-white/5 text-xs text-slate-300">
+                <div class="bg-slate-900/70 p-3.5 rounded-xl border border-slate-800 flex items-center gap-2.5">
+                    <i data-lucide="cpu" class="w-5 h-5 text-sky-400 shrink-0"></i>
+                    <span>طراحی حسگرهای پلاسمونیکی و متامتریال</span>
                 </div>
-                <div class="glass p-5 rounded-2xl text-center photon-card">
-                    <div class="text-2xl sm:text-3xl font-black text-violet-400 font-mono" dir="ltr">High-Q</div>
-                    <div class="text-xs sm:text-sm text-slate-400 mt-1">ضریب کیفیت و FOM بهینه</div>
+                <div class="bg-slate-900/70 p-3.5 rounded-xl border border-slate-800 flex items-center gap-2.5">
+                    <i data-lucide="waves" class="w-5 h-5 text-indigo-400 shrink-0"></i>
+                    <span>شفافیت القایی (PIT) و موج‌برهای نوری</span>
                 </div>
-                <div class="glass p-5 rounded-2xl text-center photon-card">
-                    <div class="text-2xl sm:text-3xl font-black text-emerald-400 font-mono" dir="ltr">PIT & Fano</div>
-                    <div class="text-xs sm:text-sm text-slate-400 mt-1">پنجره‌های شفافیت القایی</div>
-                </div>
-                <div class="glass p-5 rounded-2xl text-center photon-card">
-                    <div class="text-2xl sm:text-3xl font-black text-rose-400 font-mono" dir="ltr">FEM / FDTD</div>
-                    <div class="text-xs sm:text-sm text-slate-400 mt-1">مبتنی بر حل دقیق معادلات ماکسول</div>
+                <div class="bg-slate-900/70 p-3.5 rounded-xl border border-slate-800 flex items-center gap-2.5">
+                    <i data-lucide="code-2" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                    <span>توسعه نرم‌افزارهای محاسباتی اپتیک</span>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- بخش دوم: شبیه‌ساز تعاملی حسگر نوری (ویترین اصلی سایت) -->
-    <section id="simulator" class="relative z-10 py-16 px-4">
-        <div class="max-w-6xl mx-auto">
-            <div class="glass rounded-3xl p-6 sm:p-10 border border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.12)]">
-                
-                <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8 pb-6 border-b border-slate-800">
+        <!-- بخش ویژه فوتونیکی: شبیه‌ساز تعاملی طیف سنسور نوری -->
+        <section class="glass photon-card rounded-3xl p-6 sm:p-8 mb-8 border-t-4 border-t-emerald-400 shadow-2xl">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-5 border-b border-white/10">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-400/30 flex items-center justify-center text-emerald-400">
+                        <i data-lucide="sliders" class="w-5 h-5"></i>
+                    </div>
                     <div>
-                        <div class="inline-flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                            Interactive Optical Lab
-                        </div>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white">شبیه‌ساز زنده پاسخ طیفی حسگر ضریب شکست</h2>
-                        <p class="text-slate-400 text-sm mt-1">
-                            ضریب شکست محیط ($n$) را تغییر دهید و جابجایی بهنگام قله تشدید شفافیت القایی (PIT) را مشاهده کنید.
-                        </p>
-                    </div>
-                    <!-- نشانگر نمونه ماده -->
-                    <div class="flex items-center gap-3 bg-slate-900/90 px-5 py-3 rounded-2xl border border-slate-700 self-start lg:self-auto">
-                        <i data-lucide="flask-conical" class="w-6 h-6 text-cyan-400"></i>
-                        <div>
-                            <div class="text-xs text-slate-400">محیط نمونه تشخیص داده شده:</div>
-                            <div id="analyteName" class="text-sm font-bold text-cyan-300">آب مقطر (Water - 1.333)</div>
-                        </div>
+                        <h2 class="text-lg sm:text-xl font-extrabold text-white">نمایشگر تعاملی پاسخ طیفی حسگر نوری</h2>
+                        <p class="text-xs text-slate-400">تغییر ضریب شکست محیط نمونه و مشاهده جابجایی قله تشدید</p>
                     </div>
                 </div>
-
-                <!-- گرید کنترل‌ها و نمودار -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-                    
-                    <!-- پنل تنظیمات سمت راست -->
-                    <div class="space-y-6 bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80">
-                        <div>
-                            <div class="flex justify-between items-center mb-3">
-                                <label for="riSlider" class="text-sm font-bold text-slate-200">ضریب شکست محیط ($n$):</label>
-                                <span id="riValue" class="px-3 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 font-mono font-bold text-base" dir="ltr">1.333</span>
-                            </div>
-                            <input type="range" id="riSlider" min="1.300" max="1.420" step="0.001" value="1.333" class="w-full">
-                            <div class="flex justify-between text-[11px] text-slate-500 font-mono mt-2" dir="ltr">
-                                <span>1.300</span>
-                                <span>1.333 (H₂O)</span>
-                                <span>1.361 (Ethanol)</span>
-                                <span>1.420</span>
-                            </div>
-                        </div>
-
-                        <!-- دکمه‌های انتخاب سریع آنالیت‌ها -->
-                        <div>
-                            <div class="text-xs text-slate-400 mb-2.5">انتخاب سریع نمونه‌های استاندارد (الکل‌ها و حلال‌ها):</div>
-                            <div class="grid grid-cols-2 gap-2">
-                                <button onclick="setAnalyte(1.329, 'متانول (Methanol)')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-cyan-500/20 hover:border-cyan-500/40 border border-slate-700 text-xs text-slate-200 transition text-right flex justify-between items-center">
-                                    <span>متانول</span>
-                                    <span class="font-mono text-cyan-400">1.329</span>
-                                </button>
-                                <button onclick="setAnalyte(1.333, 'آب مقطر (Water)')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-cyan-500/20 hover:border-cyan-500/40 border border-slate-700 text-xs text-slate-200 transition text-right flex justify-between items-center">
-                                    <span>آب مقطر</span>
-                                    <span class="font-mono text-cyan-400">1.333</span>
-                                </button>
-                                <button onclick="setAnalyte(1.361, 'اتانول (Ethanol)')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-cyan-500/20 hover:border-cyan-500/40 border border-slate-700 text-xs text-slate-200 transition text-right flex justify-between items-center">
-                                    <span>اتانول</span>
-                                    <span class="font-mono text-cyan-400">1.361</span>
-                                </button>
-                                <button onclick="setAnalyte(1.377, 'ایزوپروپانول (IPA)')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-cyan-500/20 hover:border-cyan-500/40 border border-slate-700 text-xs text-slate-200 transition text-right flex justify-between items-center">
-                                    <span>ایزوپروپانول</span>
-                                    <span class="font-mono text-cyan-400">1.377</span>
-                                </button>
-                                <button onclick="setAnalyte(1.384, 'پروپانول (1-Propanol)')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-cyan-500/20 hover:border-cyan-500/40 border border-slate-700 text-xs text-slate-200 transition text-right flex justify-between items-center">
-                                    <span>پروپانول</span>
-                                    <span class="font-mono text-cyan-400">1.384</span>
-                                </button>
-                                <button onclick="setAnalyte(1.399, 'بوتانول (Butanol)')" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-cyan-500/20 hover:border-cyan-500/40 border border-slate-700 text-xs text-slate-200 transition text-right flex justify-between items-center">
-                                    <span>بوتانول</span>
-                                    <span class="font-mono text-cyan-400">1.399</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- خروجی‌های محاسباتی حسگر -->
-                        <div class="grid grid-cols-2 gap-3 pt-2">
-                            <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
-                                <div class="text-[11px] text-slate-400">طول موج تشدید ($\lambda_{res}$):</div>
-                                <div id="resWavelength" class="text-lg font-bold text-emerald-400 font-mono mt-0.5" dir="ltr">1566.5 nm</div>
-                            </div>
-                            <div class="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800">
-                                <div class="text-[11px] text-slate-400">جابجایی طیفی ($\Delta\lambda$):</div>
-                                <div id="deltaLambda" class="text-lg font-bold text-violet-400 font-mono mt-0.5" dir="ltr">+16.5 nm</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- بوم رسم نمودار طیف عبوری -->
-                    <div class="lg:col-span-2 bg-slate-950 rounded-2xl p-4 border border-slate-800 relative">
-                        <div class="flex justify-between items-center mb-2 px-2">
-                            <span class="text-xs text-slate-400 font-medium">طیف عبور نوری (Transmission Spectrum - $T$)</span>
-                            <span class="text-xs font-mono text-cyan-400" dir="ltr">S = 500 nm/RIU | FOM = 42.5 RIU⁻¹</span>
-                        </div>
-                        <canvas id="spectrumCanvas" width="700" height="320" class="w-full h-[260px] sm:h-[300px] rounded-xl"></canvas>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- بخش سوم: حوزه‌های تخصصی و فناوری‌ها -->
-    <section id="technologies" class="relative z-10 py-20 px-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="text-center max-w-3xl mx-auto mb-16">
-                <h2 class="text-3xl sm:text-4xl font-black text-white mb-4">محورهای پژوهشی و فناوری در <span class="text-cyan-400">آذرخش فوتونیک</span></h2>
-                <p class="text-slate-400 text-base">
-                    ترکیب فیزیک حالت جامد، الکترومغناطیس پیشرفته و نانوفوتونیک برای خلق ادوات نوری نسل چهارم
-                </p>
+                <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono self-start sm:self-auto" dir="ltr">
+                    λ_res = <span id="lambdaOut">1566.5</span> nm
+                </span>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- کارت ۱ -->
-                <div class="glass rounded-3xl p-8 photon-card">
-                    <div class="w-14 h-14 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6 text-cyan-400">
-                        <i data-lucide="scan-eye" class="w-7 h-7"></i>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+                <div class="space-y-4 bg-slate-950/60 p-4 rounded-2xl border border-slate-800">
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-300 font-bold">ضریب شکست محیط (n):</span>
+                        <span id="riVal" class="font-mono text-sky-400 font-bold text-sm" dir="ltr">1.333</span>
                     </div>
-                    <h3 class="text-xl font-bold text-white mb-3">حسگرهای ضریب شکست و بیوسنسورها</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        طراحی حسگرهای نوری بدون برچسب (Label-free) با قابلیت تشخیص فوق‌سریع تغییرات جزئی ضریب شکست در الکل‌ها، ترکیبات شیمیایی و نمونه‌های زیستی با ضریب شایستگی (FOM) بالا.
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-300">
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i>
-                            <span>تشخیص غلظت‌های بسیار پایین آنالیت</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i>
-                            <span>پاسخ‌دهی لحظه‌ای در پنجره مخابراتی و فروسرخ</span>
-                        </li>
-                    </ul>
+                    <input type="range" id="riRange" min="1.310" max="1.400" step="0.001" value="1.333" class="w-full">
+                    <div class="grid grid-cols-2 gap-1.5 pt-1 text-[11px]">
+                        <button type="button" onclick="setSample(1.329, 'متانول')" class="py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-sky-500/20 text-slate-300 border border-slate-700 transition">متانول (1.329)</button>
+                        <button type="button" onclick="setSample(1.333, 'آب مقطر')" class="py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-sky-500/20 text-slate-300 border border-slate-700 transition">آب (1.333)</button>
+                        <button type="button" onclick="setSample(1.361, 'اتانول')" class="py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-sky-500/20 text-slate-300 border border-slate-700 transition">اتانول (1.361)</button>
+                        <button type="button" onclick="setSample(1.377, 'ایزوپروپانول')" class="py-1.5 px-2 rounded-lg bg-slate-800 hover:bg-sky-500/20 text-slate-300 border border-slate-700 transition">ایزوپروپانول (1.377)</button>
+                    </div>
+                    <div class="text-center text-xs text-indigo-300 bg-indigo-950/40 py-1.5 rounded-lg border border-indigo-500/20">
+                        نمونه: <strong id="sampleLabel">آب مقطر</strong>
+                    </div>
                 </div>
-
-                <!-- کارت ۲ -->
-                <div class="glass rounded-3xl p-8 photon-card">
-                    <div class="w-14 h-14 rounded-2xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center mb-6 text-violet-400">
-                        <i data-lucide="cpu" class="w-7 h-7"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">فرامواد نوری و مواد تغییر فازدهنده</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        بهره‌گیری از ساختارهای نامتقارن و مواد هوشمند تغییر فازدهنده (نظیر دی‌اکسید وانادیوم $\text{VO}_2$) برای کنترل فعال طیف نوری و سوئیچینگ بین حالت‌های عایق و فلزی با تحریک حرارتی یا نوری.
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-300">
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-violet-400"></i>
-                            <span>قابلیت تنظیم‌پذیری دینامیک (Active Tunability)</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-violet-400"></i>
-                            <span>شکست تقارن ساختاری و ایجاد رزونانس‌های تیز</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- کارت ۳ -->
-                <div class="glass rounded-3xl p-8 photon-card">
-                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-6 text-emerald-400">
-                        <i data-lucide="waves" class="w-7 h-7"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">پلاسمونیک و شفافیت القایی (PIT)</h3>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        مهندسی تداخل مخرب بین مدهای روشن و تاریک در موج‌برها و فراسطوح پلاسمونیکی جهت ایجاد پنجره‌های شفافیت القایی پلاسمونیکی (PIT) و کاهش شدید سرعت گروه نور (Slow Light).
-                    </p>
-                    <ul class="space-y-2 text-xs text-slate-300">
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
-                            <span>تمرکز میدان الکتریکی در ابعاد زیرطول‌موج</span>
-                        </li>
-                        <li class="flex items-center gap-2">
-                            <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i>
-                            <span>شبیه‌سازی دقیق المان محدود در COMSOL</span>
-                        </li>
-                    </ul>
+                <div class="md:col-span-2 bg-slate-950 rounded-2xl p-3 border border-slate-800">
+                    <canvas id="simCanvas" width="500" height="190" class="w-full h-[170px]"></canvas>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- بخش چهارم: مزایای مهندسی و شبیه‌سازی -->
-    <section id="features" class="relative z-10 py-16 px-4">
-        <div class="max-w-7xl mx-auto">
-            <div class="glass rounded-3xl p-8 sm:p-12 border border-slate-800">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <div>
-                        <span class="text-cyan-400 font-mono text-xs uppercase tracking-widest">Precision Photonics</span>
-                        <h2 class="text-3xl font-black text-white mt-2 mb-6">از مدلسازی ریاضی تا بهینه‌سازی ساختارهای نانوفوتونیکی</h2>
-                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
-                            تمامی طرح‌ها و ساختارهای ارائه‌شده در مجموعه آذرخش فوتونیک بر پایه تحلیل‌های دقیق الکترومغناطیسی، بهینه‌سازی هندسی نوارهای تشدیدگر و بررسی توزیع میدان الکتریکی و مغناطیسی توسعه می‌یابند.
-                        </p>
-                        
-                        <div class="space-y-4">
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center shrink-0 text-cyan-400 mt-1">
-                                    <i data-lucide="compass" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-bold text-base">طراحی ساختارهای نامتقارن هوشمند</h4>
-                                    <p class="text-slate-400 text-xs sm:text-sm mt-1">استفاده از شکست تقارن برای تحریک مدهای تاریک و دستیابی به پیک‌های عبوری بسیار باریک.</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-start gap-4">
-                                <div class="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center shrink-0 text-violet-400 mt-1">
-                                    <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
-                                </div>
-                                <div>
-                                    <h4 class="text-white font-bold text-base">تحلیل کامل پارامترهای حسگری</h4>
-                                    <p class="text-slate-400 text-xs sm:text-sm mt-1">ارزیابی دقیق حساسیت ($S$)، پهنای باند در نصف ارتفاع (FWHM) و ضریب شایستگی (FOM) در بازه‌های طیفی مختلف.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- تصویر گرافیکی مفهومی با CSS و SVG (نمای تشدیدگر نوری) -->
-                    <div class="relative flex items-center justify-center p-6 bg-slate-950/90 rounded-2xl border border-slate-800 overflow-hidden">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 via-violet-500/20 to-emerald-500/20 blur-2xl"></div>
-                        <div class="relative z-10 w-full text-center space-y-6 py-6">
-                            <div class="text-xs font-mono text-slate-400" dir="ltr">OPTICAL RESONATOR FIELD DISTRIBUTION</div>
-                            
-                            <!-- شبیه‌سازی بصری نوارهای نامتقارن و میدان پلاسمونیکی -->
-                            <div class="flex items-center justify-center gap-6 py-8">
-                                <div class="w-16 h-40 rounded-lg bg-gradient-to-b from-cyan-400 to-blue-600 shadow-[0_0_40px_rgba(6,182,212,0.8)] animate-pulse flex items-center justify-center">
-                                    <span class="font-mono text-xs font-bold text-slate-950 rotate-90">Strip 1 ($L_1$)</span>
-                                </div>
-                                <div class="w-3 h-32 rounded-full bg-gradient-to-b from-transparent via-rose-500 to-transparent blur-sm animate-ping"></div>
-                                <div class="w-16 h-28 rounded-lg bg-gradient-to-b from-violet-400 to-purple-600 shadow-[0_0_40px_rgba(139,92,246,0.8)] animate-pulse flex items-center justify-center">
-                                    <span class="font-mono text-xs font-bold text-slate-950 rotate-90">Strip 2 ($L_2$)</span>
-                                </div>
-                            </div>
-
-                            <div class="inline-flex items-center gap-4 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-mono text-slate-300" dir="ltr">
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> |E| Max</span>
-                                <span>|</span>
-                                <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Coupling Gap</span>
-                                <span>|</span>
-                                <span class="text-emerald-400">Asymmetric Mode</span>
-                            </div>
-                        </div>
-                    </div>
+        <!-- کارت دوم: فرم فرصت همکاری ویژه استعدادهای درخشان -->
+        <section class="glass photon-card rounded-3xl p-6 sm:p-9 mb-10 border-t-4 border-t-indigo-400 shadow-2xl">
+            <div class="flex items-center gap-3 pb-4 mb-4 border-b border-white/10">
+                <div class="w-10 h-10 rounded-xl bg-indigo-500/15 border border-indigo-400/30 flex items-center justify-center text-indigo-400">
+                    <i data-lucide="user-plus" class="w-5 h-5"></i>
                 </div>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-white m-0">فرصت همکاری ویژه استعدادهای درخشان</h2>
             </div>
-        </div>
-    </section>
 
-    <!-- بخش پنجم: ارتباط با ما و فوتر -->
-    <footer id="contact" class="relative z-10 pt-16 pb-12 px-4 border-t border-slate-800/80 glass mt-12">
-        <div class="max-w-7xl mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10 pb-12 border-b border-slate-800">
+            <p class="text-center text-slate-300 text-sm sm:text-base mb-8 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+                از دانشجویان واجد شرایط استعداد درخشان (ترم ۶ به بالای مقطع کارشناسی) و دانشجویان تحصیلات تکمیلی مقاطع ارشد و دکتری دعوت به عمل می‌آید فرم زیر را تکمیل نمایند.
+            </p>
+
+            <!-- باکس پیام خطا -->
+            <div id="error-msg" style="display: none;" class="bg-red-500/15 text-red-400 border border-red-500/50 p-4 rounded-xl mb-6 text-center font-bold text-sm">
+                ⚠️ کاربر گرامی، استفاده از عبارات نامناسب در فرم مجاز نمی‌باشد. لطفاً متن خود را اصلاح کنید.
+            </div>
+
+            <!-- فرم متصل به Formspree شما -->
+            <form id="elite-form" action="https://formspree.io/f/xeeyjyld" method="POST" class="space-y-5">
                 
-                <div>
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center">
-                            <i data-lucide="zap" class="w-5 h-5 text-cyan-400"></i>
-                        </div>
-                        <span class="text-xl font-black text-white">آذرخش <span class="text-cyan-400">فوتونیک</span></span>
+                <!-- انتقال قطعی به صفحه موفقیت شما -->
+                <input type="hidden" name="_next" value="https://azarakhshphotonic.ir/success.html">
+                <input type="hidden" name="_subject" value="ثبت نام جدید در سایت آذرخش فوتونیک">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label for="fullname" class="block mb-2 font-semibold text-slate-200 text-sm flex items-center gap-1.5">
+                            <i data-lucide="user" class="w-4 h-4 text-sky-400"></i>
+                            <span>نام و نام خانوادگی:</span>
+                        </label>
+                        <input type="text" id="fullname" name="fullname" required placeholder="مثال: محمدحسن ..." class="input-photon">
                     </div>
-                    <p class="text-slate-400 text-sm leading-relaxed">
-                        مرجع تخصصی پژوهش، طراحی و شبیه‌سازی حسگرهای نوری، ساختارهای پلاسمونیکی و ادوات پیشرفته فوتونیکی.
-                    </p>
-                </div>
 
-                <div>
-                    <h4 class="text-white font-bold mb-4">دسترسی سریع</h4>
-                    <ul class="space-y-2.5 text-sm text-slate-400">
-                        <li><a href="#home" class="hover:text-cyan-400 transition">صفحه اصلی</a></li>
-                        <li><a href="#simulator" class="hover:text-cyan-400 transition">شبیه‌ساز آنلاین حسگر نوری</a></li>
-                        <li><a href="#technologies" class="hover:text-cyan-400 transition">حوزه‌های پژوهشی و سنسورها</a></li>
-                        <li><a href="https://azarakhshphotonic.ir" class="hover:text-cyan-400 transition font-mono" dir="ltr">Azarakhshphotonic.ir</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 class="text-white font-bold mb-4">ارتباط و همکاری علمی</h4>
-                    <p class="text-slate-400 text-xs leading-relaxed mb-4">
-                        برای تبادل نظر علمی، پروژه‌های شبیه‌سازی فوتونیک و همکاری‌های پژوهشی در زمینه حسگرهای نوری با ما در ارتباط باشید:
-                    </p>
-                    <div class="flex items-center gap-3">
-                        <a href="mailto:info@azarakhshphotonic.ir" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-slate-200 text-xs font-semibold transition flex items-center gap-2">
-                            <i data-lucide="mail" class="w-4 h-4"></i>
-                            <span>ارسال ایمیل</span>
-                        </a>
-                        <a href="https://github.com" target="_blank" class="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-violet-500 text-slate-200 text-xs font-semibold transition flex items-center gap-2">
-                            <i data-lucide="github" class="w-4 h-4"></i>
-                            <span>مخزن گیت‌هاب</span>
-                        </a>
+                    <div>
+                        <label for="phone" class="block mb-2 font-semibold text-slate-200 text-sm flex items-center gap-1.5">
+                            <i data-lucide="phone" class="w-4 h-4 text-sky-400"></i>
+                            <span>شماره تماس موبایل / همراه:</span>
+                        </label>
+                        <input type="tel" id="phone" name="phone" required placeholder="09..." dir="ltr" class="input-photon font-mono text-left">
                     </div>
                 </div>
 
-            </div>
+                <div>
+                    <label for="email" class="block mb-2 font-semibold text-slate-200 text-sm flex items-center gap-1.5">
+                        <i data-lucide="mail" class="w-4 h-4 text-sky-400"></i>
+                        <span>نشانی پست الکترونیک (ایمیل):</span>
+                    </label>
+                    <input type="email" id="email" name="email" required placeholder="name@example.com" dir="ltr" class="input-photon font-mono text-left">
+                </div>
 
-            <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-                <div>© تمامی حقوق برای <strong class="text-slate-300">آذرخش فوتونیک (Azarakhshphotonic.ir)</strong> محفوظ است.</div>
-                <div class="font-mono" dir="ltr">Designed with Photon Waveguide Engine ⚡</div>
-            </div>
-        </div>
-    </footer>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    <div>
+                        <label for="major" class="block mb-2 font-semibold text-slate-200 text-sm flex items-center gap-1.5">
+                            <i data-lucide="book-open" class="w-4 h-4 text-indigo-400"></i>
+                            <span>رشته تحصیلی:</span>
+                        </label>
+                        <select id="major" name="major" required class="input-photon">
+                            <option value="">انتخاب کنید...</option>
+                            <option value="physics">فیزیک و فوتونیک (تمامی گرایش‌ها)</option>
+                            <option value="electrical">مهندسی برق (الکترونیک، مخابرات و...)</option>
+                            <option value="chemistry">شیمی</option>
+                            <option value="materials">مهندسی مواد و متالورژی</option>
+                            <option value="computer">مهندسی کامپیوتر</option>
+                            <option value="mechanical">مهندسی مکانیک</option>
+                        </select>
+                    </div>
 
-    <!-- اسکریپت‌های جلوه‌های ویژه فوتونیکی و شبیه‌ساز -->
+                    <div>
+                        <label for="degree" class="block mb-2 font-semibold text-slate-200 text-sm flex items-center gap-1.5">
+                            <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-400"></i>
+                            <span>مقطع تحصیلی فعلی یا آخرین مقطع:</span>
+                        </label>
+                        <select id="degree" name="degree" required class="input-photon">
+                            <option value="">انتخاب کنید...</option>
+                            <option value="bsc">کارشناسی (ترم ۶ به بالا)</option>
+                            <option value="msc">کارشناسی ارشد</option>
+                            <option value="phd">دکتری تخصصی</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="certificate_link" class="block mb-2 font-semibold text-slate-200 text-sm flex items-center gap-1.5">
+                        <i data-lucide="link" class="w-4 h-4 text-emerald-400"></i>
+                        <span>لینک رزومه یا گواهی رتبه (استعداد درخشان):</span>
+                    </label>
+                    <input type="url" id="certificate_link" name="certificate_link" required placeholder="https://..." dir="ltr" class="input-photon font-mono text-left">
+                    <p class="text-xs text-slate-400 mt-2 flex items-center gap-1.5">
+                        <i data-lucide="info" class="w-3.5 h-3.5 text-sky-400 shrink-0"></i>
+                        <span>لطفاً فایل خود را در فضاهایی مانند گوگل درایو یا پیکوفایل آپلود کرده و لینک عمومی آن را در اینجا قرار دهید.</span>
+                    </p>
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-500 hover:to-violet-500 text-white font-bold text-base shadow-[0_6px_25px_rgba(79,70,229,0.4)] hover:shadow-[0_8px_30px_rgba(56,189,248,0.5)] hover:-translate-y-0.5 transition duration-300 cursor-pointer flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    <span>ارسال اطلاعات و رزومه</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- فوتر یکپارچه -->
+        <footer class="text-center text-xs text-slate-500 pt-4 pb-8 border-t border-white/5">
+            © تمامی حقوق برای <strong class="text-slate-300">آذرخش فوتونیک (Azarakhshphotonic.ir)</strong> محفوظ است.
+        </footer>
+
+    </div>
+
     <script>
-        // ۱. راه‌اندازی آیکون‌ها
         lucide.createIcons();
 
-        // ۲. جلوه ویژه پس‌زمینه: شبکه فوتونی و پرتوهای لیزر تعاملی
-        const pCanvas = document.getElementById('photonCanvas');
-        const pCtx = pCanvas.getContext('2d');
-        let photons = [];
-        let mouse = { x: null, y: null, radius: 160 };
+        // ۱. اسکریپت فیلتر کلمات و ارسال فرم به Formspree
+        const form = document.getElementById('elite-form');
+        const errorMsg = document.getElementById('error-msg');
+        const submitBtn = document.getElementById('submit-btn');
 
-        function resizePhotonCanvas() {
-            pCanvas.width = window.innerWidth;
-            pCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizePhotonCanvas);
-        resizePhotonCanvas();
+        const badWords = ['احمق', 'بیشعور', 'کثافت', 'آشغال', 'نفهم', 'دیوانه', 'روانی', 'مسخره'];
 
-        window.addEventListener('mousemove', (e) => {
-            mouse.x = e.clientX;
-            mouse.y = e.clientY;
-        });
-        window.addEventListener('mouseout', () => {
-            mouse.x = null;
-            mouse.y = null;
-        });
-
-        const spectralColors = ['#06b6d4', '#8b5cf6', '#10b981', '#38bdf8'];
-
-        class Photon {
-            constructor() {
-                this.x = Math.random() * pCanvas.width;
-                this.y = Math.random() * pCanvas.height;
-                this.vx = (Math.random() - 0.5) * 1.1;
-                this.vy = (Math.random() - 0.5) * 1.1;
-                this.radius = Math.random() * 2.2 + 1;
-                this.color = spectralColors[Math.floor(Math.random() * spectralColors.length)];
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > pCanvas.width) this.vx *= -1;
-                if (this.y < 0 || this.y > pCanvas.height) this.vy *= -1;
-
-                // برهم‌کنش با موس (دام نوری / انبرک نوری)
-                if (mouse.x !== null) {
-                    let dx = mouse.x - this.x;
-                    let dy = mouse.y - this.y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < mouse.radius) {
-                        pCtx.beginPath();
-                        pCtx.strokeStyle = `rgba(6, 182, 212, ${1 - dist / mouse.radius})`;
-                        pCtx.lineWidth = 1.2;
-                        pCtx.moveTo(this.x, this.y);
-                        pCtx.lineTo(mouse.x, mouse.y);
-                        pCtx.stroke();
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            let hasBadWord = false;
+            const inputs = form.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="url"]');
+            inputs.forEach(input => {
+                badWords.forEach(word => {
+                    if (input.value.includes(word)) {
+                        hasBadWord = true;
                     }
+                });
+            });
+
+            if (hasBadWord) {
+                errorMsg.style.display = 'block';
+                return; 
+            }
+
+            errorMsg.style.display = 'none';
+            submitBtn.innerHTML = 'در حال ارسال اطلاعات... لطفاً صبر کنید';
+            submitBtn.style.opacity = '0.7';
+            submitBtn.style.pointerEvents = 'none';
+
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = 'success.html';
+                } else {
+                    errorMsg.style.display = 'block';
+                    errorMsg.innerHTML = 'خطایی در سمت سرور رخ داد. لطفاً مجدداً تلاش کنید.';
+                    submitBtn.innerHTML = 'ارسال اطلاعات و رزومه';
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.pointerEvents = 'auto';
                 }
+            }).catch(error => {
+                errorMsg.style.display = 'block';
+                errorMsg.innerHTML = 'خطا در ارتباط با اینترنت.';
+                submitBtn.innerHTML = 'ارسال اطلاعات و رزومه';
+                submitBtn.style.opacity = '1';
+                submitBtn.style.pointerEvents = 'auto';
+            });
+        });
+
+        // ۲. شبیه‌ساز طیف حسگر نوری
+        const simCanvas = document.getElementById('simCanvas');
+        const sCtx = simCanvas.getContext('2d');
+        const riRange = document.getElementById('riRange');
+        const riVal = document.getElementById('riVal');
+        const lambdaOut = document.getElementById('lambdaOut');
+        const sampleLabel = document.getElementById('sampleLabel');
+
+        function setSample(n, name) {
+            riRange.value = n;
+            sampleLabel.textContent = name;
+            renderSim(n, false);
+        }
+
+        function renderSim(val, autoName = true) {
+            const n = parseFloat(val);
+            riVal.textContent = n.toFixed(3);
+            const resL = 1550 + (n - 1.300) * 500;
+            lambdaOut.textContent = resL.toFixed(1);
+
+            if (autoName) {
+                if (Math.abs(n - 1.329) < 0.002) sampleLabel.textContent = 'متانول';
+                else if (Math.abs(n - 1.333) < 0.002) sampleLabel.textContent = 'آب مقطر';
+                else if (Math.abs(n - 1.361) < 0.002) sampleLabel.textContent = 'اتانول';
+                else if (Math.abs(n - 1.377) < 0.002) sampleLabel.textContent = 'ایزوپروپانول';
+                else sampleLabel.textContent = 'آنالیت سفارشی';
             }
-            draw() {
-                pCtx.beginPath();
-                pCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                pCtx.fillStyle = this.color;
-                pCtx.shadowBlur = 12;
-                pCtx.shadowColor = this.color;
-                pCtx.fill();
-                pCtx.shadowBlur = 0;
-            }
-        }
 
-        function initPhotons() {
-            photons = [];
-            let count = Math.min(Math.floor((window.innerWidth * window.innerHeight) / 14000), 90);
-            for (let i = 0; i < count; i++) {
-                photons.push(new Photon());
-            }
-        }
-        initPhotons();
-
-        function animatePhotons() {
-            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-            for (let i = 0; i < photons.length; i++) {
-                photons[i].update();
-                photons[i].draw();
-
-                for (let j = i + 1; j < photons.length; j++) {
-                    let dx = photons[i].x - photons[j].x;
-                    let dy = photons[i].y - photons[j].y;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (dist < 120) {
-                        pCtx.beginPath();
-                        pCtx.strokeStyle = `rgba(139, 92, 246, ${(1 - dist / 120) * 0.35})`;
-                        pCtx.lineWidth = 0.8;
-                        pCtx.moveTo(photons[i].x, photons[i].y);
-                        pCtx.lineTo(photons[j].x, photons[j].y);
-                        pCtx.stroke();
-                    }
-                }
-            }
-            requestAnimationFrame(animatePhotons);
-        }
-        animatePhotons();
-
-        // ۳. شبیه‌ساز تعاملی طیف عبوری حسگر نوری (Spectrum Canvas)
-        const sCanvas = document.getElementById('spectrumCanvas');
-        const sCtx = sCanvas.getContext('2d');
-        const riSlider = document.getElementById('riSlider');
-        const riValue = document.getElementById('riValue');
-        const resWavelength = document.getElementById('resWavelength');
-        const deltaLambda = document.getElementById('deltaLambda');
-        const analyteName = document.getElementById('analyteName');
-
-        const baseRI = 1.300;
-        const baseLambda = 1550.0; // نانومتر
-        const sensitivity = 500.0; // 500 nm/RIU
-
-        function setAnalyte(ri, name) {
-            riSlider.value = ri;
-            analyteName.textContent = `${name} - n = ${ri.toFixed(3)}`;
-            updateSimulator(ri, false);
-        }
-
-        function detectAnalyteLabel(ri) {
-            if (Math.abs(ri - 1.329) < 0.002) return 'متانول (Methanol)';
-            if (Math.abs(ri - 1.333) < 0.002) return 'آب مقطر (Water)';
-            if (Math.abs(ri - 1.361) < 0.002) return 'اتانول (Ethanol)';
-            if (Math.abs(ri - 1.377) < 0.002) return 'ایزوپروپانول (IPA)';
-            if (Math.abs(ri - 1.384) < 0.002) return 'پروپانول (1-Propanol)';
-            if (Math.abs(ri - 1.399) < 0.002) return 'بوتانول (Butanol)';
-            return 'محیط سفارشی (Custom Analyte)';
-        }
-
-        function drawSpectrum(currentRI) {
-            const w = sCanvas.width;
-            const h = sCanvas.height;
+            const w = simCanvas.width;
+            const h = simCanvas.height;
             sCtx.clearRect(0, 0, w, h);
 
-            // رسم شبکه چهارخانه آزمایشگاهی (Grid)
+            // خطوط شبکه
             sCtx.strokeStyle = 'rgba(51, 65, 85, 0.35)';
             sCtx.lineWidth = 1;
-            for (let x = 50; x < w - 20; x += 60) {
-                sCtx.beginPath();
-                sCtx.moveTo(x, 20);
-                sCtx.lineTo(x, h - 40);
-                sCtx.stroke();
-            }
-            for (let y = 20; y <= h - 40; y += 50) {
-                sCtx.beginPath();
-                sCtx.moveTo(50, y);
-                sCtx.lineTo(w - 20, y);
-                sCtx.stroke();
-            }
+            for (let x = 30; x < w; x += 60) { sCtx.beginPath(); sCtx.moveTo(x, 10); sCtx.lineTo(x, h - 25); sCtx.stroke(); }
+            for (let y = 15; y < h - 25; y += 40) { sCtx.beginPath(); sCtx.moveTo(30, y); sCtx.lineTo(w - 10, y); sCtx.stroke(); }
 
-            // محاسبه طول موج تشدید فعلی
-            const shift = (currentRI - baseRI) * sensitivity;
-            const centerLambda = baseLambda + shift;
-
-            // بازه طول موج نمودار: 1500 تا 1650 نانومتر
-            const minL = 1500;
-            const maxL = 1650;
-
-            // رسم منحنی مرجع (n = 1.300) به صورت خط‌چین
+            // رسم طیف
             sCtx.beginPath();
-            sCtx.setLineDash([5, 5]);
-            sCtx.strokeStyle = 'rgba(148, 163, 184, 0.4)';
-            sCtx.lineWidth = 2;
-            for (let px = 50; px <= w - 20; px++) {
-                let lambda = minL + ((px - 50) / (w - 70)) * (maxL - minL);
-                // تابع لورنتزی دوگانه برای شبیه‌سازی پنجره شفافیت القایی (PIT)
-                let detuning = lambda - baseLambda;
-                let pitPeak = 0.88 * Math.exp(-(detuning * detuning) / (2 * 6 * 6));
-                let broadDip = 0.65 * Math.exp(-(detuning * detuning) / (2 * 24 * 24));
-                let T = Math.max(0.08, Math.min(0.95, 0.82 - broadDip + pitPeak));
-                let py = (h - 40) - T * (h - 70);
-                if (px === 50) sCtx.moveTo(px, py);
-                else sCtx.lineTo(px, py);
-            }
-            sCtx.stroke();
-            sCtx.setLineDash([]);
-
-            // رسم منحنی فعال با درخشش لیزری
-            sCtx.beginPath();
-            const grad = sCtx.createLinearGradient(50, 0, w - 20, 0);
-            grad.addColorStop(0, '#06b6d4');
+            const grad = sCtx.createLinearGradient(30, 0, w - 10, 0);
+            grad.addColorStop(0, '#38bdf8');
             grad.addColorStop(0.5, '#10b981');
-            grad.addColorStop(1, '#8b5cf6');
+            grad.addColorStop(1, '#818cf8');
             sCtx.strokeStyle = grad;
-            sCtx.lineWidth = 3.5;
-            sCtx.shadowBlur = 15;
-            sCtx.shadowColor = '#06b6d4';
+            sCtx.lineWidth = 3;
+            sCtx.shadowBlur = 12;
+            sCtx.shadowColor = '#38bdf8';
 
-            let peakX = 50;
-            let peakY = h - 40;
-
-            for (let px = 50; px <= w - 20; px++) {
-                let lambda = minL + ((px - 50) / (w - 70)) * (maxL - minL);
-                let detuning = lambda - centerLambda;
-                let pitPeak = 0.88 * Math.exp(-(detuning * detuning) / (2 * 6 * 6));
-                let broadDip = 0.65 * Math.exp(-(detuning * detuning) / (2 * 24 * 24));
-                let T = Math.max(0.08, Math.min(0.95, 0.82 - broadDip + pitPeak));
-                let py = (h - 40) - T * (h - 70);
-
-                if (Math.abs(lambda - centerLambda) < 0.8) {
-                    peakX = px;
-                    peakY = py;
-                }
-
-                if (px === 50) sCtx.moveTo(px, py);
+            for (let px = 30; px <= w - 10; px++) {
+                let l = 1520 + ((px - 30) / (w - 40)) * 110;
+                let det = l - resL;
+                let peak = 0.85 * Math.exp(-(det * det) / 36);
+                let dip = 0.6 * Math.exp(-(det * det) / 500);
+                let T = Math.max(0.1, Math.min(0.95, 0.78 - dip + peak));
+                let py = (h - 25) - T * (h - 45);
+                if (px === 30) sCtx.moveTo(px, py);
                 else sCtx.lineTo(px, py);
             }
             sCtx.stroke();
             sCtx.shadowBlur = 0;
 
-            // نشانگر قله تشدید (Resonance Peak Marker)
-            sCtx.beginPath();
-            sCtx.arc(peakX, peakY, 6, 0, Math.PI * 2);
-            sCtx.fillStyle = '#10b981';
-            sCtx.fill();
-            sCtx.strokeStyle = '#ffffff';
-            sCtx.lineWidth = 2;
-            sCtx.stroke();
-
-            // برچسب طول موج بالای قله
-            sCtx.fillStyle = '#f8fafc';
-            sCtx.font = 'bold 12px monospace';
-            sCtx.fillText(`λ = ${centerLambda.toFixed(1)} nm`, peakX - 40, peakY - 14);
-
-            // برچسب محورها
             sCtx.fillStyle = '#94a3b8';
-            sCtx.font = '11px monospace';
-            for (let l = 1500; l <= 1650; l += 30) {
-                let xPos = 50 + ((l - minL) / (maxL - minL)) * (w - 70);
-                sCtx.fillText(`${l}nm`, xPos - 18, h - 18);
-            }
-            sCtx.fillText('1.0', 22, 35);
-            sCtx.fillText('0.5', 22, (h - 40) / 2 + 10);
-            sCtx.fillText('0.0', 22, h - 40);
+            sCtx.font = '10px monospace';
+            sCtx.fillText('1520 nm', 30, h - 8);
+            sCtx.fillText('1575 nm', w / 2 - 20, h - 8);
+            sCtx.fillText('1630 nm', w - 55, h - 8);
         }
 
-        function updateSimulator(val, autoDetect = true) {
-            const ri = parseFloat(val);
-            riValue.textContent = ri.toFixed(3);
-            const shift = (ri - baseRI) * sensitivity;
-            const currentLambda = baseLambda + shift;
+        riRange.addEventListener('input', (e) => renderSim(e.target.value, true));
+        renderSim(1.333, false);
 
-            resWavelength.textContent = `${currentLambda.toFixed(1)} nm`;
-            deltaLambda.textContent = `+${shift.toFixed(1)} nm`;
+        // ۳. شبکه فوتونی پس‌زمینه
+        const pCanvas = document.getElementById('photonCanvas');
+        const pCtx = pCanvas.getContext('2d');
+        let particles = [];
+        let mouse = { x: null, y: null };
 
-            if (autoDetect) {
-                analyteName.textContent = `${detectAnalyteLabel(ri)} - n = ${ri.toFixed(3)}`;
-            }
-            drawSpectrum(ri);
+        function resizeBg() { pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeBg);
+        resizeBg();
+        window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+        for (let i = 0; i < 65; i++) {
+            particles.push({
+                x: Math.random() * pCanvas.width,
+                y: Math.random() * pCanvas.height,
+                vx: (Math.random() - 0.5) * 0.9,
+                vy: (Math.random() - 0.5) * 0.9,
+                r: Math.random() * 2 + 1,
+                c: ['#38bdf8', '#818cf8', '#10b981'][Math.floor(Math.random() * 3)]
+            });
         }
 
-        riSlider.addEventListener('input', (e) => updateSimulator(e.target.value, true));
-        // اجرای اولیه
-        updateSimulator(1.333, false);
+        function animateBg() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            particles.forEach((p, i) => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > pCanvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > pCanvas.height) p.vy *= -1;
+                pCtx.beginPath(); pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                pCtx.fillStyle = p.c; pCtx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    let dx = p.x - particles[j].x, dy = p.y - particles[j].y;
+                    let d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < 115) {
+                        pCtx.beginPath();
+                        pCtx.strokeStyle = `rgba(56, 189, 248, ${(1 - d / 115) * 0.25})`;
+                        pCtx.moveTo(p.x, p.y); pCtx.lineTo(particles[j].x, particles[j].y);
+                        pCtx.stroke();
+                    }
+                }
+                if (mouse.x) {
+                    let dx = p.x - mouse.x, dy = p.y - mouse.y;
+                    let d = Math.sqrt(dx * dx + dy * dy);
+                    if (d < 140) {
+                        pCtx.beginPath();
+                        pCtx.strokeStyle = `rgba(129, 140, 248, ${(1 - d / 140) * 0.6})`;
+                        pCtx.moveTo(p.x, p.y); pCtx.lineTo(mouse.x, mouse.y);
+                        pCtx.stroke();
+                    }
+                }
+            });
+            requestAnimationFrame(animateBg);
+        }
+        animateBg();
     </script>
 </body>
 </html>
