@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>آزمایشگاه مجازی سه‌بعدی اجزای دوچرخه | کار و فناوری هفتم - محمدحسن پورصالحی</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vazirmatn Font for Clean Persian Typography -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <!-- Three.js r128 & OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Vazirmatn', 'Segoe UI', Tahoma, sans-serif;
+            background: radial-gradient(circle at 50% 35%, #16325b 0%, #0b192c 65%, #060e1a 100%);
+            color: #f8fafc;
+            height: 100dvh;
+            width: 100vw;
+            touch-action: none;
+        }
+        #canvas-container {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        /* Glassmorphism Panels */
+        .glass-panel {
+            background: rgba(13, 27, 46, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(56, 189, 248, 0.22);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+        .glass-pill {
+            background: rgba(15, 34, 58, 0.88);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(45, 212, 191, 0.35);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-pill:active {
+            transform: scale(0.95);
+        }
+        /* 3D Floating HTML Pins */
+        .part-pin {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            pointer-events: auto;
+            cursor: pointer;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 11.5px;
+            font-weight: 700;
+            white-space: nowrap;
+            color: #ffffff;
+            background: rgba(12, 28, 48, 0.88);
+            border: 1.5px solid rgba(45, 212, 191, 0.65);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            z-index: 10;
+        }
+        .part-pin:hover, .part-pin.active-pin {
+            background: rgba(10, 130, 140, 0.96);
+            border-color: #fbbf24;
+            transform: translate(-50%, -50%) scale(1.12);
+            z-index: 25;
+            box-shadow: 0 0 16px rgba(251, 191, 36, 0.65);
+        }
+        .part-pin .pin-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #2dd4bf;
+            box-shadow: 0 0 6px #2dd4bf;
+        }
+        .part-pin.active-pin .pin-dot {
+            background: #fbbf24;
+            box-shadow: 0 0 8px #fbbf24;
+        }
+        /* Custom Range Slider */
+        input[type=range].explode-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 7px;
+            background: linear-gradient(90deg, #0a828c 0%, #f59e0b 100%);
+            border-radius: 999px;
+            outline: none;
+        }
+        input[type=range].explode-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 3px solid #f59e0b;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            cursor: pointer;
+        }
+        /* Custom Scrollbar for horizontal chips */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        @keyframes pulseRing {
+            0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.6); }
+            70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+        }
+        .pulse-amber {
+            animation: pulseRing 2s infinite;
+        }
+    </style>
+</head>
+<body class="relative select-none">
+
+    <!-- 3D WebGL Canvas Container -->
+    <div id="canvas-container"></div>
+
+    <!-- 3D Floating Labels Overlay -->
+    <div id="labels-container" class="pointer-events-none absolute inset-0 overflow-hidden z-10"></div>
+
+    <!-- TOP HEADER: Title & Teacher Info + Quick Actions -->
+    <header class="relative z-20 p-2.5 sm:p-3.5 pointer-events-none flex flex-col gap-2">
+        <div class="glass-panel rounded-2xl px-3.5 py-2.5 pointer-events-auto flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-700 flex items-center justify-center shadow-lg border border-teal-300/30 shrink-0">
+                    <!-- Bicycle SVG Icon -->
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="5.5" cy="17.5" r="3.5"/>
+                        <circle cx="18.5" cy="17.5" r="3.5"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 6a1 1 0 100-2 1 1 0 000 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-sm sm:text-base font-extrabold text-white tracking-tight">آزمایشگاه سه‌بعدی و تصویر انفجاری دوچرخه</h1>
+                        <span class="hidden md:inline-block bg-teal-500/20 text-teal-300 border border-teal-400/30 text-[11px] px-2 py-0.5 rounded-full font-bold">پودمان ۱: صفحه ۵</span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-slate-300">
+                        کار و فناوری هفتم &nbsp;|&nbsp; دبیر: <span class="text-amber-400 font-semibold">محمدحسن پورصالحی</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Top Action Buttons (Table 3-1 & Quiz Game & Sound) -->
+            <div class="flex items-center gap-1.5 sm:gap-2 mr-auto sm:mr-0">
+                <button id="btn-quiz-mode" onclick="toggleQuizMode()" class="px-2.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition">
+                    <span>🎯</span>
+                    <span>مسابقه پیدا کن!</span>
+                </button>
+                <button onclick="openTableModal()" class="px-2.5 py-1.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 text-xs font-bold flex items-center gap-1.5 transition">
+                    <span>📋</span>
+                    <span class="hidden sm:inline">جدول ۳-۱ کتاب</span>
+                    <span class="sm:hidden">جدول کتاب</span>
+                </button>
+                <button id="btn-labels-toggle" onclick="toggleLabels()" class="px-2.5 py-1.5 rounded-xl bg-slate-700/70 hover:bg-slate-600/80 border border-slate-500/40 text-slate-200 text-xs font-bold flex items-center gap-1 transition" title="نمایش/مخفی‌سازی برچسب‌ها">
+                    <span>🏷️</span>
+                    <span id="labels-status-text" class="hidden md:inline">برچسب‌ها: روشن</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Camera Preset & Simulation Mode Bar -->
+        <div class="flex flex-wrap items-center justify-between gap-2 pointer-events-auto">
+            <!-- Camera Presets -->
+            <div class="glass-panel rounded-xl p-1 flex items-center gap-1 overflow-x-auto no-scrollbar max-w-full">
+                <span class="text-[11px] text-slate-400 px-1.5 font-medium shrink-0">دوربین:</span>
+                <button onclick="setCameraPreset('overview')" class="cam-btn px-2.5 py-1 rounded-lg bg-teal-600/80 text-white text-[11px] font-bold shrink-0 transition" id="cam-overview">نمای کلی</button>
+                <button onclick="setCameraPreset('drivetrain')" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-700/60 text-slate-200 text-[11px] font-bold shrink-0 transition" id="cam-drivetrain">🔍 طَبَق، قامه و شفت</button>
+                <button onclick="setCameraPreset('freewheel')" class="cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-700/60 text-slate-200 text-[11px] font-bold shrink-0 transition" id="cam-freewheel">⚙️ خودرو و چرخ عقب</button>
+            </div>
+
+            <!-- Mechanical Motion Simulator -->
+            <div class="glass-panel rounded-xl p-1 flex items-center gap-1 overflow-x-auto no-scrollbar max-w-full">
+                <span class="text-[11px] text-slate-400 px-1.5 font-medium shrink-0">حرکت:</span>
+                <button onclick="setMotionMode('pedal')" id="mode-pedal" class="motion-btn px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px] font-bold shrink-0 transition flex items-center gap-1">
+                    <span>🚴</span><span>رکاب زدن</span>
+                </button>
+                <button onclick="setMotionMode('freewheel')" id="mode-freewheel" class="motion-btn px-2.5 py-1 rounded-lg hover:bg-slate-700/60 text-slate-200 text-[11px] font-bold shrink-0 transition flex items-center gap-1" title="توقف رکاب در حین چرخش چرخ‌ها و صدای جغجغه خودرو">
+                    <span>🔊</span><span>هرزگرد (جغجغه خودرو)</span>
+                </button>
+                <button onclick="setMotionMode('stop')" id="mode-stop" class="motion-btn px-2.5 py-1 rounded-lg hover:bg-slate-700/60 text-slate-200 text-[11px] font-bold shrink-0 transition">
+                    ⏸ توقف
+                </button>
+            </div>
+        </div>
+
+        <!-- QUIZ BANNER (Hidden by default, shown when Quiz Mode is active) -->
+        <div id="quiz-banner" class="hidden glass-panel rounded-2xl p-3 border-2 border-amber-400/80 pointer-events-auto transition-all">
+            <div class="flex items-center justify-between gap-2 mb-1.5">
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 font-black text-xs" id="quiz-progress">سوال ۱ از ۶</span>
+                    <span class="text-xs font-bold text-emerald-300" id="quiz-score">امتیاز: ۰</span>
+                </div>
+                <button onclick="toggleQuizMode()" class="text-xs text-rose-300 hover:text-rose-200 font-bold px-2 py-0.5 rounded bg-rose-500/20">خروج از مسابقه ✕</button>
+            </div>
+            <p id="quiz-question-text" class="text-sm sm:text-base font-extrabold text-white"></p>
+            <p id="quiz-feedback-text" class="text-xs mt-1 font-bold min-h-[18px] text-amber-300"></p>
+        </div>
+    </header>
+
+    <!-- Touch Hint Pill (Auto-fades after first interaction) -->
+    <div id="touch-hint" class="pointer-events-none fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 bg-slate-900/80 border border-teal-400/40 text-teal-200 px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 shadow-2xl transition-opacity duration-500">
+        <span>👆</span>
+        <span>با انگشت بچرخانید، زوم کنید یا روی هر قطعه ضربه بزنید</span>
+    </div>
+
+    <!-- BOTTOM CONTROLS & PART INSPECTOR DRAWER -->
+    <footer class="fixed bottom-0 inset-x-0 z-20 p-2.5 sm:p-3.5 pointer-events-none flex flex-col gap-2 max-w-4xl mx-auto">
+
+        <!-- Exploded View Slider Bar -->
+        <div class="glass-panel rounded-2xl px-3.5 py-2.5 pointer-events-auto flex flex-col gap-2">
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-2 shrink-0">
+                    <button id="btn-explode-toggle" onclick="toggleExplodeButton()" class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-extrabold text-xs shadow-md pulse-amber transition flex items-center gap-1.5">
+                        <span id="explode-btn-icon">💥</span>
+                        <span id="explode-btn-text">باز کردن قطعات (انفجاری)</span>
+                    </button>
+                </div>
+                <div class="flex-1 flex items-center gap-2.5">
+                    <span class="text-[11px] text-slate-300 hidden sm:inline shrink-0">فاصله قطعات:</span>
+                    <input id="explode-slider" type="range" min="0" max="100" value="0" class="explode-slider" oninput="onExplodeSliderChange(this.value)">
+                    <span id="explode-percent" class="text-xs font-black text-amber-400 w-9 text-left shrink-0">۰٪</span>
+                </div>
+            </div>
+
+            <!-- Quick Part Selector Chips -->
+            <div id="parts-chips-bar" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1 border-t border-slate-700/60">
+                <!-- Populated dynamically by JS -->
+            </div>
+        </div>
+
+        <!-- Selected Part Details Card (Collapsible on mobile) -->
+        <div id="part-info-card" class="glass-panel rounded-2xl p-3 sm:p-4 pointer-events-auto transition-all duration-300 border-r-4 border-r-teal-400">
+            <div class="flex items-start justify-between gap-2">
+                <div class="flex items-center gap-2 flex-wrap">
+                    <h2 id="info-title" class="text-base sm:text-lg font-black text-amber-300">طَبَق (چرخ‌دنده بزرگ جلو)</h2>
+                    <span id="info-badge-section" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-cyan-500/20 text-cyan-200 border border-cyan-400/30">بخش انتقال نیرو</span>
+                    <span id="info-badge-motion" class="px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/25 text-emerald-300 border border-emerald-400/40">جزء متحرک</span>
+                </div>
+                <button onclick="toggleInfoCardBody()" class="text-xs text-slate-300 hover:text-white bg-slate-800/80 px-2 py-1 rounded-lg border border-slate-600/50 shrink-0" id="btn-collapse-info">
+                    بستن توضیح ▼
+                </button>
+            </div>
+            <div id="info-body-wrapper" class="mt-2">
+                <p id="info-desc" class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                    چرخ‌دنده بزرگ دندانه‌داری که در جلو قرار دارد و بازوی رکاب (قامه) به آن متصل است. با چرخیدن طَبَق، زنجیر کشیده شده و نیرو را به چرخ‌دنده‌های عقب (خودرو) منتقل می‌کند.
+                </p>
+                <div class="mt-2 pt-2 border-t border-slate-700/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-teal-300">
+                    <span id="info-tip">💡 نکته کارگاهی: در حالت انفجاری (باز کردن قطعات) می‌توانید ترتیب قرارگیری پنجه‌رکاب، قامه، طَبَق و شفت را از نزدیک ببینید.</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL: Textbook Table 3-1 (صفحه ۵ کتاب درسی) -->
+    <div id="table-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-filter backdrop-blur-md flex items-center justify-center p-3">
+        <div class="glass-panel rounded-2xl max-w-2xl w-full max-h-[88vh] flex flex-col overflow-hidden border border-teal-400/40">
+            <div class="px-4 py-3 bg-slate-900/90 border-b border-slate-700 flex items-center justify-between">
+                <div>
+                    <h3 class="text-sm sm:text-base font-black text-amber-300">جدول ۳-۱ صفحه ۵ کتاب درسی: شناسایی اجزای دوچرخه</h3>
+                    <p class="text-[11px] text-slate-300">روی هر ردیف بزنید تا همان قطعه را در مدل سه‌بعدی به شما نشان دهد</p>
+                </div>
+                <button onclick="closeTableModal()" class="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500/40 font-bold flex items-center justify-center">✕</button>
+            </div>
+            <div class="p-3 sm:p-4 overflow-y-auto text-xs sm:text-sm space-y-3">
+                <div class="overflow-x-auto rounded-xl border border-slate-700">
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="bg-teal-900/70 text-white text-xs">
+                                <th class="p-2.5 border-b border-slate-700">ردیف</th>
+                                <th class="p-2.5 border-b border-slate-700">بخش‌های اصلی دوچرخه</th>
+                                <th class="p-2.5 border-b border-slate-700 text-amber-300">اجزای ثابت</th>
+                                <th class="p-2.5 border-b border-slate-700 text-emerald-300">اجزای متحرک</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/70 text-slate-200">
+                            <tr onclick="selectPartFromModal('chainring')" class="hover:bg-teal-500/15 cursor-pointer transition">
+                                <td class="p-2.5 font-bold">۱</td>
+                                <td class="p-2.5 font-bold text-cyan-300">سیستم انتقال نیرو (رکاب و زنجیر)</td>
+                                <td class="p-2.5">پوسته توپی تنه</td>
+                                <td class="p-2.5 font-semibold text-emerald-200">پنجه‌رکاب، قامه، شفت و بلبرینگ، طَبَق، زنجیر، خودرو (هرزگرد)</td>
+                            </tr>
+                            <tr onclick="selectPartFromModal('handlebar')" class="hover:bg-teal-500/15 cursor-pointer transition">
+                                <td class="p-2.5 font-bold">۲</td>
+                                <td class="p-2.5 font-bold text-cyan-300">بخش هدایت و فرمان</td>
+                                <td class="p-2.5">لوله پیشانی تنه، بست کرپی</td>
+                                <td class="p-2.5 font-semibold text-emerald-200">میله فرمان، دوشاخ جلو، دسته‌های ترمز، کاسه‌ساچمه فرمان</td>
+                            </tr>
+                            <tr onclick="selectPartFromModal('frame')" class="hover:bg-teal-500/15 cursor-pointer transition">
+                                <td class="p-2.5 font-bold">۳</td>
+                                <td class="p-2.5 font-bold text-cyan-300">اسکلت، بدنه و نشیمنگاه</td>
+                                <td class="p-2.5 font-semibold text-amber-200">تنه (بدنه اصلی)، زین، لوله زین، بست زین</td>
+                                <td class="p-2.5">— (اجزای این بخش پس از تنظیم، ثابت هستند)</td>
+                            </tr>
+                            <tr onclick="selectPartFromModal('wheels')" class="hover:bg-teal-500/15 cursor-pointer transition">
+                                <td class="p-2.5 font-bold">۴</td>
+                                <td class="p-2.5 font-bold text-cyan-300">بخش حرکت (چرخ‌های جلو و عقب)</td>
+                                <td class="p-2.5">شفتِ محور چرخ در شیار دوشاخ</td>
+                                <td class="p-2.5 font-semibold text-emerald-200">تایر (لاستیک)، طوقه، پره‌ها، توپی چرخ و بلبرینگ‌ها</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="bg-amber-500/10 border border-amber-400/30 rounded-xl p-3 text-xs leading-relaxed text-amber-100">
+                    <strong class="text-amber-300">📌 یادآوری مهم کلاسی:</strong>
+                    دوچرخه یک <strong>سیستم</strong> متشکل از زیرسیستم‌ها (انتقال نیرو، هدایت، ترمز و بدنه) است. در سیستم انتقال قدرت، نیروی پای شما به ترتیب از <strong>پنجه‌رکاب $\leftarrow$ قامه $\leftarrow$ شفت مرکزی $\leftarrow$ طَبَق $\leftarrow$ زنجیر $\leftarrow$ خودرو (چرخ‌دنده هرزگرد عقب)</strong> به چرخ عقب منتقل می‌شود.
+                </div>
+            </div>
+            <div class="px-4 py-2.5 bg-slate-900/90 border-t border-slate-700 flex justify-end">
+                <button onclick="closeTableModal()" class="px-4 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs">متوجه شدم (بازگشت به مدل سه‌بعدی)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================================
+        // 1. EDUCATIONAL DATA FOR ALL BICYCLE COMPONENTS (Page 5 Textbook Aligned)
+        // =========================================================================
+        const BICYCLE_PARTS = {
+            pedals: {
+                id: 'pedals',
+                shortName: 'پنجه‌رکاب',
+                title: 'پنجه‌رکاب (محل قرارگیری پنجه پا)',
+                section: 'بخش انتقال نیرو',
+                motionType: 'جزء متحرک',
+                isMovingPart: true,
+                description: 'قطعه‌ای است که کف یا پنجه پای دوچرخه‌سوار روی آن قرار می‌گیرد و با پیچ رزوه‌دار به سرِ «قامه» بسته می‌شود. درون پنجه‌رکاب ساچمه‌هایی وجود دارد تا هنگام چرخش پا، صفحه رکاب زیر کفش نچرخد و تراز بماند.',
+                tip: '💡 دقت کنید: پنجه‌رکاب چپ و راست به انتهای دو بازوی «قامه» بسته می‌شوند.',
+                explodeOffset: { left: new THREE.Vector3(0, 0, -2.7), right: new THREE.Vector3(0, 0, 2.7) },
+                camPos: new THREE.Vector3(-0.8, 0.2, 3.8),
+                camTarget: new THREE.Vector3(-0.2, -0.5, 0.5)
+            },
+            cranks: {
+                id: 'cranks',
+                shortName: 'قامه (بازوی رکاب)',
+                title: 'قامه راست و چپ (بازوی اهرمی رکاب)',
+                section: 'بخش انتقال نیرو',
+                motionType: 'جزء متحرک',
+                isMovingPart: true,
+                description: 'به دو میله یا بازوی فلزی در دو طرف دوچرخه که از یک سر به «پنجه‌رکاب» و از سر دیگر به «شفت مرکزی» وصل می‌شوند، «قامه» می‌گویند. قامه مانند یک اهرم، فشار پای شما را به نیروی چرخشی تبدیل می‌کند.',
+                tip: '💡 در حالت انفجاری ببینید چگونه دو قامه با زاویه ۱۸۰ درجه نسبت به هم در دو طرف شفت قرار گرفته‌اند.',
+                explodeOffset: { left: new THREE.Vector3(0, 0, -1.75), right: new THREE.Vector3(0, 0, 1.85) },
+                camPos: new THREE.Vector3(-0.6, 0.4, 3.5),
+                camTarget: new THREE.Vector3(-0.2, -0.5, 0.2)
+            },
+            spindle: {
+                id: 'spindle',
+                shortName: 'شفت مرکزی و بلبرینگ',
+                title: 'شفت مرکزی (میل‌تنه) و بلبرینگ‌ها',
+                section: 'بخش انتقال نیرو',
+                motionType: 'جزء متحرک',
+                isMovingPart: true,
+                description: 'میله فولادی بسیار مقاومی است که از وسط پوسته تنه عبور می‌کند و داخل دو «بلبرینگ» (کاسه‌ساچمه) می‌چرخد. دو سر این شفت بیرون می‌آید تا قامه چپ و راست و طَبَق روی آن محکم شوند.',
+                tip: '💡 برای دیدن شفت و ساچمه‌های بلبرینگ، دکمه «باز کردن قطعات (انفجاری)» را بزنید تا از دل تنه بیرون بیایند!',
+                explodeOffset: { main: new THREE.Vector3(0, -0.65, 0), bearingR: new THREE.Vector3(0, 0, 0.75), bearingL: new THREE.Vector3(0, 0, -0.75) },
+                camPos: new THREE.Vector3(-0.3, -0.1, 2.8),
+                camTarget: new THREE.Vector3(-0.2, -0.6, 0)
+            },
+            chainring: {
+                id: 'chainring',
+                shortName: 'طَبَق (چرخ‌دنده جلو)',
+                title: 'طَبَق (چرخ‌دنده بزرگ جلو)',
+                section: 'بخش انتقال نیرو',
+                motionType: 'جزء متحرک',
+                isMovingPart: true,
+                description: 'چرخ‌دنده بزرگ دندانه‌داری که در سمت راست دوچرخه به قامه و شفت مرکزی متصل است. دندانه‌های طَبَق در سوراخ‌های زنجیر درگیر می‌شوند و با هر دور رکاب زدن، زنجیر را به جلو می‌کشند.',
+                tip: '💡 تعداد دندانه‌های «طَبَق» بیشتر از چرخ‌دنده‌های «خودرو» در عقب است تا سرعت چرخش چرخ عقب افزایش یابد.',
+                explodeOffset: { main: new THREE.Vector3(0, 0, 1.25) },
+                camPos: new THREE.Vector3(0.2, 0.1, 3.1),
+                camTarget: new THREE.Vector3(-0.2, -0.5, 0.5)
+            },
+            freewheel: {
+                id: 'freewheel',
+                shortName: 'خودرو (هرزگرد عقب)',
+                title: 'خودرو (چرخ‌دنده‌های خورشیدی و هرزگرد عقب)',
+                section: 'بخش انتقال نیرو',
+                motionType: 'جزء متحرک',
+                isMovingPart: true,
+                description: 'مجموعه چرخ‌دنده‌های خورشیدی روی توپی چرخ عقب است که مکانیزم «جغجغه‌ای و هرزگرد» دارد؛ یعنی وقتی به جلو رکاب می‌زنید چرخ را می‌چرخاند، اما وقتی رکاب نمی‌زنید صدای تق‌تق می‌دهد و چرخ آزادانه می‌چرخد.',
+                tip: '💡 روی دکمه «🔊 هرزگرد (جغجغه خودرو)» در بالای صفحه بزنید تا هم صدای جغجغه را بشنوید و هم کارکرد هرزگرد را ببینید!',
+                explodeOffset: { main: new THREE.Vector3(-0.3, 0, 1.15) },
+                camPos: new THREE.Vector3(-2.1, 0.2, 2.5),
+                camTarget: new THREE.Vector3(-1.85, -0.5, 0.3)
+            },
+            chain: {
+                id: 'chain',
+                shortName: 'زنجیر چرخ',
+                title: 'زنجیر انتقال قدرت',
+                section: 'بخش انتقال نیرو',
+                motionType: 'جزء متحرک',
+                isMovingPart: true,
+                description: 'حلقه‌ای متشکل از ده‌ها قطعه فلزی کوچک و غلتک‌دار که دور «طَبَق» در جلو و «خودرو» در عقب حلقه می‌زند و نیروی چرخشی پا را از جلو به چرخ عقب منتقل می‌کند.',
+                tip: '💡 روغن‌کاری منظم زنجیر باعث کاهش اصطکاک و نرمی حرکت سیستم انتقال قدرت می‌شود.',
+                explodeOffset: { main: new THREE.Vector3(0, -0.45, 1.55) },
+                camPos: new THREE.Vector3(-0.9, -0.1, 3.4),
+                camTarget: new THREE.Vector3(-1.0, -0.5, 0.4)
+            },
+            frame: {
+                id: 'frame',
+                shortName: 'تنه (بدنه اصلی)',
+                title: 'تنه یا اسکلت اصلی دوچرخه',
+                section: 'بخش بدنه و اسکلت',
+                motionType: 'جزء ثابت',
+                isMovingPart: false,
+                description: 'تنه از لوله‌های فلزی یا کربنی به شکل دو مثلث متصل به هم ساخته شده است (ساختار مثلثی بیشترین استحکام را دارد). تمام اجزای دیگر دوچرخه از جمله شفت مرکزی، دوشاخ، زین و چرخ‌ها روی تنه سوار می‌شوند.',
+                tip: '💡 در جدول ۳-۱ کتاب درسی، تنه مهم‌ترین «جزء ثابت» دوچرخه محسوب می‌شود.',
+                explodeOffset: { main: new THREE.Vector3(0, 0.15, 0) },
+                camPos: new THREE.Vector3(0, 0.8, 5.2),
+                camTarget: new THREE.Vector3(0, 0.1, 0)
+            },
+            handlebar: {
+                id: 'handlebar',
+                shortName: 'فرمان و دوشاخ',
+                title: 'فرمان، کرپی، دسته‌های ترمز و دوشاخ جلو',
+                section: 'بخش هدایت و کنترل',
+                motionType: 'جزء متحرک (هدایت)',
+                isMovingPart: true,
+                description: 'مجموعه فرمان و دوشاخ جلو از داخل لوله پیشانی تنه عبور می‌کنند و به دوچرخه‌سوار امکان تغییر جهت و هدایت چرخ جلو و همچنین گرفتن ترمز را می‌دهند.',
+                tip: '💡 دوشاخ جلو دو بازو دارد که توپی چرخ جلو بین آن دو بسته می‌شود.',
+                explodeOffset: { main: new THREE.Vector3(0.55, 0.85, 0) },
+                camPos: new THREE.Vector3(2.3, 1.4, 3.2),
+                camTarget: new THREE.Vector3(1.1, 0.7, 0)
+            },
+            saddle: {
+                id: 'saddle',
+                shortName: 'زین و لوله زین',
+                title: 'زین (نشیمنگاه) و لوله زین',
+                section: 'بخش بدنه و نشیمنگاه',
+                motionType: 'جزء ثابت',
+                isMovingPart: false,
+                description: 'نشیمنگاه دوچرخه‌سوار که روی «لوله زین» نصب شده و وارد لوله عمودی تنه می‌شود. پس از تنظیم ارتفاع مناسب با قد دوچرخه‌سوار، توسط بست زین محکم و ثابت می‌گردد.',
+                tip: '💡 از آنجا که زین در حین حرکت دوچرخه نمی‌چرخد، جزو اجزای ثابت به شمار می‌رود.',
+                explodeOffset: { main: new THREE.Vector3(-0.25, 1.05, 0) },
+                camPos: new THREE.Vector3(-1.5, 1.7, 3.0),
+                camTarget: new THREE.Vector3(-0.65, 0.95, 0)
+            },
+            wheels: {
+                id: 'wheels',
+                shortName: 'چرخ‌های جلو و عقب',
+                title: 'چرخ جلو و عقب (تایر، طوقه، پره‌ها و توپی)',
+                section: 'بخش حرکت و چرخ‌ها',
+                motionType: 'جزء متحرک',
+                isMovingPart: true,
+                description: 'هر چرخ از توپی مرکزی (مجهز به بلبرینگ)، پره‌های فلزی، طوقه دایره‌ای و تایر لاستیکی آج‌دار تشکیل شده است و وظیفه حمل وزن و حرکت روان دوچرخه روی زمین را بر عهده دارد.',
+                tip: '💡 چرخ عقب نیروی محرکه را از «خودرو» می‌گیرد و چرخ جلو وظیفه هدایت مسیر را دارد.',
+                explodeOffset: { front: new THREE.Vector3(1.1, -0.35, 0), rear: new THREE.Vector3(-1.1, -0.35, 0) },
+                camPos: new THREE.Vector3(0, 0.4, 5.6),
+                camTarget: new THREE.Vector3(0, -0.3, 0)
+            }
+        };
+
+        // =========================================================================
+        // 2. THREE.JS SCENE, CAMERA, RENDERER & LIGHTING SETUP
+        // =========================================================================
+        const container = document.getElementById('canvas-container');
+        const labelsContainer = document.getElementById('labels-container');
+
+        const scene = new THREE.Scene();
+
+        const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0.2, 0.9, 5.4);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.07;
+        controls.maxDistance = 11;
+        controls.minDistance = 1.3;
+        controls.target.set(0, 0.05, 0);
+
+        // Hide touch hint on first interaction
+        let hintHidden = false;
+        controls.addEventListener('start', () => {
+            if (!hintHidden) {
+                hintHidden = true;
+                const hint = document.getElementById('touch-hint');
+                if (hint) {
+                    hint.style.opacity = '0';
+                    setTimeout(() => hint.remove(), 500);
+                }
+            }
+        });
+
+        // Studio Lighting for Metallic Engineering Parts
+        const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.75);
+        scene.add(ambientLight);
+
+        const mainDirLight = new THREE.DirectionalLight(0xffffff, 1.15);
+        mainDirLight.position.set(5, 8, 6);
+        scene.add(mainDirLight);
+
+        const fillLight = new THREE.DirectionalLight(0x38bdf8, 0.55);
+        fillLight.position.set(-6, 3, -5);
+        scene.add(fillLight);
+
+        const bottomRimLight = new THREE.DirectionalLight(0xf59e0b, 0.35);
+        bottomRimLight.position.set(0, -5, 3);
+        scene.add(bottomRimLight);
+
+        // Subtle Engineering Grid Floor
+        const gridHelper = new THREE.GridHelper(10, 20, 0x0a828c, 0x1e3a5f);
+        gridHelper.position.y = -1.55;
+        gridHelper.material.opacity = 0.35;
+        gridHelper.material.transparent = true;
+        scene.add(gridHelper);
+
+        // =========================================================================
+        // 3. PROCEDURAL 3D BICYCLE BUILDER (HIGH DETAIL CAD-STYLE GEOMETRY)
+        // =========================================================================
+        const bikeRoot = new THREE.Group();
+        scene.add(bikeRoot);
+
+        // Key coordinates in bike local space
+        const BB_POS = new THREE.Vector3(-0.2, -0.55, 0);      // Bottom Bracket (شفت مرکزی و توپی تنه)
+        const REAR_HUB = new THREE.Vector3(-1.85, -0.55, 0);   // Rear wheel center
+        const FRONT_HUB = new THREE.Vector3(1.75, -0.55, 0);   // Front wheel center
+        const SEAT_CLUSTER = new THREE.Vector3(-0.68, 0.68, 0);// Top of seat tube
+        const HEAD_TOP = new THREE.Vector3(1.18, 0.72, 0);     // Top of head tube
+        const HEAD_BOT = new THREE.Vector3(1.32, 0.32, 0);     // Bottom of head tube
+
+        // Shared Materials (Cloned per mesh so highlighting works cleanly)
+        const MAT_FRAME = new THREE.MeshStandardMaterial({ color: 0x0ea5e9, metalness: 0.45, roughness: 0.25 });
+        const MAT_CHROME = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.82, roughness: 0.18 });
+        const MAT_DARK_METAL = new THREE.MeshStandardMaterial({ color: 0x334155, metalness: 0.65, roughness: 0.35 });
+        const MAT_GOLD_GEAR = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.65, roughness: 0.25 });
+        const MAT_COPPER_COG = new THREE.MeshStandardMaterial({ color: 0xfb923c, metalness: 0.6, roughness: 0.28 });
+        const MAT_TIRE = new THREE.MeshStandardMaterial({ color: 0x1e293b, metalness: 0.1, roughness: 0.85 });
+        const MAT_SADDLE = new THREE.MeshStandardMaterial({ color: 0x0f172a, metalness: 0.15, roughness: 0.6 });
+        const MAT_BEARING = new THREE.MeshStandardMaterial({ color: 0x2dd4bf, metalness: 0.7, roughness: 0.2 });
+
+        // Helper: Create a cylinder strut between two 3D points
+        function createTubeBetween(p1, p2, radiusTop, radiusBot, material, partId) {
+            const dir = new THREE.Vector3().subVectors(p2, p1);
+            const len = dir.length();
+            const geom = new THREE.CylinderGeometry(radiusTop, radiusBot, len, 20);
+            const mesh = new THREE.Mesh(geom, material.clone());
+            mesh.position.copy(p1).add(p2).multiplyScalar(0.5);
+            mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
+            mesh.userData.partId = partId;
+            return mesh;
+        }
+
+        // Helper: Tag all descendants of a group with a partId for raycasting
+        function tagGroup(group, partId) {
+            group.userData.partId = partId;
+            group.traverse(child => {
+                if (child.isMesh) {
+                    child.userData.partId = partId;
+                    child.userData.origEmissive = child.material.emissive ? child.material.emissive.getHex() : 0x000000;
+                }
+            });
+        }
+
+        // Dictionary of 3D groups for animation and explosion
+        const partMeshes = {};
+
+        // -------------------------------------------------------------------------
+        // A. FRAME (تنه دوچرخه - جزء ثابت)
+        // -------------------------------------------------------------------------
+        const frameGroup = new THREE.Group();
+        // Main triangle tubes
+        frameGroup.add(createTubeBetween(SEAT_CLUSTER, HEAD_TOP, 0.055, 0.055, MAT_FRAME, 'frame')); // Top tube
+        frameGroup.add(createTubeBetween(BB_POS, HEAD_BOT, 0.068, 0.06, MAT_FRAME, 'frame'));        // Down tube
+        frameGroup.add(createTubeBetween(BB_POS, SEAT_CLUSTER.clone().add(new THREE.Vector3(-0.04, 0.08, 0)), 0.062, 0.062, MAT_FRAME, 'frame')); // Seat tube
+        // Head tube
+        frameGroup.add(createTubeBetween(
+            HEAD_BOT.clone().add(new THREE.Vector3(0.03, -0.08, 0)),
+            HEAD_TOP.clone().add(new THREE.Vector3(-0.03, 0.08, 0)),
+            0.072, 0.072, MAT_FRAME, 'frame'
+        ));
+        // Bottom Bracket Shell (پوسته توپی تنه که شفت از داخل آن رد می‌شود)
+        const bbShellGeom = new THREE.CylinderGeometry(0.145, 0.145, 0.34, 28, 1, false);
+        bbShellGeom.rotateX(Math.PI / 2);
+        const bbShellMesh = new THREE.Mesh(bbShellGeom, MAT_FRAME.clone());
+        bbShellMesh.position.copy(BB_POS);
+        frameGroup.add(bbShellMesh);
+
+        // Inner dark bore of BB shell
+        const bbHoleGeom = new THREE.CylinderGeometry(0.11, 0.11, 0.35, 24);
+        bbHoleGeom.rotateX(Math.PI / 2);
+        const bbHoleMesh = new THREE.Mesh(bbHoleGeom, MAT_DARK_METAL.clone());
+        bbHoleMesh.position.copy(BB_POS);
+        frameGroup.add(bbHoleMesh);
+
+        // Rear triangle (Seat stays & Chain stays - left and right)
+        [-1, 1].forEach(side => {
+            const zRear = side * 0.18;
+            const zBB = side * 0.12;
+            const zSeat = side * 0.05;
+            const rearDropout = new THREE.Vector3(REAR_HUB.x, REAR_HUB.y, zRear);
+            frameGroup.add(createTubeBetween(new THREE.Vector3(BB_POS.x, BB_POS.y, zBB), rearDropout, 0.04, 0.032, MAT_FRAME, 'frame'));
+            frameGroup.add(createTubeBetween(new THREE.Vector3(SEAT_CLUSTER.x, SEAT_CLUSTER.y - 0.05, zSeat), rearDropout, 0.035, 0.03, MAT_FRAME, 'frame'));
+
+            // Rear dropout plates
+            const dropGeom = new THREE.BoxGeometry(0.16, 0.14, 0.025);
+            const dropMesh = new THREE.Mesh(dropGeom, MAT_CHROME.clone());
+            dropMesh.position.copy(rearDropout);
+            frameGroup.add(dropMesh);
+        });
+
+        tagGroup(frameGroup, 'frame');
+        bikeRoot.add(frameGroup);
+        partMeshes.frame = frameGroup;
+
+        // -------------------------------------------------------------------------
+        // B. BOTTOM BRACKET SPINDLE & BEARINGS (شفت مرکزی و بلبرینگ‌ها)
+        // -------------------------------------------------------------------------
+        const spindleWrapper = new THREE.Group();
+        spindleWrapper.position.copy(BB_POS);
+        bikeRoot.add(spindleWrapper);
+
+        const spindleRotGroup = new THREE.Group();
+        spindleWrapper.add(spindleRotGroup);
+
+        // Central Steel Axle (شفت مرکزی / میل‌تنه)
+        const axleGeom = new THREE.CylinderGeometry(0.055, 0.055, 0.56, 24);
+        axleGeom.rotateX(Math.PI / 2);
+        const axleMesh = new THREE.Mesh(axleGeom, MAT_CHROME.clone());
+        spindleRotGroup.add(axleMesh);
+
+        // Square tapered ends of the spindle (سرهای چهارپهلوی شفت که قامه روی آن قفل می‌شود)
+        [-0.29, 0.29].forEach(zPos => {
+            const tipGeom = new THREE.BoxGeometry(0.075, 0.075, 0.08);
+            const tipMesh = new THREE.Mesh(tipGeom, MAT_GOLD_GEAR.clone());
+            tipMesh.position.set(0, 0, zPos);
+            spindleRotGroup.add(tipMesh);
+        });
+
+        // Left & Right Ball Bearings (بلبرینگ‌ها / کاسه‌ساچمه با ساچمه‌های قابل مشاهده)
+        function createBearingUnit() {
+            const bGroup = new THREE.Group();
+            const outerRing = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.022, 16, 28), MAT_BEARING.clone());
+            const innerRing = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.018, 16, 28), MAT_CHROME.clone());
+            bGroup.add(outerRing, innerRing);
+            // 10 steel balls inside the bearing race
+            for (let i = 0; i < 10; i++) {
+                const ang = (i / 10) * Math.PI * 2;
+                const ball = new THREE.Mesh(new THREE.SphereGeometry(0.022, 12, 12), MAT_CHROME.clone());
+                ball.position.set(Math.cos(ang) * 0.095, Math.sin(ang) * 0.095, 0);
+                bGroup.add(ball);
+            }
+            return bGroup;
+        }
+        const bearingRight = createBearingUnit();
+        bearingRight.position.set(0, 0, 0.18);
+        const bearingLeft = createBearingUnit();
+        bearingLeft.position.set(0, 0, -0.18);
+        spindleRotGroup.add(bearingRight, bearingLeft);
+
+        tagGroup(spindleWrapper, 'spindle');
+        partMeshes.spindle = { wrapper: spindleWrapper, rotGroup: spindleRotGroup, bearingRight, bearingLeft };
+
+        // -------------------------------------------------------------------------
+        // C. FRONT CHAINRING (طَبَق - چرخ‌دنده بزرگ جلو)
+        // -------------------------------------------------------------------------
+        const chainringWrapper = new THREE.Group();
+        chainringWrapper.position.copy(BB_POS);
+        bikeRoot.add(chainringWrapper);
+
+        const chainringRotGroup = new THREE.Group();
+        chainringRotGroup.position.set(0, 0, 0.25);
+        chainringWrapper.add(chainringRotGroup);
+
+        // Outer toothed ring
+        const ringGeom = new THREE.TorusGeometry(0.36, 0.028, 16, 40);
+        const ringMesh = new THREE.Mesh(ringGeom, MAT_GOLD_GEAR.clone());
+        chainringRotGroup.add(ringMesh);
+
+        // 32 Gear teeth around the chainring
+        const numChainringTeeth = 32;
+        for (let i = 0; i < numChainringTeeth; i++) {
+            const ang = (i / numChainringTeeth) * Math.PI * 2;
+            const toothGeom = new THREE.BoxGeometry(0.032, 0.055, 0.022);
+            const tooth = new THREE.Mesh(toothGeom, MAT_GOLD_GEAR.clone());
+            tooth.position.set(Math.cos(ang) * 0.395, Math.sin(ang) * 0.395, 0);
+            tooth.rotation.z = ang - Math.PI / 2;
+            chainringRotGroup.add(tooth);
+        }
+
+        // 5 Spider arms connecting hub to outer ring
+        for (let i = 0; i < 5; i++) {
+            const ang = (i / 5) * Math.PI * 2;
+            const spokeGeom = new THREE.BoxGeometry(0.048, 0.34, 0.024);
+            const spoke = new THREE.Mesh(spokeGeom, MAT_CHROME.clone());
+            spoke.position.set(Math.cos(ang) * 0.18, Math.sin(ang) * 0.18, 0);
+            spoke.rotation.z = ang - Math.PI / 2;
+            chainringRotGroup.add(spoke);
+        }
+
+        // Center mounting disc of chainring
+        const centerDiscGeom = new THREE.CylinderGeometry(0.095, 0.095, 0.03, 24);
+        centerDiscGeom.rotateX(Math.PI / 2);
+        chainringRotGroup.add(new THREE.Mesh(centerDiscGeom, MAT_DARK_METAL.clone()));
+
+        tagGroup(chainringWrapper, 'chainring');
+        partMeshes.chainring = { wrapper: chainringWrapper, rotGroup: chainringRotGroup };
+
+        // -------------------------------------------------------------------------
+        // D. CRANK ARMS (قامه راست و چپ - بازوهای فلزی رکاب)
+        // -------------------------------------------------------------------------
+        const cranksWrapper = new THREE.Group();
+        cranksWrapper.position.copy(BB_POS);
+        bikeRoot.add(cranksWrapper);
+
+        const cranksRotGroup = new THREE.Group();
+        cranksWrapper.add(cranksRotGroup);
+
+        const CRANK_LEN = 0.52;
+
+        function buildCrankArm(isRight) {
+            const armGroup = new THREE.Group();
+            const zBase = isRight ? 0.30 : -0.30;
+            const yDir = isRight ? -1 : 1; // Right arm goes down (-Y), Left arm goes up (+Y) at angle 0
+
+            // Main lever bar
+            const barGeom = new THREE.BoxGeometry(0.085, CRANK_LEN, 0.036);
+            const barMesh = new THREE.Mesh(barGeom, MAT_CHROME.clone());
+            barMesh.position.set(0, yDir * (CRANK_LEN / 2), zBase);
+            armGroup.add(barMesh);
+
+            // Bosses at both ends
+            const bossHub = new THREE.Mesh(new THREE.CylinderGeometry(0.068, 0.068, 0.048, 20).rotateX(Math.PI / 2), MAT_CHROME.clone());
+            bossHub.position.set(0, 0, zBase);
+            const bossPedal = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.048, 20).rotateX(Math.PI / 2), MAT_CHROME.clone());
+            bossPedal.position.set(0, yDir * CRANK_LEN, zBase);
+            armGroup.add(bossHub, bossPedal);
+
+            return armGroup;
+        }
+
+        const rightCrankArm = buildCrankArm(true);
+        const leftCrankArm = buildCrankArm(false);
+        cranksRotGroup.add(rightCrankArm, leftCrankArm);
+
+        tagGroup(cranksWrapper, 'cranks');
+        partMeshes.cranks = { wrapper: cranksWrapper, rotGroup: cranksRotGroup, rightCrankArm, leftCrankArm };
+
+        // -------------------------------------------------------------------------
+        // E. PEDALS (پنجه‌رکاب‌های راست و چپ - محل قرارگیری پنجه پا)
+        // -------------------------------------------------------------------------
+        const pedalsWrapper = new THREE.Group();
+        pedalsWrapper.position.copy(BB_POS);
+        bikeRoot.add(pedalsWrapper);
+
+        const pedalsOrbitGroup = new THREE.Group();
+        pedalsWrapper.add(pedalsOrbitGroup);
+
+        function buildPedalUnit(isRight) {
+            const pGroup = new THREE.Group();
+            const zSign = isRight ? 1 : -1;
+
+            // Pedal Spindle (محور پیچ‌دار رکاب)
+            const pAxleGeom = new THREE.CylinderGeometry(0.022, 0.022, 0.18, 16);
+            pAxleGeom.rotateX(Math.PI / 2);
+            const pAxle = new THREE.Mesh(pAxleGeom, MAT_CHROME.clone());
+            pAxle.position.set(0, 0, zSign * 0.09);
+            pGroup.add(pAxle);
+
+            // Pedal Platform (صفحه زیر پنجه پا)
+            const platGeom = new THREE.BoxGeometry(0.24, 0.042, 0.16);
+            const platMesh = new THREE.Mesh(platGeom, MAT_DARK_METAL.clone());
+            platMesh.position.set(0, 0, zSign * 0.16);
+            pGroup.add(platMesh);
+
+            // Orange safety reflectors on front & back of pedal
+            [-0.122, 0.122].forEach(xRef => {
+                const refGeom = new THREE.BoxGeometry(0.01, 0.026, 0.11);
+                const refMat = new THREE.MeshStandardMaterial({ color: 0xf97316, emissive: 0x7c2d12, roughness: 0.3 });
+                const refMesh = new THREE.Mesh(refGeom, refMat);
+                refMesh.position.set(xRef, 0, zSign * 0.16);
+                pGroup.add(refMesh);
+            });
+
+            return pGroup;
+        }
+
+        const rightPedal = buildPedalUnit(true);
+        rightPedal.position.set(0, -CRANK_LEN, 0.32);
+        const leftPedal = buildPedalUnit(false);
+        leftPedal.position.set(0, CRANK_LEN, -0.32);
+        pedalsOrbitGroup.add(rightPedal, leftPedal);
+
+        tagGroup(pedalsWrapper, 'pedals');
+        partMeshes.pedals = { wrapper: pedalsWrapper, orbitGroup: pedalsOrbitGroup, rightPedal, leftPedal };
+
+        // -------------------------------------------------------------------------
+        // F. REAR FREEWHEEL / CASSETTE (خودرو - چرخ‌دنده‌های خورشیدی و هرزگرد عقب)
+        // -------------------------------------------------------------------------
+        const freewheelWrapper = new THREE.Group();
+        freewheelWrapper.position.copy(REAR_HUB);
+        bikeRoot.add(freewheelWrapper);
+
+        const freewheelRotGroup = new THREE.Group();
+        freewheelRotGroup.position.set(0, 0, 0.17);
+        freewheelWrapper.add(freewheelRotGroup);
+
+        // 5 Multi-speed cogs from largest (inner) to smallest (outer)
+        const cogRadii = [0.22, 0.185, 0.155, 0.128, 0.105];
+        cogRadii.forEach((rad, idx) => {
+            const zCog = idx * 0.022;
+            const cogMat = (idx === 1) ? MAT_GOLD_GEAR.clone() : MAT_COPPER_COG.clone();
+            const cogDisc = new THREE.Mesh(new THREE.CylinderGeometry(rad, rad, 0.015, 28).rotateX(Math.PI / 2), cogMat);
+            cogDisc.position.set(0, 0, zCog);
+            freewheelRotGroup.add(cogDisc);
+
+            // Teeth on each cog
+            const teethCount = Math.floor(rad * 95);
+            for (let t = 0; t < teethCount; t++) {
+                const ang = (t / teethCount) * Math.PI * 2;
+                const tooth = new THREE.Mesh(new THREE.BoxGeometry(0.022, 0.035, 0.015), cogMat);
+                tooth.position.set(Math.cos(ang) * (rad + 0.012), Math.sin(ang) * (rad + 0.012), zCog);
+                tooth.rotation.z = ang - Math.PI / 2;
+                freewheelRotGroup.add(tooth);
+            }
+        });
+
+        // Inner ratchet pawl ring visual (مکانیزم جغجغه‌ای هرزگرد)
+        const ratchetCore = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.075, 0.075, 0.12, 20).rotateX(Math.PI / 2),
+            MAT_BEARING.clone()
+        );
+        ratchetCore.position.set(0, 0, 0.04);
+        freewheelRotGroup.add(ratchetCore);
+
+        tagGroup(freewheelWrapper, 'freewheel');
+        partMeshes.freewheel = { wrapper: freewheelWrapper, rotGroup: freewheelRotGroup };
+
+        // -------------------------------------------------------------------------
+        // G. DRIVE CHAIN (زنجیر چرخ متحرک)
+        // -------------------------------------------------------------------------
+        const chainWrapper = new THREE.Group();
+        bikeRoot.add(chainWrapper);
+
+        // Build closed loop path around Front Chainring (BB_POS, r=0.37) and Rear Freewheel (REAR_HUB, r=0.16)
+        const chainZ = 0.25;
+        const rFront = 0.37;
+        const rRear = 0.165;
+        const chainPoints = [];
+        // Top run (from rear top to front top)
+        for (let i = 0; i <= 14; i++) {
+            const t = i / 14;
+            chainPoints.push(new THREE.Vector3(
+                THREE.MathUtils.lerp(REAR_HUB.x, BB_POS.x, t),
+                THREE.MathUtils.lerp(REAR_HUB.y + rRear, BB_POS.y + rFront, t),
+                chainZ
+            ));
+        }
+        // Front arc around chainring (top to bottom via right side)
+        for (let i = 1; i <= 14; i++) {
+            const ang = (Math.PI / 2) - (i / 14) * Math.PI;
+            chainPoints.push(new THREE.Vector3(
+                BB_POS.x + Math.cos(ang) * rFront,
+                BB_POS.y + Math.sin(ang) * rFront,
+                chainZ
+            ));
+        }
+        // Bottom run (from front bottom to rear bottom)
+        for (let i = 1; i <= 14; i++) {
+            const t = i / 14;
+            chainPoints.push(new THREE.Vector3(
+                THREE.MathUtils.lerp(BB_POS.x, REAR_HUB.x, t),
+                THREE.MathUtils.lerp(BB_POS.y - rFront, REAR_HUB.y - rRear, t),
+                chainZ
+            ));
+        }
+        // Rear arc around freewheel (bottom to top via left side)
+        for (let i = 1; i < 14; i++) {
+            const ang = (-Math.PI / 2) - (i / 14) * Math.PI;
+            chainPoints.push(new THREE.Vector3(
+                REAR_HUB.x + Math.cos(ang) * rRear,
+                REAR_HUB.y + Math.sin(ang) * rRear,
+                chainZ
+            ));
+        }
+
+        const chainCurve = new THREE.CatmullRomCurve3(chainPoints, true);
+        const chainLinks = [];
+        const NUM_LINKS = 52;
+        const linkGeom = new THREE.BoxGeometry(0.068, 0.032, 0.036);
+        for (let i = 0; i < NUM_LINKS; i++) {
+            const mat = (i % 2 === 0) ? MAT_DARK_METAL.clone() : MAT_CHROME.clone();
+            const linkMesh = new THREE.Mesh(linkGeom, mat);
+            chainWrapper.add(linkMesh);
+            chainLinks.push({ mesh: linkMesh, baseT: i / NUM_LINKS });
+        }
+
+        function updateChainLinks(offsetProgress) {
+            chainLinks.forEach(item => {
+                let u = (item.baseT + offsetProgress) % 1;
+                if (u < 0) u += 1;
+                const pos = chainCurve.getPointAt(u);
+                const tangent = chainCurve.getTangentAt(u);
+                item.mesh.position.copy(pos);
+                item.mesh.rotation.z = Math.atan2(tangent.y, tangent.x);
+            });
+        }
+        updateChainLinks(0);
+
+        tagGroup(chainWrapper, 'chain');
+        partMeshes.chain = { wrapper: chainWrapper };
+
+        // -------------------------------------------------------------------------
+        // H. FRONT & REAR WHEELS (چرخ‌های جلو و عقب)
+        // -------------------------------------------------------------------------
+        function createWheelAssembly() {
+            const wGroup = new THREE.Group();
+            const WHEEL_RAD = 0.86;
+
+            // Rubber Tire (تایر)
+            const tireMesh = new THREE.Mesh(new THREE.TorusGeometry(WHEEL_RAD, 0.088, 18, 48), MAT_TIRE.clone());
+            wGroup.add(tireMesh);
+
+            // Metallic Rim (طوقه فلزی)
+            const rimMesh = new THREE.Mesh(new THREE.TorusGeometry(WHEEL_RAD - 0.075, 0.026, 14, 48), MAT_CHROME.clone());
+            wGroup.add(rimMesh);
+
+            // Central Hub (توپی چرخ)
+            const hubMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.065, 0.065, 0.28, 20).rotateX(Math.PI / 2), MAT_CHROME.clone());
+            wGroup.add(hubMesh);
+
+            // 16 Steel Spokes (پره‌های چرخ)
+            for (let i = 0; i < 16; i++) {
+                const ang = (i / 16) * Math.PI * 2;
+                const zHub = (i % 2 === 0) ? 0.09 : -0.09;
+                const pStart = new THREE.Vector3(Math.cos(ang) * 0.05, Math.sin(ang) * 0.05, zHub);
+                const pEnd = new THREE.Vector3(Math.cos(ang + 0.15) * (WHEEL_RAD - 0.08), Math.sin(ang + 0.15) * (WHEEL_RAD - 0.08), 0);
+                wGroup.add(createTubeBetween(pStart, pEnd, 0.008, 0.008, MAT_CHROME, 'wheels'));
+            }
+
+            // Orange wheel reflector between spokes (شبرنگ چرخ برای تشخیص واضح چرخش)
+            const wheelRef = new THREE.Mesh(
+                new THREE.BoxGeometry(0.11, 0.045, 0.018),
+                new THREE.MeshStandardMaterial({ color: 0xf59e0b, emissive: 0x78350f })
+            );
+            wheelRef.position.set(0, WHEEL_RAD * 0.58, 0);
+            wGroup.add(wheelRef);
+
+            return wGroup;
+        }
+
+        const rearWheelWrapper = new THREE.Group();
+        rearWheelWrapper.position.copy(REAR_HUB);
+        const rearWheelRot = createWheelAssembly();
+        rearWheelWrapper.add(rearWheelRot);
+        bikeRoot.add(rearWheelWrapper);
+
+        const frontWheelWrapper = new THREE.Group();
+        frontWheelWrapper.position.copy(FRONT_HUB);
+        const frontWheelRot = createWheelAssembly();
+        frontWheelWrapper.add(frontWheelRot);
+        bikeRoot.add(frontWheelWrapper);
+
+        tagGroup(rearWheelWrapper, 'wheels');
+        tagGroup(frontWheelWrapper, 'wheels');
+        partMeshes.wheels = { rearWrapper: rearWheelWrapper, frontWrapper: frontWheelWrapper, rearRot: rearWheelRot, frontRot: frontWheelRot };
+
+        // -------------------------------------------------------------------------
+        // I. FORK, STEM & HANDLEBARS (دوشاخ جلو و فرمان)
+        // -------------------------------------------------------------------------
+        const handlebarGroup = new THREE.Group();
+
+        // Steerer tube & stem
+        const stemTop = new THREE.Vector3(1.10, 1.02, 0);
+        const barCenter = new THREE.Vector3(1.24, 1.08, 0);
+        handlebarGroup.add(createTubeBetween(HEAD_BOT, stemTop, 0.046, 0.046, MAT_CHROME, 'handlebar'));
+        handlebarGroup.add(createTubeBetween(stemTop, barCenter, 0.048, 0.048, MAT_DARK_METAL, 'handlebar'));
+
+        // Fork Crown & Left/Right Fork Blades (دوشاخ جلو)
+        [-1, 1].forEach(side => {
+            const crownPt = new THREE.Vector3(HEAD_BOT.x + 0.02, HEAD_BOT.y - 0.04, side * 0.14);
+            const hubPt = new THREE.Vector3(FRONT_HUB.x, FRONT_HUB.y, side * 0.14);
+            handlebarGroup.add(createTubeBetween(HEAD_BOT, crownPt, 0.045, 0.045, MAT_FRAME, 'handlebar'));
+            handlebarGroup.add(createTubeBetween(crownPt, hubPt, 0.044, 0.03, MAT_FRAME, 'handlebar'));
+        });
+
+        // Handlebar Crossbar + Grips + Brake Levers
+        const hBarLeft = new THREE.Vector3(barCenter.x - 0.06, barCenter.y, -0.56);
+        const hBarRight = new THREE.Vector3(barCenter.x - 0.06, barCenter.y, 0.56);
+        handlebarGroup.add(createTubeBetween(barCenter, hBarLeft, 0.036, 0.036, MAT_CHROME, 'handlebar'));
+        handlebarGroup.add(createTubeBetween(barCenter, hBarRight, 0.036, 0.036, MAT_CHROME, 'handlebar'));
+
+        // Grips & Brake Levers (دستگیره‌ها و اهرم‌های ترمز)
+        [-1, 1].forEach(side => {
+            const gripStart = new THREE.Vector3(barCenter.x - 0.04, barCenter.y, side * 0.34);
+            const gripEnd = new THREE.Vector3(barCenter.x - 0.07, barCenter.y, side * 0.58);
+            handlebarGroup.add(createTubeBetween(gripStart, gripEnd, 0.046, 0.046, MAT_TIRE, 'handlebar'));
+
+            // Brake lever
+            const leverStart = new THREE.Vector3(barCenter.x - 0.03, barCenter.y - 0.02, side * 0.31);
+            const leverEnd = new THREE.Vector3(barCenter.x + 0.11, barCenter.y - 0.09, side * 0.44);
+            handlebarGroup.add(createTubeBetween(leverStart, leverEnd, 0.016, 0.012, MAT_CHROME, 'handlebar'));
+        });
+
+        tagGroup(handlebarGroup, 'handlebar');
+        bikeRoot.add(handlebarGroup);
+        partMeshes.handlebar = handlebarGroup;
+
+        // -------------------------------------------------------------------------
+        // J. SADDLE & SEATPOST (زین و لوله زین - جزء ثابت)
+        // -------------------------------------------------------------------------
+        const saddleGroup = new THREE.Group();
+        const seatTop = new THREE.Vector3(-0.77, 1.02, 0);
+        saddleGroup.add(createTubeBetween(SEAT_CLUSTER, seatTop, 0.042, 0.042, MAT_CHROME, 'saddle'));
+
+        // Ergonomic Saddle shape
+        const saddleRear = new THREE.Mesh(new THREE.SphereGeometry(0.16, 20, 16), MAT_SADDLE.clone());
+        saddleRear.scale.set(1.3, 0.32, 0.95);
+        saddleRear.position.set(seatTop.x - 0.08, seatTop.y + 0.04, 0);
+        const saddleNose = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.08, 0.28, 16).rotateZ(Math.PI / 2), MAT_SADDLE.clone());
+        saddleNose.scale.set(1, 0.55, 0.7);
+        saddleNose.position.set(seatTop.x + 0.08, seatTop.y + 0.035, 0);
+        saddleGroup.add(saddleRear, saddleNose);
+
+        tagGroup(saddleGroup, 'saddle');
+        bikeRoot.add(saddleGroup);
+        partMeshes.saddle = saddleGroup;
+
+        // -------------------------------------------------------------------------
+        // K. DASHED 3D CAD ASSEMBLY GUIDE LINES (خطوط راهنمای مونتاژ در حالت انفجاری)
+        // -------------------------------------------------------------------------
+        const guideLinesGroup = new THREE.Group();
+        bikeRoot.add(guideLinesGroup);
+
+        const dashedLineMat = new THREE.LineDashedMaterial({
+            color: 0xfbbf24,
+            dashSize: 0.08,
+            gapSize: 0.05,
+            transparent: true,
+            opacity: 0
+        });
+
+        function createDynamicLine() {
+            const geom = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
+            const line = new THREE.Line(geom, dashedLineMat);
+            guideLinesGroup.add(line);
+            return line;
+        }
+
+        const lineBBExpand = createDynamicLine();      // Connects Left Pedal -> Left Crank -> BB -> Right Crank -> Right Pedal
+        const lineSpindleDrop = createDynamicLine();   // Connects BB Shell -> Dropped Spindle
+        const lineRearAxle = createDynamicLine();      // Connects Rear Hub -> Freewheel
+        const lineSaddle = createDynamicLine();        // Connects Seat Tube -> Saddle
+        const lineFork = createDynamicLine();          // Connects Head Tube -> Fork/Handlebar
+
+        function updateGuideLine(line, p1, p2) {
+            const posAttr = line.geometry.attributes.position;
+            posAttr.setXYZ(0, p1.x, p1.y, p1.z);
+            posAttr.setXYZ(1, p2.x, p2.y, p2.z);
+            posAttr.needsUpdate = true;
+            line.computeLineDistances();
+        }
+
+        // =========================================================================
+        // 4. FLOATING 3D PERSIAN LABELS & QUICK SELECTOR CHIPS
+        // =========================================================================
+        let showLabels = true;
+        const labelElements = {};
+
+        // Define anchor functions that return current 3D world position of each part
+        const partAnchors = {
+            pedals: () => {
+                const v = new THREE.Vector3();
+                rightPedal.getWorldPosition(v);
+                return v.add(new THREE.Vector3(0, -0.18, 0.15));
+            },
+            cranks: () => {
+                const v = new THREE.Vector3();
+                rightCrankArm.getWorldPosition(v);
+                return v.add(new THREE.Vector3(0.15, -0.25, 0.35));
+            },
+            spindle: () => {
+                const v = new THREE.Vector3();
+                spindleWrapper.getWorldPosition(v);
+                return v.add(new THREE.Vector3(0, -0.22, 0));
+            },
+            chainring: () => {
+                const v = new THREE.Vector3();
+                chainringRotGroup.getWorldPosition(v);
+                return v.add(new THREE.Vector3(0.28, 0.28, 0.1));
+            },
+            freewheel: () => {
+                const v = new THREE.Vector3();
+                freewheelRotGroup.getWorldPosition(v);
+                return v.add(new THREE.Vector3(0, 0.25, 0.12));
+            },
+            chain: () => {
+                const v = new THREE.Vector3();
+                chainWrapper.getWorldPosition(v);
+                return v.add(new THREE.Vector3(-1.05, -0.78, 0.28));
+            },
+            frame: () => {
+                const v = new THREE.Vector3();
+                frameGroup.getWorldPosition(v);
+                return v.add(new THREE.Vector3(0.25, 0.72, 0));
+            },
+            handlebar: () => {
+                const v = new THREE.Vector3();
+                handlebarGroup.getWorldPosition(v);
+                return v.add(new THREE.Vector3(1.22, 1.25, 0));
+            },
+            saddle: () => {
+                const v = new THREE.Vector3();
+                saddleGroup.getWorldPosition(v);
+                return v.add(new THREE.Vector3(-0.78, 1.22, 0));
+            },
+            wheels: () => {
+                const v = new THREE.Vector3();
+                frontWheelWrapper.getWorldPosition(v);
+                return v.add(new THREE.Vector3(0.55, -0.5, 0));
+            }
+        };
+
+        // Initialize 3D Labels & Bottom Chips
+        const chipsBar = document.getElementById('parts-chips-bar');
+        Object.values(BICYCLE_PARTS).forEach(part => {
+            // Create 3D Pin
+            const pin = document.createElement('div');
+            pin.className = 'part-pin';
+            pin.innerHTML = `<span class="pin-dot"></span><span>${part.shortName}</span>`;
+            pin.onclick = (e) => {
+                e.stopPropagation();
+                handlePartSelection(part.id);
+            };
+            labelsContainer.appendChild(pin);
+            labelElements[part.id] = pin;
+
+            // Create Bottom Quick Chip
+            const chip = document.createElement('button');
+            chip.id = `chip-${part.id}`;
+            chip.className = 'part-chip px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-teal-700/70 text-slate-200 border border-slate-600/60 text-xs font-bold shrink-0 transition';
+            chip.textContent = part.shortName;
+            chip.onclick = () => handlePartSelection(part.id, true);
+            chipsBar.appendChild(chip);
+        });
+
+        function updateFloatingLabels() {
+            if (!showLabels) return;
+            const halfW = window.innerWidth / 2;
+            const halfH = window.innerHeight / 2;
+
+            Object.keys(BICYCLE_PARTS).forEach(id => {
+                const pin = labelElements[id];
+                const worldPos = partAnchors[id]();
+                const projected = worldPos.clone().project(camera);
+
+                if (projected.z > 1) {
+                    pin.style.display = 'none';
+                    return;
+                }
+                pin.style.display = 'flex';
+                const x = (projected.x * halfW) + halfW;
+                const y = -(projected.y * halfH) + halfH;
+                pin.style.left = `${x}px`;
+                pin.style.top = `${y}px`;
+            });
+        }
+
+        function toggleLabels() {
+            showLabels = !showLabels;
+            labelsContainer.style.display = showLabels ? 'block' : 'none';
+            const txt = document.getElementById('labels-status-text');
+            if (txt) txt.textContent = showLabels ? 'برچسب‌ها: روشن' : 'برچسب‌ها: خاموش';
+        }
+
+        // =========================================================================
+        // 5. EXPLODED VIEW INTERPOLATION (تصویر انفجاری نرم و مهندسی)
+        // =========================================================================
+        let targetExplodeFactor = 0; // 0.0 to 1.0
+        let currentExplodeFactor = 0;
+
+        function onExplodeSliderChange(val) {
+            targetExplodeFactor = parseFloat(val) / 100;
+            updateExplodeUI(val);
+        }
+
+        function toggleExplodeButton() {
+            const slider = document.getElementById('explode-slider');
+            if (targetExplodeFactor < 0.5) {
+                targetExplodeFactor = 1.0;
+                slider.value = 100;
+                updateExplodeUI(100);
+            } else {
+                targetExplodeFactor = 0.0;
+                slider.value = 0;
+                updateExplodeUI(0);
+            }
+        }
+
+        function updateExplodeUI(val) {
+            const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            const faVal = String(Math.round(val)).replace(/\d/g, d => persianDigits[d]);
+            document.getElementById('explode-percent').textContent = `${faVal}٪`;
+
+            const btnText = document.getElementById('explode-btn-text');
+            const btnIcon = document.getElementById('explode-btn-icon');
+            if (val > 40) {
+                btnText.textContent = 'مونتاژ و بستن قطعات';
+                btnIcon.textContent = '🔧';
+            } else {
+                btnText.textContent = 'باز کردن قطعات (انفجاری)';
+                btnIcon.textContent = '💥';
+            }
+        }
+
+        function applyExplodedPositions(t) {
+            // 1. Frame slight lift
+            frameGroup.position.lerpVectors(new THREE.Vector3(0, 0, 0), BICYCLE_PARTS.frame.explodeOffset.main, t);
+
+            // 2. Spindle & Bearings (Slides down and bearings expand along Z so students see inside!)
+            spindleWrapper.position.lerpVectors(BB_POS, BB_POS.clone().add(BICYCLE_PARTS.spindle.explodeOffset.main), t);
+            bearingRight.position.z = THREE.MathUtils.lerp(0.18, 0.18 + BICYCLE_PARTS.spindle.explodeOffset.bearingR.z, t);
+            bearingLeft.position.z = THREE.MathUtils.lerp(-0.18, -0.18 + BICYCLE_PARTS.spindle.explodeOffset.bearingL.z, t);
+
+            // 3. Front Chainring (طَبَق) slides outward along +Z
+            chainringRotGroup.position.z = THREE.MathUtils.lerp(0.25, 0.25 + BICYCLE_PARTS.chainring.explodeOffset.main.z, t);
+
+            // 4. Crank Arms (قامه راست و چپ) slide outward further along +Z and -Z
+            rightCrankArm.position.z = THREE.MathUtils.lerp(0, BICYCLE_PARTS.cranks.explodeOffset.right.z, t);
+            leftCrankArm.position.z = THREE.MathUtils.lerp(0, BICYCLE_PARTS.cranks.explodeOffset.left.z, t);
+
+            // 5. Pedals (پنجه‌رکاب) slide outward furthest along +Z and -Z
+            const rPedalZ = THREE.MathUtils.lerp(0.32, 0.32 + BICYCLE_PARTS.pedals.explodeOffset.right.z, t);
+            const lPedalZ = THREE.MathUtils.lerp(-0.32, -0.32 + BICYCLE_PARTS.pedals.explodeOffset.left.z, t);
+            rightPedal.position.z = rPedalZ;
+            leftPedal.position.z = lPedalZ;
+
+            // 6. Rear Freewheel (خودرو) slides out along +Z
+            freewheelWrapper.position.lerpVectors(REAR_HUB, REAR_HUB.clone().add(BICYCLE_PARTS.freewheel.explodeOffset.main), t);
+
+            // 7. Chain drops and steps forward along +Z
+            chainWrapper.position.lerpVectors(new THREE.Vector3(0, 0, 0), BICYCLE_PARTS.chain.explodeOffset.main, t);
+
+            // 8. Front & Rear Wheels separate outward
+            frontWheelWrapper.position.lerpVectors(FRONT_HUB, FRONT_HUB.clone().add(BICYCLE_PARTS.wheels.explodeOffset.front), t);
+            rearWheelWrapper.position.lerpVectors(REAR_HUB, REAR_HUB.clone().add(BICYCLE_PARTS.wheels.explodeOffset.rear), t);
+
+            // 9. Handlebar & Fork slide up/forward
+            handlebarGroup.position.lerpVectors(new THREE.Vector3(0, 0, 0), BICYCLE_PARTS.handlebar.explodeOffset.main, t);
+
+            // 10. Saddle & Seatpost slide up out of Seat Tube
+            saddleGroup.position.lerpVectors(new THREE.Vector3(0, 0, 0), BICYCLE_PARTS.saddle.explodeOffset.main, t);
+
+            // Update dashed assembly lines
+            dashedLineMat.opacity = t * 0.85;
+            if (t > 0.02) {
+                updateGuideLine(
+                    lineBBExpand,
+                    new THREE.Vector3(BB_POS.x, BB_POS.y, lPedalZ - 0.1),
+                    new THREE.Vector3(BB_POS.x, BB_POS.y, rPedalZ + 0.1)
+                );
+                updateGuideLine(lineSpindleDrop, BB_POS, spindleWrapper.position);
+                updateGuideLine(lineRearAxle, rearWheelWrapper.position, freewheelWrapper.position.clone().add(new THREE.Vector3(0, 0, 0.25)));
+                updateGuideLine(lineSaddle, SEAT_CLUSTER, SEAT_CLUSTER.clone().add(saddleGroup.position));
+                updateGuideLine(lineFork, HEAD_TOP, HEAD_TOP.clone().add(handlebarGroup.position));
+            }
+        }
+
+        // =========================================================================
+        // 6. PART SELECTION, HIGHLIGHTING & RAYCASTING (کلیک یا لمس قطعات)
+        // =========================================================================
+        let selectedPartId = 'chainring';
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+        let pointerDownPos = { x: 0, y: 0 };
+
+        renderer.domElement.addEventListener('pointerdown', (e) => {
+            pointerDownPos = { x: e.clientX, y: e.clientY };
+        });
+
+        renderer.domElement.addEventListener('pointerup', (e) => {
+            const dist = Math.hypot(e.clientX - pointerDownPos.x, e.clientY - pointerDownPos.y);
+            if (dist > 8) return; // Ignore drag/rotate gestures
+
+            pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+            pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+            raycaster.setFromCamera(pointer, camera);
+
+            const intersects = raycaster.intersectObjects(bikeRoot.children, true);
+            const hit = intersects.find(item => item.object.userData && item.object.userData.partId);
+            if (hit) {
+                handlePartSelection(hit.object.userData.partId, false);
+            }
+        });
+
+        function handlePartSelection(partId, moveCam = false) {
+            if (quizState.active) {
+                checkQuizAnswer(partId);
+                return;
+            }
+            highlightAndShowPart(partId, moveCam);
+        }
+
+        function highlightAndShowPart(partId, moveCam = false) {
+            selectedPartId = partId;
+            const partData = BICYCLE_PARTS[partId];
+            if (!partData) return;
+
+            // 1. Highlight 3D Mesh Emissive Glow
+            bikeRoot.traverse(obj => {
+                if (obj.isMesh && obj.material && obj.material.emissive) {
+                    if (obj.userData.partId === partId) {
+                        obj.material.emissive.setHex(0x0d9488);
+                        obj.material.emissiveIntensity = 0.65;
+                    } else {
+                        obj.material.emissive.setHex(obj.userData.origEmissive || 0x000000);
+                        obj.material.emissiveIntensity = 1.0;
+                    }
+                }
+            });
+
+            // 2. Highlight Floating Pin & Bottom Chip
+            Object.keys(labelElements).forEach(id => {
+                labelElements[id].classList.toggle('active-pin', id === partId);
+                const chip = document.getElementById(`chip-${id}`);
+                if (chip) {
+                    if (id === partId) {
+                        chip.className = 'part-chip px-3 py-1 rounded-lg bg-amber-400 text-slate-950 font-black text-xs shrink-0 shadow transition';
+                        chip.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+                    } else {
+                        chip.className = 'part-chip px-2.5 py-1 rounded-lg bg-slate-800/90 hover:bg-teal-700/70 text-slate-200 border border-slate-600/60 text-xs font-bold shrink-0 transition';
+                    }
+                }
+            });
+
+            // 3. Update Bottom Info Card
+            document.getElementById('info-title').textContent = partData.title;
+            document.getElementById('info-badge-section').textContent = partData.section;
+            const motionBadge = document.getElementById('info-badge-motion');
+            motionBadge.textContent = partData.motionType;
+            if (partData.isMovingPart) {
+                motionBadge.className = 'px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-500/25 text-emerald-300 border border-emerald-400/40';
+            } else {
+                motionBadge.className = 'px-2 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/25 text-amber-300 border border-amber-400/40';
+            }
+            document.getElementById('info-desc').textContent = partData.description;
+            document.getElementById('info-tip').textContent = partData.tip;
+
+            // Ensure card body is open when a part is tapped
+            const bodyWrapper = document.getElementById('info-body-wrapper');
+            if (bodyWrapper.classList.contains('hidden')) {
+                toggleInfoCardBody();
+            }
+
+            // 4. Optional Camera Focus
+            if (moveCam && partData.camPos) {
+                animateCameraTo(partData.camPos, partData.camTarget);
+            }
+        }
+
+        function toggleInfoCardBody() {
+            const bodyWrapper = document.getElementById('info-body-wrapper');
+            const btn = document.getElementById('btn-collapse-info');
+            const isHidden = bodyWrapper.classList.toggle('hidden');
+            btn.textContent = isHidden ? 'نمایش توضیح ▲' : 'بستن توضیح ▼';
+        }
+
+        // =========================================================================
+        // 7. CAMERA PRESETS & SMOOTH TRANSITIONS
+        // =========================================================================
+        let camAnim = null;
+
+        function animateCameraTo(targetPos, targetLookAt) {
+            camAnim = {
+                startPos: camera.position.clone(),
+                endPos: targetPos.clone(),
+                startTarget: controls.target.clone(),
+                endTarget: targetLookAt.clone(),
+                progress: 0
+            };
+        }
+
+        function setCameraPreset(preset) {
+            document.querySelectorAll('.cam-btn').forEach(b => {
+                b.className = 'cam-btn px-2.5 py-1 rounded-lg hover:bg-slate-700/60 text-slate-200 text-[11px] font-bold shrink-0 transition';
+            });
+            const activeBtn = document.getElementById(`cam-${preset}`);
+            if (activeBtn) {
+                activeBtn.className = 'cam-btn px-2.5 py-1 rounded-lg bg-teal-600/80 text-white text-[11px] font-bold shrink-0 transition';
+            }
+
+            if (preset === 'overview') {
+                animateCameraTo(new THREE.Vector3(0.2, 0.9, 5.4), new THREE.Vector3(0, 0.05, 0));
+            } else if (preset === 'drivetrain') {
+                animateCameraTo(new THREE.Vector3(-0.1, 0.15, 2.7), new THREE.Vector3(-0.2, -0.55, 0.25));
+                highlightAndShowPart('chainring', false);
+            } else if (preset === 'freewheel') {
+                animateCameraTo(new THREE.Vector3(-2.0, 0.15, 2.3), new THREE.Vector3(-1.85, -0.55, 0.25));
+                highlightAndShowPart('freewheel', false);
+            }
+        }
+
+        // =========================================================================
+        // 8. MECHANICAL MOTION SIMULATOR & WEB AUDIO RATCHET SOUND
+        // =========================================================================
+        let motionMode = 'pedal'; // 'pedal' | 'freewheel' | 'stop'
+        let crankAngle = 0;
+        let wheelAngle = 0;
+        let chainOffset = 0;
+        let audioCtx = null;
+        let lastClickStep = 0;
+
+        function playRatchetClickSound() {
+            try {
+                if (!audioCtx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(1450, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(320, audioCtx.currentTime + 0.018);
+
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.018);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.02);
+            } catch (e) {
+                // Ignore if audio not permitted yet
+            }
+        }
+
+        function setMotionMode(mode) {
+            motionMode = mode;
+            document.querySelectorAll('.motion-btn').forEach(b => {
+                b.className = 'motion-btn px-2.5 py-1 rounded-lg hover:bg-slate-700/60 text-slate-200 text-[11px] font-bold shrink-0 transition flex items-center gap-1';
+            });
+            const activeBtn = document.getElementById(`mode-${mode}`);
+            if (activeBtn) {
+                activeBtn.className = 'motion-btn px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-[11px] font-bold shrink-0 transition flex items-center gap-1';
+            }
+
+            if (mode === 'freewheel') {
+                highlightAndShowPart('freewheel', false);
+                playRatchetClickSound();
+            }
+        }
+
+        // =========================================================================
+        // 9. INTERACTIVE MINI-QUIZ GAME ("مسابقه قطعه رو پیدا کن!")
+        // =========================================================================
+        const QUIZ_QUESTIONS = [
+            { targetId: 'chainring', q: '۱. کدام قطعه «طَبَق» (چرخ‌دنده بزرگ جلو) است؟ روی آن ضربه بزنید!' },
+            { targetId: 'cranks', q: '۲. «قامه» (بازوی فلزی که رکاب را به شفت وصل می‌کند) کدام است؟' },
+            { targetId: 'spindle', q: '۳. «شفت مرکزی و بلبرینگ» که از وسط تنه رد شده را پیدا کنید! (می‌توانید حالت انفجاری را باز کنید)' },
+            { targetId: 'freewheel', q: '۴. کدام قطعه «خودرو» (چرخ‌دنده‌های خورشیدی عقب با مکانیزم هرزگرد) است؟' },
+            { targetId: 'pedals', q: '۵. «پنجه‌رکاب» (محل قرار دادن پنجه پا) را روی دوچرخه انتخاب کنید!' },
+            { targetId: 'frame', q: '۶. مهم‌ترین «جزء ثابت» دوچرخه یعنی «تنه (بدنه اصلی)» کدام است؟' }
+        ];
+
+        const quizState = {
+            active: false,
+            index: 0,
+            score: 0
+        };
+
+        function toggleQuizMode() {
+            quizState.active = !quizState.active;
+            const banner = document.getElementById('quiz-banner');
+            const btnQuiz = document.getElementById('btn-quiz-mode');
+
+            if (quizState.active) {
+                quizState.index = 0;
+                quizState.score = 0;
+                banner.classList.remove('hidden');
+                btnQuiz.className = 'px-2.5 py-1.5 rounded-xl bg-amber-500 text-slate-950 text-xs font-black flex items-center gap-1.5 transition';
+                renderQuizQuestion();
+            } else {
+                banner.classList.add('hidden');
+                btnQuiz.className = 'px-2.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-xs font-bold flex items-center gap-1.5 transition';
+            }
+        }
+
+        function renderQuizQuestion() {
+            const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+            const toFa = n => String(n).replace(/\d/g, d => persianDigits[d]);
+
+            if (quizState.index >= QUIZ_QUESTIONS.length) {
+                document.getElementById('quiz-progress').textContent = 'پایان مسابقه 🎉';
+                document.getElementById('quiz-question-text').textContent = `آفرین قهرمان! امتیاز نهایی شما: ${toFa(quizState.score)} از ${toFa(QUIZ_QUESTIONS.length * 10)} 🌟`;
+                document.getElementById('quiz-feedback-text').textContent = 'شما تمام اجزای کلیدی دوچرخه (طبق، قامه، شفت، خودرو و تنه) را به خوبی یاد گرفتید!';
+                return;
+            }
+
+            const item = QUIZ_QUESTIONS[quizState.index];
+            document.getElementById('quiz-progress').textContent = `سوال ${toFa(quizState.index + 1)} از ${toFa(QUIZ_QUESTIONS.length)}`;
+            document.getElementById('quiz-score').textContent = `امتیاز: ${toFa(quizState.score)}`;
+            document.getElementById('quiz-question-text').textContent = item.q;
+            document.getElementById('quiz-feedback-text').textContent = 'روی قطعه یا برچسب نام آن در مدل سه‌بعدی ضربه بزنید...';
+        }
+
+        function checkQuizAnswer(tappedPartId) {
+            if (quizState.index >= QUIZ_QUESTIONS.length) return;
+            const currentQ = QUIZ_QUESTIONS[quizState.index];
+            const feedbackEl = document.getElementById('quiz-feedback-text');
+            const tappedName = BICYCLE_PARTS[tappedPartId]?.shortName || '';
+
+            highlightAndShowPart(tappedPartId, false);
+
+            if (tappedPartId === currentQ.targetId) {
+                quizState.score += 10;
+                feedbackEl.className = 'text-xs mt-1 font-extrabold text-emerald-400';
+                feedbackEl.textContent = `✅ احسنت! کاملاً درست زدی: «${tappedName}» (+۱۰ امتیاز)`;
+                quizState.index++;
+                setTimeout(() => {
+                    if (quizState.active) renderQuizQuestion();
+                }, 1300);
+            } else {
+                feedbackEl.className = 'text-xs mt-1 font-extrabold text-rose-400';
+                feedbackEl.textContent = `❌ نه، این «${tappedName}» است! دوباره دقت کن و قطعه درست را پیدا کن.`;
+            }
+        }
+
+        // =========================================================================
+        // 10. MODAL CONTROLS FOR TEXTBOOK TABLE 3-1
+        // =========================================================================
+        function openTableModal() {
+            document.getElementById('table-modal').classList.remove('hidden');
+        }
+        function closeTableModal() {
+            document.getElementById('table-modal').classList.add('hidden');
+        }
+        function selectPartFromModal(partId) {
+            closeTableModal();
+            highlightAndShowPart(partId, true);
+        }
+
+        // =========================================================================
+        // 11. MAIN ANIMATION LOOP & WINDOW RESIZE
+        // =========================================================================
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Smooth Exploded View Interpolation
+            if (Math.abs(currentExplodeFactor - targetExplodeFactor) > 0.001) {
+                currentExplodeFactor += (targetExplodeFactor - currentExplodeFactor) * 0.1;
+                applyExplodedPositions(currentExplodeFactor);
+            }
+
+            // Smooth Camera Preset Transition
+            if (camAnim) {
+                camAnim.progress += 0.06;
+                if (camAnim.progress >= 1) {
+                    camera.position.copy(camAnim.endPos);
+                    controls.target.copy(camAnim.endTarget);
+                    camAnim = null;
+                } else {
+                    const ease = 1 - Math.pow(1 - camAnim.progress, 3);
+                    camera.position.lerpVectors(camAnim.startPos, camAnim.endPos, ease);
+                    controls.target.lerpVectors(camAnim.startTarget, camAnim.endTarget, ease);
+                }
+            }
+
+            // Mechanical Rotation Simulation
+            if (motionMode === 'pedal') {
+                const speed = 0.028;
+                crankAngle -= speed;
+                wheelAngle -= speed * 2.2; // Gear ratio: Front chainring is larger than rear cog!
+                chainOffset = (chainOffset + speed * 0.18) % 1;
+
+                spindleRotGroup.rotation.z = crankAngle;
+                chainringRotGroup.rotation.z = crankAngle;
+                cranksRotGroup.rotation.z = crankAngle;
+                pedalsOrbitGroup.rotation.z = crankAngle;
+                // Counter-rotate pedals on their own axles so platform stays horizontal under foot!
+                rightPedal.rotation.z = -crankAngle;
+                leftPedal.rotation.z = -crankAngle;
+
+                freewheelRotGroup.rotation.z = wheelAngle;
+                rearWheelRot.rotation.z = wheelAngle;
+                frontWheelRot.rotation.z = wheelAngle;
+                updateChainLinks(chainOffset);
+            } else if (motionMode === 'freewheel') {
+                // Coasting / Freewheel mode: Pedals, Crank, Chainring & Chain STOP, while Wheels keep spinning!
+                const wheelSpeed = 0.055;
+                wheelAngle -= wheelSpeed;
+                rearWheelRot.rotation.z = wheelAngle;
+                frontWheelRot.rotation.z = wheelAngle;
+
+                // Trigger subtle ratchet click sound periodically
+                const step = Math.floor(Math.abs(wheelAngle) * 5);
+                if (step !== lastClickStep) {
+                    lastClickStep = step;
+                    playRatchetClickSound();
+                }
+            }
+
+            controls.update();
+            updateFloatingLabels();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        window.onload = function () {
+            highlightAndShowPart('chainring', false);
+            animate();
+        };
+    </script>
+</body>
+</html>
