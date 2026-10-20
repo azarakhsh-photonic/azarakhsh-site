@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آزمایشگاه تعاملی ساز و کارهای حرکتی | استاد محمدحسن پورصالحی</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vazirmatn Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.18);
+        }
+        .tab-active {
+            background: linear-gradient(135deg, #2563eb, #0ea5e9);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.4);
+        }
+        .part-btn.active {
+            border-color: #38bdf8;
+            background-color: rgba(56, 189, 248, 0.2);
+            transform: scale(1.02);
+        }
+        canvas {
+            touch-action: manipulation;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- Top Teacher Header -->
+    <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-sky-500/30 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center text-2xl shadow-md">
+                    ⚙️
+                </div>
+                <div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <span class="bg-amber-500/20 text-amber-300 border border-amber-400/40 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                            پودمان ۳ کار و فناوری پایه نهم
+                        </span>
+                        <span class="bg-sky-500/20 text-sky-300 border border-sky-400/40 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                            Azarakhshphotonic.ir
+                        </span>
+                    </div>
+                    <h1 class="text-lg md:text-xl font-black text-white mt-1">
+                        آزمایشگاه و کارگاه تعاملی «ساز و کارهای حرکتی»
+                    </h1>
+                </div>
+            </div>
+            <div class="bg-gradient-to-r from-blue-900/80 to-slate-800/90 border border-sky-400/40 px-4 py-2 rounded-xl text-center md:text-left shadow-inner">
+                <p class="text-xs text-sky-300 font-medium">طراحی و توسعه سامانه آموزشی:</p>
+                <p class="text-sm md:text-base font-extrabold text-amber-400 tracking-wide">
+                    استاد محمدحسن پورصالحی
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="max-w-7xl mx-auto px-4 pb-2 overflow-x-auto">
+            <nav class="flex gap-2 min-w-max">
+                <button onclick="switchTab('tab-mechanisms')" id="btn-tab-mechanisms" class="tab-btn tab-active px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-1.5">
+                    <span>🔄</span> ۱. شبیه‌ساز ساز و کارها و چرخ‌دنده‌ها
+                </button>
+                <button onclick="switchTab('tab-crane')" id="btn-tab-crane" class="tab-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-1.5">
+                    <span>🏗️</span> ۲. کارگاه ساخت جرثقیل برقی و ابن‌سینا
+                </button>
+                <button onclick="switchTab('tab-snail')" id="btn-tab-snail" class="tab-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-1.5">
+                    <span>🐌</span> ۳. پروژه حلزون (چرخ لنگ) و پل خضر
+                </button>
+                <button onclick="switchTab('tab-software')" id="btn-tab-software" class="tab-btn bg-slate-800 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded-lg text-xs md:text-sm font-bold transition-all flex items-center gap-1.5">
+                    <span>💻</span> ۴. نرم‌افزار، جدول ۱-۳ و خودارزیابی
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-grow w-full">
+
+        <!-- ==================== TAB 1: MECHANISMS & GEARS ==================== -->
+        <section id="tab-mechanisms" class="tab-content space-y-6">
+            <!-- Intro Banner -->
+            <div class="glass-card rounded-2xl p-4 md:p-5 border-r-4 border-sky-400">
+                <h2 class="text-base md:text-lg font-bold text-sky-300 flex items-center gap-2">
+                    <span>💡</span> تعریف سیستم و ساز و کار حرکتی (صفحه ۲۵ و ۲۶ کتاب)
+                </h2>
+                <p class="text-xs md:text-sm text-slate-300 mt-2 leading-relaxed">
+                    <strong>سیستم</strong> مجموعه‌ای است که اجزای آن با هم در ارتباط‌اند و با فرایندهایی، ورودی‌ها را به خروجی‌ها تبدیل می‌کنند (مانند تبدیل انرژی برق به مکانیکی در پنکه). به اجزایی که نقش اصلی انتقال و تبدیل حرکت را در ماشین‌ها بر عهده دارند، <strong>«ساز و کار حرکتی»</strong> می‌گویند. در شبیه‌ساز زیر، هر یک از ۶ ساز و کار اصلی را انتخاب کرده و با تغییر سرعت و اندازه، عملکرد آن‌ها را آزمایش کنید!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Column: Interactive Canvas Simulator -->
+                <div class="lg:col-span-7 glass-card rounded-2xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <h3 class="font-bold text-amber-400 text-sm md:text-base" id="sim-title">
+                                الف) ساز و کار حرکتی چرخ‌دنده (Gear Mechanism)
+                            </h3>
+                            <span id="sim-badge" class="bg-emerald-500/20 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-500/40">
+                                جهت چرخش: معکوس یکدیگر
+                            </span>
+                        </div>
+
+                        <!-- Mechanism Selector Buttons -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-4">
+                            <button onclick="setMechanism('gear')" id="mech-btn-gear" class="mech-select-btn bg-sky-600 text-white text-xs font-bold py-2 px-3 rounded-lg border border-sky-400 transition">
+                                ⚙️ ۱. چرخ‌دنده
+                            </button>
+                            <button onclick="setMechanism('belt')" id="mech-btn-belt" class="mech-select-btn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 px-3 rounded-lg border border-slate-600 transition">
+                                ⭕ ۲. چرخ تسمه
+                            </button>
+                            <button onclick="setMechanism('chain')" id="mech-btn-chain" class="mech-select-btn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 px-3 rounded-lg border border-slate-600 transition">
+                                🚲 ۳. چرخ زنجیر
+                            </button>
+                            <button onclick="setMechanism('friction')" id="mech-btn-friction" class="mech-select-btn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 px-3 rounded-lg border border-slate-600 transition">
+                                🛞 ۴. چرخ اصطکاکی
+                            </button>
+                            <button onclick="setMechanism('cam')" id="mech-btn-cam" class="mech-select-btn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 px-3 rounded-lg border border-slate-600 transition">
+                                💧 ۵. بادامک و پیرو
+                            </button>
+                            <button onclick="setMechanism('screw')" id="mech-btn-screw" class="mech-select-btn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 px-3 rounded-lg border border-slate-600 transition">
+                                🗜️ ۶. پیچ حرکتی (گیره)
+                            </button>
+                        </div>
+
+                        <!-- Interactive Canvas -->
+                        <div class="relative bg-slate-950 rounded-xl border border-slate-700 overflow-hidden flex items-center justify-center">
+                            <canvas id="mechCanvas" width="600" height="320" class="w-full h-auto max-h-[320px]"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Controls Bar -->
+                    <div class="mt-4 bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">سرعت موتور محرک: <span id="speed-val" class="text-sky-400 font-bold">5</span></label>
+                            <input type="range" id="mech-speed" min="0" max="10" value="5" class="w-full accent-sky-500 cursor-pointer" oninput="updateMechParams()">
+                        </div>
+                        <div>
+                            <label class="text-xs text-slate-400 block mb-1">نسبت اندازه (متحرک به محرک): <span id="ratio-val" class="text-amber-400 font-bold">2.0x</span></label>
+                            <input type="range" id="mech-ratio" min="1" max="3" step="0.5" value="2" class="w-full accent-amber-500 cursor-pointer" oninput="updateMechParams()">
+                        </div>
+                        <div class="flex gap-2 justify-end">
+                            <button onclick="toggleMechDir()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-2 rounded-lg transition w-full">
+                                🔄 تغییر جهت چرخش
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Detailed Explanation & 6 Gear Types -->
+                <div class="lg:col-span-5 flex flex-col gap-4">
+                    <!-- Dynamic Info Box -->
+                    <div class="glass-card rounded-2xl p-4 border-t-4 border-amber-400">
+                        <h4 class="font-bold text-amber-300 text-sm md:text-base mb-2" id="mech-info-title">
+                            مشخصات ساز و کار حرکتی چرخ‌دنده
+                        </h4>
+                        <p class="text-xs md:text-sm text-slate-200 leading-relaxed mb-3" id="mech-info-desc">
+                            سیستمی است که حداقل از دو چرخ‌دنده تشکیل شده و به صورت جفت کار می‌کند. از طریق اتصال دندانه‌ها، حرکت چرخشی یک محور (محرک) را به محور دیگر (متحرک) منتقل می‌کند.
+                        </p>
+                        <div class="bg-slate-900/80 rounded-lg p-3 border border-slate-700 text-xs space-y-1.5" id="mech-info-points">
+                            <p><strong class="text-sky-400">قطعات اصلی:</strong> چرخ‌دنده محرک (ورودی)، چرخ‌دنده متحرک (خروجی)، محورها و دندانه‌ها.</p>
+                            <p><strong class="text-emerald-400">کاربرد در زندگی:</strong> موتور ساعت عقربه‌ای (چرخ‌دنده‌های پلاستیکی)، گیربکس خودرو، تقویم مکانیکی ابوریحان بیرونی.</p>
+                            <p><strong class="text-rose-400">نکته فنی:</strong> اگر چرخ‌دنده کوچک، چرخ‌دنده بزرگ را بچرخاند، سرعت کم شده اما قدرت (گشتاور) افزایش می‌یابد.</p>
+                        </div>
+                    </div>
+
+                    <!-- 6 Types of Gears Interactive Cards (Page 27) -->
+                    <div class="glass-card rounded-2xl p-4 flex-grow">
+                        <h4 class="font-bold text-sky-300 text-sm mb-3 flex items-center justify-between">
+                            <span>⚙️ ۶ نوع ساز و کار چرخ‌دنده (شکل ۲-۳ کتاب)</span>
+                            <span class="text-[11px] text-slate-400 font-normal">روی هر کدام کلیک کنید</span>
+                        </h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="showGearType('spur')" class="gear-type-btn text-right p-2.5 rounded-xl bg-slate-800/90 hover:bg-sky-900/40 border border-slate-700 hover:border-sky-400 transition">
+                                <div class="font-bold text-xs text-amber-300">الف) چرخ‌دنده ساده</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">محورهای موازی، دندانه صاف</div>
+                            </button>
+                            <button onclick="showGearType('helical')" class="gear-type-btn text-right p-2.5 rounded-xl bg-slate-800/90 hover:bg-sky-900/40 border border-slate-700 hover:border-sky-400 transition">
+                                <div class="font-bold text-xs text-amber-300">ب) چرخ‌دنده مارپیچ</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">دندانه‌های مورب، صدای کمتر</div>
+                            </button>
+                            <button onclick="showGearType('bevel')" class="gear-type-btn text-right p-2.5 rounded-xl bg-slate-800/90 hover:bg-sky-900/40 border border-slate-700 hover:border-sky-400 transition">
+                                <div class="font-bold text-xs text-amber-300">پ) چرخ‌دنده مخروطی</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">محورهای متقاطع (معمولاً ۹۰ درجه)</div>
+                            </button>
+                            <button onclick="showGearType('worm')" class="gear-type-btn text-right p-2.5 rounded-xl bg-slate-800/90 hover:bg-sky-900/40 border border-slate-700 hover:border-sky-400 transition">
+                                <div class="font-bold text-xs text-amber-300">ت) پیچ و چرخ حلزون</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">کاهش شدید سرعت و قفل‌شونده</div>
+                            </button>
+                            <button onclick="showGearType('rack')" class="gear-type-btn text-right p-2.5 rounded-xl bg-slate-800/90 hover:bg-sky-900/40 border border-slate-700 hover:border-sky-400 transition">
+                                <div class="font-bold text-xs text-amber-300">ث) چرخ‌دنده شانه‌ای ساده</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">تبدیل حرکت چرخشی به خطی</div>
+                            </button>
+                            <button onclick="showGearType('internal')" class="gear-type-btn text-right p-2.5 rounded-xl bg-slate-800/90 hover:bg-sky-900/40 border border-slate-700 hover:border-sky-400 transition">
+                                <div class="font-bold text-xs text-amber-300">ج) چرخ‌دنده داخلی</div>
+                                <div class="text-[11px] text-slate-400 mt-0.5">دندانه داخل حلقه، چرخش هم‌جهت</div>
+                            </button>
+                        </div>
+                        <div id="gear-type-detail" class="mt-3 p-3 rounded-lg bg-sky-950/60 border border-sky-500/40 text-xs text-sky-100 leading-relaxed">
+                            👆 <strong>چرخ‌دنده ساده:</strong> دندانه‌ها موازی با محور چرخش هستند. در ساعت‌های عقربه‌ای و اسباب‌بازی‌ها بسیار رایج است و جهت چرخش دو چرخ‌دنده عکس یکدیگر است.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historical & Real-World Boxes (Page 27, 28, 29) -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-card rounded-xl p-4 border-b-4 border-amber-500">
+                    <h4 class="font-bold text-amber-400 text-sm flex items-center gap-1.5">
+                        <span>🧭</span> تقویم مکانیکی ابوریحان بیرونی (ص ۲۷)
+                    </h4>
+                    <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+                        یکی از ابداعات مهم ابوریحان بیرونی، طراحی <strong>تقویم مکانیکی</strong> با استفاده از ساز و کار حرکتی چرخ‌دنده‌هاست. هدف آن نمایش طلوع و غروب ماه، مدت گذشته از ماه و موقعیت تقریبی ماه و خورشید بود. او اندازه، فواصل، جنس و تعداد دندانه‌ها را با دقت شرح داده است.
+                    </p>
+                </div>
+                <div class="glass-card rounded-xl p-4 border-b-4 border-emerald-500">
+                    <h4 class="font-bold text-emerald-400 text-sm flex items-center gap-1.5">
+                        <span>🧵</span> ۳ ساز و کار درون چرخ خیاطی (ص ۲۹)
+                    </h4>
+                    <ul class="text-xs text-slate-300 mt-2 space-y-1 leading-relaxed list-disc list-inside">
+                        <li><strong>الف) تسمه و چرخ تسمه:</strong> انتقال چرخش موتور الکتریکی به محور چرخ خیاطی.</li>
+                        <li><strong>ب) ساز و کار بادامک:</strong> ایجاد حرکات رفت و برگشتی منظم سوزن و اهرم‌ها.</li>
+                        <li><strong>پ) شانه دندانه‌دار پیش‌بر:</strong> جلو بردن منظم پارچه در زیر پایه دوخت.</li>
+                    </ul>
+                </div>
+                <div class="glass-card rounded-xl p-4 border-b-4 border-rose-500">
+                    <h4 class="font-bold text-rose-400 text-sm flex items-center gap-1.5">
+                        <span>🧤</span> نکات ایمنی و نگهداری چرخ زنجیر (ص ۲۸)
+                    </h4>
+                    <ul class="text-xs text-slate-300 mt-2 space-y-1 leading-relaxed list-disc list-inside">
+                        <li>هرگز به اجزای <strong>در حال حرکت</strong> ساز و کارها دست نزنید (خطر قطع یا له شدن انگشتان).</li>
+                        <li>هنگام بررسی و تمیزکاری زنجیر دوچرخه یا گیره، حتماً از <strong>دستکش ایمنی</strong> استفاده کنید.</li>
+                        <li>چرخ زنجیر را <strong>به مقدار کم</strong> روغن‌کاری کنید؛ چون روغن زیاد باعث جذب سریع گرد و خاک و سایش می‌شود!</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: CRANE WORKSHOP & AVICENNA ==================== -->
+        <section id="tab-crane" class="tab-content hidden space-y-6">
+            <div class="glass-card rounded-2xl p-4 md:p-5 border-r-4 border-amber-400">
+                <h2 class="text-base md:text-lg font-bold text-amber-300 flex items-center gap-2">
+                    <span>🏗️</span> کارگاه تعاملی پروژه ۱: طراحی و ساخت جرثقیل برقی اهرمی (صفحات ۳۲ و ۳۳ کتاب)
+                </h2>
+                <p class="text-xs md:text-sm text-slate-300 mt-1 leading-relaxed">
+                    در این پروژه با ترکیب مهارت‌های <strong>کار با چوب، کار با فلز و برق و الکترونیک</strong>، یک جرثقیل برقی می‌سازید که از <strong>ساز و کار چرخ تسمه</strong>، <strong>قرقره مرکب</strong> و <strong>قوانین اهرم‌ها</strong> بهره می‌برد. با کلید دوجهته زیر، جرثقیل را هدایت کنید و روی شماره قطعات کلیک کنید تا شناسنامه هر قطعه را ببینید!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Interactive Crane Canvas -->
+                <div class="lg:col-span-7 glass-card rounded-2xl p-4 flex flex-col justify-between">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <span class="text-sm font-bold text-sky-300">شبیه‌ساز زنده جرثقیل شکل ۱۱-۳ کتاب</span>
+                        <span id="crane-status-badge" class="bg-slate-800 text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/40 font-bold">
+                            وضعیت کلید دوجهته: حالت تعادل (متوقف ⏹️)
+                        </span>
+                    </div>
+
+                    <div class="relative bg-slate-950 rounded-xl border border-slate-700 overflow-hidden">
+                        <canvas id="craneCanvas" width="620" height="360" class="w-full h-auto"></canvas>
+                    </div>
+
+                    <!-- Two-way Switch Interactive Controls -->
+                    <div class="mt-4 bg-slate-900 p-3.5 rounded-xl border border-slate-700">
+                        <div class="text-xs text-slate-300 mb-2 font-bold flex items-center justify-between">
+                            <span>🕹️ کنترل کلید دوجهته جرثقیل (مهم‌ترین بخش الکترونیکی پروژه):</span>
+                            <span id="hook-height-display" class="text-sky-400">ارتفاع بار: 50%</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="setCraneSwitch('up')" id="crane-btn-up" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs md:text-sm transition flex items-center justify-center gap-1.5 shadow">
+                                ⬆️ بالا بردن بار (جذب نخ)
+                            </button>
+                            <button onclick="setCraneSwitch('stop')" id="crane-btn-stop" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-2.5 px-3 rounded-xl text-xs md:text-sm transition flex items-center justify-center gap-1.5 ring-2 ring-white">
+                                ⏹️ تعادل قطعه بالایی کلید (توقف)
+                            </button>
+                            <button onclick="setCraneSwitch('down')" id="crane-btn-down" class="bg-rose-700 hover:bg-rose-600 text-white font-bold py-2.5 px-3 rounded-xl text-xs md:text-sm transition flex items-center justify-center gap-1.5 shadow">
+                                ⬇️ پایین آوردن بار (قطب معکوس)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Parts Explorer & Assembly Steps -->
+                <div class="lg:col-span-5 flex flex-col gap-4">
+                    <div class="glass-card rounded-2xl p-4">
+                        <h3 class="font-bold text-amber-400 text-sm mb-2">
+                            🔍 شناسنامه قطعات جرثقیل (روی هر قطعه کلیک کنید):
+                        </h3>
+                        <div class="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto pr-1">
+                            <button onclick="selectCranePart(0)" class="crane-part-btn part-btn active text-right p-2 rounded-lg bg-slate-800 border border-slate-600 text-xs transition">
+                                <span class="font-bold text-sky-300">۱. موتور الکتریکی ۹ ولت</span>
+                                <span class="block text-[10px] text-slate-400">تبدیل انرژی برق به چرخش</span>
+                            </button>
+                            <button onclick="selectCranePart(1)" class="crane-part-btn part-btn text-right p-2 rounded-lg bg-slate-800 border border-slate-600 text-xs transition">
+                                <span class="font-bold text-sky-300">۲. چرخ تسمه و پولی بزرگ</span>
+                                <span class="block text-[10px] text-slate-400">درب بطری + قرقره نخ پلاستیکی</span>
+                            </button>
+                            <button onclick="selectCranePart(2)" class="crane-part-btn part-btn text-right p-2 rounded-lg bg-slate-800 border border-slate-600 text-xs transition">
+                                <span class="font-bold text-sky-300">۳. بازوی چوبی شیاردار</span>
+                                <span class="block text-[10px] text-slate-400">اهرم اصلی + اره کاری شیار سر بازو</span>
+                            </button>
+                            <button onclick="selectCranePart(3)" class="crane-part-btn part-btn text-right p-2 rounded-lg bg-slate-800 border border-slate-600 text-xs transition">
+                                <span class="font-bold text-sky-300">۴. قرقره مرکب و قلاب</span>
+                                <span class="block text-[10px] text-slate-400">ماسوره چرخ خیاطی + مفتول ۲ میلی‌متری</span>
+                            </button>
+                            <button onclick="selectCranePart(4)" class="crane-part-btn part-btn text-right p-2 rounded-lg bg-slate-800 border border-slate-600 text-xs transition">
+                                <span class="font-bold text-sky-300">۵. کلید دوجهته دست‌ساز</span>
+                                <span class="block text-[10px] text-slate-400">تغییر جهت جریان و تعادل توقف</span>
+                            </button>
+                            <button onclick="selectCranePart(5)" class="crane-part-btn part-btn text-right p-2 rounded-lg bg-slate-800 border border-slate-600 text-xs transition">
+                                <span class="font-bold text-sky-300">۶. باتری و پایه چوبی/MDF</span>
+                                <span class="block text-[10px] text-slate-400">۲ عدد باتری ۱.۵ ولت + ستون نگهدارنده</span>
+                            </button>
+                        </div>
+
+                        <!-- Selected Part Details -->
+                        <div id="crane-part-detail" class="mt-3 p-3.5 rounded-xl bg-slate-900 border border-sky-500/40 text-xs space-y-1.5 leading-relaxed">
+                            <div class="font-bold text-amber-300 text-sm" id="cp-title">۱. موتور الکتریکی کوچک ۹ ولت و بست فلزی</div>
+                            <p id="cp-desc" class="text-slate-200">
+                                موتور الکتریکی در انتهای بازوی چوبی نصب می‌شود. برای جانمایی آن، از تسمه فلزی (ضخامت ۱ یا ۲ میلی‌متر و عرض ۱۰ میلی‌متر) که خم‌کاری و سوراخ‌کاری شده به همراه پیچ و مهره استفاده می‌شود.
+                            </p>
+                            <p id="cp-tip" class="text-emerald-400 font-medium">
+                                💡 نکته تحقیق کنید (ص ۳۳): چرا از چرخ و تسمه در سر موتور استفاده شده؟ چون سرعت بسیار بالای موتور را کاهش داده و قدرت (گشتاور) لازم برای کشیدن نخ و بلند کردن بار را افزایش می‌دهد!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 4 Project Stages -->
+                    <div class="glass-card rounded-2xl p-4">
+                        <h4 class="font-bold text-sky-300 text-sm mb-2">📋 ۴ مرحله استاندارد اجرای پروژه‌های کار و فناوری:</h4>
+                        <ol class="text-xs text-slate-300 space-y-1.5 list-decimal list-inside">
+                            <li><strong class="text-white">مرحله ۱ (ترسیم روندنما):</strong> ترسیم فلوچارت مراحل انجام پروژه با رایانه (پودمان الگوریتم).</li>
+                            <li><strong class="text-white">مرحله ۲ (طراحی و ترسیم نقشه‌ها):</strong> ترسیم نقشه قطعات با رایانه، اندازه‌گذاری و چاپ.</li>
+                            <li><strong class="text-white">مرحله ۳ (ساخت قطعات):</strong> برش چوب/MDF، خم‌کاری و سوراخ‌کاری فلز، ساخت پولی و قلاب.</li>
+                            <li><strong class="text-white">مرحله ۴ (مونتاژ و آزمایش):</strong> نصب موتور، چرخ تسمه، قرقره مرکب، لحیم‌کاری کلید دوجهته و تست.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Avicenna's Crane Interactive Calculator (Page 30) -->
+            <div class="glass-card rounded-2xl p-5 border border-amber-500/40 bg-gradient-to-r from-slate-900 via-amber-950/20 to-slate-900">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                    <div class="md:col-span-8 space-y-2">
+                        <h3 class="text-base font-bold text-amber-400 flex items-center gap-2">
+                            <span>🏛️</span> جرثقیل شگفت‌انگیز ابن‌سینا در کتاب «معیارالعقول» (صفحه ۳۰ کتاب)
+                        </h3>
+                        <p class="text-xs md:text-sm text-slate-200 leading-relaxed">
+                            جرثقیل ابداعی منتسب به <strong>ابن‌سینا</strong> ترکیبی هوشمندانه از <strong>چرخ‌دنده، پیچ‌دنده (حلزونی) و قرقره‌های ثابت و متحرک</strong> و مبتنی بر قوانین مکانیک حاکم بر <strong>اهرم‌ها</strong> است؛ به گونه‌ای که با نیروی معادل <strong>۱۰ من</strong>، باری به وزن <strong>۱۰,۰۰۰ من</strong> را بلند می‌کرد (افزایش نیرو به میزان ۱۰۰۰ برابر!). همچنین امروزه جرثقیل‌ها بر روی کشتی‌ها و سکوهای نفتی (مانند <strong>سکوی نفتی شهید رجایی خلیج فارس</strong>) نصب می‌شوند.
+                        </p>
+                    </div>
+                    <div class="md:col-span-4 bg-slate-950/90 p-4 rounded-xl border border-amber-500/30 text-center">
+                        <label class="text-xs text-slate-400 block mb-1">نیروی ورودی دست شما (به «من»):</label>
+                        <input type="range" id="avicenna-input" min="1" max="20" value="10" class="w-full accent-amber-500" oninput="calcAvicenna()">
+                        <div class="flex justify-between text-xs mt-2">
+                            <span>نیروی ورودی: <strong id="av-in" class="text-sky-400">10 من</strong></span>
+                            <span>مزیت مکانیکی: <strong class="text-emerald-400">1000 برابر</strong></span>
+                        </div>
+                        <div class="mt-2 pt-2 border-t border-slate-800 text-sm font-black text-amber-400">
+                            وزن بار قابل جابه‌جایی: <span id="av-out">10,000</span> من!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: SNAIL TOY & KHEZR BRIDGE ==================== -->
+        <section id="tab-snail" class="tab-content hidden space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+                <!-- Project 2: Wooden Snail Toy (Pages 34-35) -->
+                <div class="glass-card rounded-2xl p-4 md:p-5 flex flex-col justify-between border-t-4 border-rose-500">
+                    <div>
+                        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <h2 class="text-base font-bold text-rose-400 flex items-center gap-2">
+                                <span>🐌</span> پروژه ۲: اسباب‌بازی حلزون (ساز و کار چرخ لنگ - ص ۳۴ و ۳۵)
+                            </h2>
+                            <span class="bg-rose-500/20 text-rose-300 text-xs px-2.5 py-0.5 rounded-full border border-rose-500/40">
+                                محور خارج از مرکز
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                            اساس حرکت این اسباب‌بازی یک <strong>«چرخ لنگ»</strong> است؛ یعنی <strong>محور چرخ به صورت خارج از مرکز</strong> به دو چرخ گرد چوبی (برش‌خورده با گردبُر دریل) متصل شده است. وقتی نخ ۱ متری کشیده می‌شود، خروج از مرکز محور باعث می‌شود بدن، سر و دم حلزون (که با پین‌های چوبی متصل‌اند) حرکت موجی بالا و پایین شبیه خزیدن طبیعی حلزون داشته باشند!
+                        </p>
+
+                        <div class="bg-slate-950 rounded-xl border border-slate-700 overflow-hidden">
+                            <canvas id="snailCanvas" width="520" height="260" class="w-full h-auto"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+                            <div>
+                                <label class="text-xs text-slate-300 block mb-1">
+                                    میزان خروج محور از مرکز چرخ: <span id="ecc-val" class="text-rose-400 font-bold">خارج از مرکز (چرخ لنگ)</span>
+                                </label>
+                                <input type="range" id="snail-ecc" min="0" max="22" value="18" class="w-full accent-rose-500" oninput="updateSnailParams()">
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="toggleSnailMove()" id="snail-btn" class="w-full bg-rose-600 hover:bg-rose-500 text-white font-bold py-2 px-3 rounded-lg text-xs transition">
+                                    🧶 توقف / کشیدن نخ حلزون
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-400 bg-slate-950/70 p-2.5 rounded-lg border border-slate-800">
+                            <strong class="text-amber-300">مراحل مونتاژ حلزون (شکل ۱۷-۳):</strong> الف) اتصال دم به بدن با پین چوبی $\leftarrow$ ب) اتصال سر به بدن $\leftarrow$ پ) اتصال محور به یکی از چرخ‌ها (در سوراخ خارج از مرکز) $\leftarrow$ ت) قرار دادن بدن روی محور $\leftarrow$ ث و ج) اتصال چرخ دوم و نخ ۱ متری.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Khezr Floating Bridge (Page 36) -->
+                <div class="glass-card rounded-2xl p-4 md:p-5 flex flex-col justify-between border-t-4 border-emerald-500">
+                    <div>
+                        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <h2 class="text-base font-bold text-emerald-400 flex items-center gap-2">
+                                <span>🚢</span> شبیه‌ساز «پل متحرک خضر» (شاهکار دفاع مقدس - ص ۳۶)
+                            </h2>
+                            <span class="bg-emerald-500/20 text-emerald-300 text-xs px-2.5 py-0.5 rounded-full border border-emerald-500/40">
+                                شهید حاج اسدالله هاشمی
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                            پس از عملیات والفجر ۸ در منطقه «فاو»، برای عبور تدارکات از <strong>رودخانه خروشان اروند (عرض ۹۰۰ متر)</strong> که پل‌های ثابت آن بمباران می‌شد، مهندسین جهاد سازندگی و تیم <strong>شهید حاج اسدالله هاشمی</strong> «پل متحرک خضر» را ساختند. این پل شامل صفحه شناور (<strong>دوبه</strong>)، <strong>۳ رشته سیم‌بکسل</strong>، <strong>گوشواره‌های هدایت‌کننده</strong> و یک <strong>تراکتور بدون لاستیک</strong> بود.
+                        </p>
+
+                        <div class="bg-slate-950 rounded-xl border border-slate-700 overflow-hidden">
+                            <canvas id="khezrCanvas" width="520" height="260" class="w-full h-auto"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 bg-slate-900 p-3 rounded-xl border border-slate-700 space-y-3">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="text-slate-300 font-bold">🚜 دنده تراکتور جاسازی‌شده روی دوبه را انتخاب کنید:</span>
+                            <span id="khezr-gear-label" class="text-emerald-400 font-bold">دنده عقب ⬅️ حرکت خضر به جلو!</span>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="setKhezrGear('forward')" class="bg-sky-700 hover:bg-sky-600 text-white font-bold py-2 px-2 rounded-lg text-xs transition">
+                                دنده جلو تراکتور (حرکت به عقب ⬅️)
+                            </button>
+                            <button onclick="setKhezrGear('neutral')" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-2 rounded-lg text-xs transition">
+                                خلاص (توقف ⏹️)
+                            </button>
+                            <button onclick="setKhezrGear('reverse')" class="bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-2 px-2 rounded-lg text-xs transition">
+                                دنده عقب تراکتور (حرکت به جلو ➡️)
+                            </button>
+                        </div>
+                        <div class="text-[11px] text-slate-300 bg-slate-950/70 p-2.5 rounded-lg border border-slate-800 leading-relaxed">
+                            <strong class="text-emerald-400">نکته طلایی امتحانی:</strong> سیم‌بکسل‌های ۱ و ۲ از داخل گوشواره‌های دوبه رد شده و نقش <strong>ریل قطار و هدایت‌کننده</strong> را در برابر جریان شدید آب داشتند (نیازی به فرمان نبود). سیم‌بکسل سوم چند دور به دور رینگِ چرخ عقب تراکتور پیچیده شده بود؛ وقتی راننده <strong>دنده جلو</strong> می‌زد، خضر به <strong>عقب</strong> می‌رفت و با <strong>دنده عقب</strong>، خضر به <strong>جلو</strong> می‌رفت!
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: SOFTWARE, TABLE 1-3 & EVALUATION ==================== -->
+        <section id="tab-software" class="tab-content hidden space-y-6">
+
+            <!-- Table 1-3 Complete Reference (Page 30) -->
+            <div class="glass-card rounded-2xl p-4 md:p-5 border-r-4 border-sky-400">
+                <h2 class="text-base md:text-lg font-bold text-sky-300 mb-3 flex items-center gap-2">
+                    <span>📊</span> جدول ۱-۳ کامل‌شده کتاب درسی (صفحه ۳۰): ساز و کارهای حرکتی و کاربرد آن‌ها
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs md:text-sm text-right border-collapse">
+                        <thead>
+                            <tr class="bg-slate-800 text-amber-300 border-b border-slate-600">
+                                <th class="p-3">ردیف</th>
+                                <th class="p-3">ساز و کار حرکتی</th>
+                                <th class="p-3">سیستمی که ساز و کار در آن به کار رفته</th>
+                                <th class="p-3">کاربرد ساز و کار حرکتی در آن سیستم</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-700/70 bg-slate-900/50">
+                            <tr class="hover:bg-slate-800/60">
+                                <td class="p-3 font-bold text-sky-400">۱</td>
+                                <td class="p-3 font-bold">ساز و کار حرکتی پیچ‌های حرکتی</td>
+                                <td class="p-3">گیره رومیزی / گیره لوله / جک خودرو</td>
+                                <td class="p-3 text-emerald-300">باز و بسته کردن فک‌های گیره (تبدیل چرخش به حرکت خطی و ایجاد نیروی فشاری زیاد)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/60">
+                                <td class="p-3 font-bold text-sky-400">۲</td>
+                                <td class="p-3 font-bold">ساز و کار حرکتی چرخ‌دنده</td>
+                                <td class="p-3">موتور ساعت عقربه‌ای / گیربکس خودرو / همزن</td>
+                                <td class="p-3 text-emerald-300">انتقال حرکت چرخشی، تغییر سرعت و گشتاور و تنظیم حرکت دقیق عقربه‌ها</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/60">
+                                <td class="p-3 font-bold text-sky-400">۳</td>
+                                <td class="p-3 font-bold">ساز و کار حرکتی چرخ تسمه</td>
+                                <td class="p-3">چرخ خیاطی / کولر آبی / جرثقیل برقی پروژه</td>
+                                <td class="p-3 text-emerald-300">انتقال حرکت چرخشی بین دو محور با فاصله و کاهش سرعت موتور الکتریکی</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/60">
+                                <td class="p-3 font-bold text-sky-400">۴</td>
+                                <td class="p-3 font-bold">ساز و کار حرکتی چرخ زنجیر</td>
+                                <td class="p-3">دوچرخه / موتورسیکلت</td>
+                                <td class="p-3 text-emerald-300">انتقال بدون لغزش نیروی پا از رکاب و طبق به خودرو و چرخ عقب</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/60">
+                                <td class="p-3 font-bold text-sky-400">۵</td>
+                                <td class="p-3 font-bold">ساز و کار حرکتی بادامک و میل‌بادامک</td>
+                                <td class="p-3">سیستم احتراق موتور خودرو / چرخ خیاطی</td>
+                                <td class="p-3 text-emerald-300">باز و بسته کردن سوپاپ‌ها در زمان‌بندی دقیق (تبدیل چرخش به حرکت رفت و برگشتی)</td>
+                            </tr>
+                            <tr class="hover:bg-slate-800/60">
+                                <td class="p-3 font-bold text-sky-400">۶</td>
+                                <td class="p-3 font-bold">ساز و کار حرکتی چرخ اصطکاکی</td>
+                                <td class="p-3">دینام دوچرخه / فندک سنگی / دستگاه نورد</td>
+                                <td class="p-3 text-emerald-300">انتقال حرکت چرخشی از طریق تماس و اصطکاک مستقیم دو سطح دایره‌ای</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Interactive Physics Software Guide (Page 31) -->
+                <div class="glass-card rounded-2xl p-4 md:p-5">
+                    <h3 class="font-bold text-amber-400 text-sm md:text-base mb-2 flex items-center gap-2">
+                        <span>🖥️</span> آشنایی با نرم‌افزار شبیه‌ساز Interactive Physics (ص ۳۱)
+                    </h3>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                        قبل از ساخت ساز و کارهای حرکتی، می‌توانیم آن‌ها را در نرم‌افزار <strong>Interactive Physics</strong> (یا نسخه پیشرفته‌تر آن یعنی <strong>Working Model</strong>) شبیه‌سازی و بهینه‌سازی کنیم. روی بخش‌های محیط نرم‌افزار زیر کلیک کنید:
+                    </p>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-700">
+                            <strong class="text-sky-400 block">۱. ابزار اجرا و توقف (Run / Stop / Reset):</strong>
+                            برای شروع شبیه‌سازی فیزیکی، توقف و بازگشت به حالت اولیه.
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-700">
+                            <strong class="text-sky-400 block">۲. ابزارهای ترسیم اشکال هندسی:</strong>
+                            رسم مستطیل (اهرم)، دایره (چرخ و قرقره)، طناب و فنر.
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-700">
+                            <strong class="text-sky-400 block">۳. ابزارهای اتصال و سوراخ کردن:</strong>
+                            ایجاد پین، مفصل چرخشی، تکیه‌گاه ثابت و اتصال قطعات به هم.
+                        </div>
+                        <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-700">
+                            <strong class="text-sky-400 block">۴. ابزارهای تعریف نیروها و عملگرها:</strong>
+                            افزودن موتور چرخشی، نیرو، گرانش و نوار مختصات و وضعیت.
+                        </div>
+                    </div>
+                    <div class="mt-3 p-3 rounded-xl bg-indigo-950/50 border border-indigo-500/30 text-xs text-indigo-200">
+                        <strong>سایر پروژه‌های نیمه‌تجویزی (جدول ۲-۳ صفحه ۳۷):</strong> خودروی الکتریکی، ربات مسیریاب، بازوی بلند فلزی، ترازوی عقربه‌ای آشپزخانه، ساز و کار کرم خاکی، عنبیه مکانیکی، بیل مکانیکی چوبی، جرثقیل با پدال، بالگرد، میل گاردان و جرثقیل الکترومغناطیسی.
+                    </div>
+                </div>
+
+                <!-- Self-Evaluation Calculator (Page 38) -->
+                <div class="glass-card rounded-2xl p-4 md:p-5">
+                    <h3 class="font-bold text-emerald-400 text-sm md:text-base mb-2 flex items-center gap-2">
+                        <span>🧮</span> ماشین‌حساب جدول خودارزیابی پروژه (صفحه ۳۸ کتاب)
+                    </h3>
+                    <p class="text-xs text-slate-300 mb-3">
+                        امتیاز خود را در هر ردیف وارد کنید تا جمع نمره از ۱۰۰۰ و نمره نهایی از ۲۰ ($\frac{X}{50}$) محاسبه شود:
+                    </p>
+                    <div class="space-y-2 text-xs max-h-56 overflow-y-auto pr-1">
+                        <div class="flex justify-between items-center bg-slate-900 p-2 rounded-lg">
+                            <span>۱ تا ۴. شایستگی‌های فنی (الگوریتم، ترسیم، سازوکار، برنامه‌نویسی) [تا ۴۵۰]:</span>
+                            <input type="number" id="ev-1" value="450" min="0" max="450" class="w-20 bg-slate-800 text-center text-white rounded p-1 border border-slate-600" oninput="calcEval()">
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-900 p-2 rounded-lg">
+                            <span>۵. مدیریت منابع (زمان، استفاده بهینه از مواد، صرفه‌جویی) [تا ۱۰۰]:</span>
+                            <input type="number" id="ev-2" value="100" min="0" max="100" class="w-20 bg-slate-800 text-center text-white rounded p-1 border border-slate-600" oninput="calcEval()">
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-900 p-2 rounded-lg">
+                            <span>۶، ۷ و ۸. کار گروهی (۱۰۰) + نوآوری (۵۰) + فناوری اطلاعات (۵۰) [تا ۲۰۰]:</span>
+                            <input type="number" id="ev-3" value="200" min="0" max="200" class="w-20 bg-slate-800 text-center text-white rounded p-1 border border-slate-600" oninput="calcEval()">
+                        </div>
+                        <div class="flex justify-between items-center bg-slate-900 p-2 rounded-lg">
+                            <span>۹ و ۱۰. کیفیت محصول (۱۰۰) + موفقیت در بازارچه (۱۵۰) [تا ۲۵۰]:</span>
+                            <input type="number" id="ev-4" value="250" min="0" max="250" class="w-20 bg-slate-800 text-center text-white rounded p-1 border border-slate-600" oninput="calcEval()">
+                        </div>
+                    </div>
+                    <div class="mt-4 p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 flex items-center justify-between">
+                        <div class="text-xs">
+                            <span>جمع امتیاز ($X$ از ۱۰۰۰): </span>
+                            <strong id="ev-total" class="text-amber-300 text-sm">1000</strong>
+                        </div>
+                        <div class="text-sm font-black text-emerald-300">
+                            نمره نهایی ($\frac{X}{50}$ از ۲۰): <span id="ev-grade" class="text-lg text-white">20</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-4 mt-8 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>تهیه شده جهت آموزش تعاملی دانش‌آموزان پایه نهم | <strong>استاد محمدحسن پورصالحی</strong></p>
+            <p class="text-sky-400 font-semibold">پودمان ۳: ساز و کارهای حرکتی | Azarakhshphotonic.ir</p>
+        </div>
+    </footer>
+
+    <!-- ==================== JAVASCRIPT LOGIC & ANIMATIONS ==================== -->
+    <script>
+        // --- Tab Switching ---
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('bg-slate-800', 'text-slate-300');
+            });
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.remove('bg-slate-800', 'text-slate-300');
+            activeBtn.classList.add('tab-active');
+        }
+
+        // --- TAB 1: MECHANISMS SIMULATOR ---
+        const mechCanvas = document.getElementById('mechCanvas');
+        const mCtx = mechCanvas.getContext('2d');
+        let currentMech = 'gear';
+        let mechSpeed = 5;
+        let mechRatio = 2.0;
+        let mechDir = 1;
+        let angle1 = 0;
+        let angle2 = 0;
+
+        const mechData = {
+            gear: {
+                title: 'الف) ساز و کار حرکتی چرخ‌دنده (Gear Mechanism)',
+                badge: 'جهت چرخش: معکوس یکدیگر',
+                desc: 'حداقل از دو چرخ‌دنده تشکیل شده و به صورت جفت کار می‌کند. از طریق درگیری دندانه‌ها، حرکت چرخشی یک محور را بدون لغزش به محور دیگر منتقل می‌کند.',
+                points: `
+                    <p><strong class="text-sky-400">قطعات اصلی:</strong> چرخ‌دنده محرک (کوچک)، چرخ‌دنده متحرک (بزرگ)، دندانه‌ها و محورها.</p>
+                    <p><strong class="text-emerald-400">مثال‌ها:</strong> موتور ساعت عقربه‌ای (چرخ‌دنده‌های پلاستیکی)، تقویم مکانیکی ابوریحان بیرونی، گیربکس.</p>
+                    <p><strong class="text-rose-400">ویژگی:</strong> دو چرخ‌دنده ساده درگیر، خلاف جهت هم می‌چرخند.</p>
+                `
+            },
+            belt: {
+                title: 'ب) ساز و کار حرکتی چرخ تسمه (Belt & Pulley)',
+                badge: 'جهت چرخش: هم‌جهت (تسمه مستقیم)',
+                desc: 'شامل دو پولی (چرخ تسمه) و یک تسمه انعطاف‌پذیر است که حرکت چرخشی را بین دو محور که از هم فاصله دارند به نرمی و با صدای کم منتقل می‌کند.',
+                points: `
+                    <p><strong class="text-sky-400">قطعات اصلی:</strong> پولی محرک، پولی متحرک، تسمه لاستیکی یا نخی.</p>
+                    <p><strong class="text-emerald-400">مثال‌ها:</strong> موتور چرخ خیاطی، کولر آبی، پروژه جرثقیل برقی کتاب درسی.</p>
+                    <p><strong class="text-rose-400">ویژگی:</strong> باید دقت کرد تسمه از شیار پولی‌ها خارج نشود؛ اگر تسمه ضربدری بسته شود جهت چرخش برعکس می‌شود.</p>
+                `
+            },
+            chain: {
+                title: 'پ) ساز و کار حرکتی چرخ زنجیر (Chain & Sprocket)',
+                badge: 'جهت چرخش: هم‌جهت (بدون لغزش)',
+                desc: 'مشابه چرخ تسمه عمل می‌کند اما به دلیل وجود دندانه‌ها روی چرخ‌ها و حلقه‌های زنجیر فلزی، هیچ‌گونه لغزشی ندارد و نیروی زیادی را منتقل می‌کند.',
+                points: `
+                    <p><strong class="text-sky-400">قطعات اصلی:</strong> چرخ زنجیر جلو (طبق و قامه)، چرخ زنجیر عقب (خودرو)، زنجیر فلزی.</p>
+                    <p><strong class="text-emerald-400">مثال‌ها:</strong> سیستم انتقال قدرت دوچرخه و موتورسیکلت.</p>
+                    <p><strong class="text-rose-400">نگهداری و ایمنی:</strong> استفاده از دستکش ایمنی هنگام تمیزکاری و روغن‌کاری به مقدار کم (جلوگیری از جذب گرد و خاک).</p>
+                `
+            },
+            friction: {
+                title: 'ت) ساز و کار حرکتی چرخ اصطکاکی (Friction Wheels)',
+                badge: 'جهت چرخش: معکوس یکدیگر',
+                desc: 'دو چرخ بدون دندانه که سطح محیطی آن‌ها با فشار به هم تکیه داده شده و به کمک نیروی اصطکاک، چرخش را از یک چرخ به دیگری منتقل می‌کنند.',
+                points: `
+                    <p><strong class="text-sky-400">قطعات اصلی:</strong> چرخ محرک و چرخ متحرک با سطح زبر یا لاستیکی.</p>
+                    <p><strong class="text-emerald-400">مثال‌ها:</strong> دینام دوچرخه (در تماس با لاستیک)، دستگاه‌های تغذیه کاغذ در چاپگر.</p>
+                    <p><strong class="text-rose-400">ویژگی:</strong> در صورت بیش از حد بودن بار، روی هم سر می‌خورند و از شکستن قطعات جلوگیری می‌شود.</p>
+                `
+            },
+            cam: {
+                title: 'ث) ساز و کار حرکتی بادامک (Cam & Follower)',
+                badge: 'تبدیل حرکت: چرخشی به رفت و برگشتی خطی',
+                desc: 'بادامک قطعه‌ای تخم‌مرغی یا غیرمدور است که با چرخش روی محور خود، میله پیرو (Follower) را به صورت متناوب بالا و پایین می‌برد.',
+                points: `
+                    <p><strong class="text-sky-400">قطعات اصلی:</strong> بادامک، میل‌بادامک، میله پیرو (سوپاپ) و فنر بازگرداننده.</p>
+                    <p><strong class="text-emerald-400">مثال‌ها:</strong> باز و بسته کردن سوپاپ‌ها در سیستم احتراق موتور خودرو، مکانیزم زیر چرخ خیاطی.</p>
+                    <p><strong class="text-rose-400">ویژگی:</strong> حرکت چرخشی پیوسته را به حرکت خطی زمان‌بندی‌شده تبدیل می‌کند.</p>
+                `
+            },
+            screw: {
+                title: 'ج) ساز و کار حرکتی پیچ حرکتی (Lead Screw / Vise)',
+                badge: 'تبدیل حرکت: چرخشی به خطی با نیروی زیاد',
+                desc: 'با چرخاندن دسته پیچ حرکتی، مهره یا فک متحرک در راستای خط مستقیم به جلو و عقب حرکت کرده و نیروی فشاری بسیار زیادی تولید می‌کند.',
+                points: `
+                    <p><strong class="text-sky-400">قطعات اصلی:</strong> پیچ حرکتی رزوه‌دار، دسته، فک ثابت و فک متحرک.</p>
+                    <p><strong class="text-emerald-400">مثال‌ها:</strong> گیره رومیزی کارگاه، گیره لوله، گیره دستی (شکل ۷-۳)، جک مکانیکی خودرو.</p>
+                    <p><strong class="text-rose-400">ویژگی:</strong> دارای مزیت مکانیکی بالا و خاصیت قفل‌شوندگی (فک خودبه‌خود باز نمی‌شود).</p>
+                `
+            }
+        };
+
+        function setMechanism(type) {
+            currentMech = type;
+            document.querySelectorAll('.mech-select-btn').forEach(btn => {
+                btn.className = 'mech-select-btn bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold py-2 px-3 rounded-lg border border-slate-600 transition';
+            });
+            const active = document.getElementById('mech-btn-' + type);
+            active.className = 'mech-select-btn bg-sky-600 text-white text-xs font-bold py-2 px-3 rounded-lg border border-sky-400 transition';
+
+            const info = mechData[type];
+            document.getElementById('sim-title').textContent = info.title;
+            document.getElementById('sim-badge').textContent = info.badge;
+            document.getElementById('mech-info-title').textContent = info.title;
+            document.getElementById('mech-info-desc').textContent = info.desc;
+            document.getElementById('mech-info-points').innerHTML = info.points;
+        }
+
+        function updateMechParams() {
+            mechSpeed = parseFloat(document.getElementById('mech-speed').value);
+            mechRatio = parseFloat(document.getElementById('mech-ratio').value);
+            document.getElementById('speed-val').textContent = mechSpeed;
+            document.getElementById('ratio-val').textContent = mechRatio.toFixed(1) + 'x';
+        }
+
+        function toggleMechDir() {
+            mechDir *= -1;
+        }
+
+        function showGearType(type) {
+            const details = {
+                spur: '👆 <strong>الف) چرخ‌دنده ساده:</strong> دندانه‌ها صاف و موازی با محور چرخش هستند. برای انتقال حرکت بین دو محور موازی (مثل موتور ساعت عقربه‌ای شکل ۳-۳) به کار می‌رود.',
+                helical: '👆 <strong>ب) چرخ‌دنده مارپیچ:</strong> دندانه‌ها به صورت کج و مارپیچ روی استوانه تراشیده شده‌اند. درگیری دندانه‌ها نرم‌تر است و در دورهای بالا صدای بسیار کمتری نسبت به نوع ساده دارد (مثل گیربکس خودرو).',
+                bevel: '👆 <strong>پ) چرخ‌دنده مخروطی:</strong> زمانی که دو محور با هم زاویه داشته باشند (معمولاً عمود بر هم یا ۹۰ درجه)، جهت محور چرخش را تغییر می‌دهد (مثل دریل دستی یا دیفرانسیل).',
+                worm: '👆 <strong>ت) پیچ و چرخ حلزون:</strong> از یک محور مارپیچ (حلزون) و یک چرخ‌دنده تشکیل شده است. سرعت را به شدت کاهش و قدرت را افزایش می‌دهد و قفل‌شونده است (در جرثقیل ابن‌سینا و بالابرها).',
+                rack: '👆 <strong>ث) چرخ‌دنده شانه‌ای ساده:</strong> یک چرخ‌دنده دایره‌ای روی یک میله صاف دندانه‌دار (شانه) می‌چرخد و حرکت چرخشی را به حرکت خطی تبدیل می‌کند (مثل فرمان خودرو و درب‌های ریلی).',
+                internal: '👆 <strong>ج) چرخ‌دنده داخلی:</strong> دندانه‌ها در داخل یک حلقه قرار دارند و چرخ‌دنده کوچک در درون آن می‌چرخد. در این حالت هر دو چرخ‌دنده هم‌جهت می‌چرخند.'
+            };
+            document.getElementById('gear-type-detail').innerHTML = details[type];
+        }
+
+        function drawGearWheel(ctx, x, y, radius, teeth, angle, color, label) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+
+            ctx.fillStyle = color;
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2;
+
+            // Draw Teeth
+            for (let i = 0; i < teeth; i++) {
+                const a = (i * 2 * Math.PI) / teeth;
+                ctx.save();
+                ctx.rotate(a);
+                ctx.fillRect(-5, -radius - 8, 10, 12);
+                ctx.restore();
+            }
+
+            // Main wheel body
+            ctx.beginPath();
+            ctx.arc(0, 0, radius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            // Spokes
+            ctx.strokeStyle = 'rgba(15, 23, 42, 0.5)';
+            ctx.lineWidth = 4;
+            for (let i = 0; i < 4; i++) {
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(radius * 0.8 * Math.cos(i * Math.PI / 2), radius * 0.8 * Math.sin(i * Math.PI / 2));
+                ctx.stroke();
+            }
+
+            // Center shaft
+            ctx.beginPath();
+            ctx.arc(0, 0, 10, 0, Math.PI * 2);
+            ctx.fillStyle = '#1e293b';
+            ctx.fill();
+            ctx.restore();
+
+            // Label
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = 'bold 12px Vazirmatn';
+            ctx.textAlign = 'center';
+            ctx.fillText(label, x, y + radius + 28);
+        }
+
+        function renderMechCanvas() {
+            mCtx.clearRect(0, 0, mechCanvas.width, mechCanvas.height);
+            const dt = 0.015 * mechSpeed * mechDir;
+            angle1 += dt;
+            angle2 += dt / mechRatio;
+
+            const r1 = 42;
+            const r2 = r1 * mechRatio;
+
+            if (currentMech === 'gear') {
+                const cx1 = 210;
+                const cx2 = cx1 + r1 + r2 + 12;
+                const cy = 150;
+                const teeth1 = 12;
+                const teeth2 = Math.round(teeth1 * mechRatio);
+                drawGearWheel(mCtx, cx1, cy, r1, teeth1, angle1, '#f59e0b', `محرک (${teeth1} دندانه)`);
+                drawGearWheel(mCtx, cx2, cy, r2, teeth2, -angle2 + Math.PI / teeth2, '#38bdf8', `متحرک (${teeth2} دندانه)`);
+            } else if (currentMech === 'belt' || currentMech === 'chain') {
+                const cx1 = 160;
+                const cx2 = 430;
+                const cy = 150;
+
+                // Belt / Chain lines
+                mCtx.save();
+                mCtx.beginPath();
+                mCtx.moveTo(cx1, cy - r1);
+                mCtx.lineTo(cx2, cy - r2);
+                mCtx.moveTo(cx1, cy + r1);
+                mCtx.lineTo(cx2, cy + r2);
+                mCtx.strokeStyle = currentMech === 'belt' ? '#cbd5e1' : '#facc15';
+                mCtx.lineWidth = currentMech === 'belt' ? 6 : 5;
+                if (currentMech === 'chain') {
+                    mCtx.setLineDash([8, 6]);
+                    mCtx.lineDashOffset = -angle1 * r1;
+                }
+                mCtx.stroke();
+                mCtx.restore();
+
+                if (currentMech === 'belt') {
+                    drawGearWheel(mCtx, cx1, cy, r1, 0, angle1, '#f59e0b', 'پولی محرک (موتور)');
+                    drawGearWheel(mCtx, cx2, cy, r2, 0, angle2, '#10b981', 'پولی متحرک');
+                } else {
+                    drawGearWheel(mCtx, cx1, cy, r1, 12, angle1, '#f59e0b', 'چرخ زنجیر محرک');
+                    drawGearWheel(mCtx, cx2, cy, r2, Math.round(12 * mechRatio), angle2, '#38bdf8', 'چرخ زنجیر متحرک');
+                }
+            } else if (currentMech === 'friction') {
+                const cx1 = 220;
+                const cx2 = cx1 + r1 + r2;
+                const cy = 150;
+                drawGearWheel(mCtx, cx1, cy, r1, 0, angle1, '#fb7185', 'چرخ اصطکاکی محرک');
+                drawGearWheel(mCtx, cx2, cy, r2, 0, -angle2, '#38bdf8', 'چرخ اصطکاکی متحرک');
+                // Contact spark/pressure indicator
+                mCtx.fillStyle = '#fde047';
+                mCtx.beginPath();
+                mCtx.arc(cx1 + r1, cy, 5, 0, Math.PI * 2);
+                mCtx.fill();
+            } else if (currentMech === 'cam') {
+                const cx = 300;
+                const cy = 210;
+                const camLift = Math.max(0, Math.sin(angle1)) * 38;
+
+                // Follower Rod (Valve)
+                const followerY = cy - 55 - camLift;
+                mCtx.fillStyle = '#94a3b8';
+                mCtx.fillRect(cx - 8, followerY - 95, 16, 95);
+                // Follower Tip
+                mCtx.fillStyle = '#38bdf8';
+                mCtx.beginPath();
+                mCtx.arc(cx, followerY, 10, 0, Math.PI * 2);
+                mCtx.fill();
+                // Guide Box
+                mCtx.strokeStyle = '#475569';
+                mCtx.lineWidth = 3;
+                mCtx.strokeRect(cx - 22, cy - 140, 44, 50);
+
+                // Cam Shape
+                mCtx.save();
+                mCtx.translate(cx, cy);
+                mCtx.rotate(angle1 - Math.PI / 2);
+                mCtx.fillStyle = '#f59e0b';
+                mCtx.beginPath();
+                mCtx.ellipse(18, 0, 58, 38, 0, 0, Math.PI * 2);
+                mCtx.fill();
+                mCtx.fillStyle = '#1e293b';
+                mCtx.beginPath();
+                mCtx.arc(0, 0, 9, 0, Math.PI * 2);
+                mCtx.fill();
+                mCtx.restore();
+
+                mCtx.fillStyle = '#e2e8f0';
+                mCtx.font = 'bold 12px Vazirmatn';
+                mCtx.textAlign = 'center';
+                mCtx.fillText('بادامک چرخان و میله پیرو (باز و بسته کردن سوپاپ)', cx, 290);
+            } else if (currentMech === 'screw') {
+                // Bench Vise (گیره رومیزی)
+                const baseX = 140;
+                const baseY = 180;
+                const jawOffset = ((Math.sin(angle1 * 0.5) + 1) / 2) * 110;
+
+                // Threaded Screw Rod
+                mCtx.fillStyle = '#94a3b8';
+                mCtx.fillRect(baseX + 40, baseY - 15, 280, 14);
+                mCtx.strokeStyle = '#334155';
+                mCtx.lineWidth = 2;
+                const threadShift = (angle1 * 6) % 10;
+                for (let x = baseX + 45 + threadShift; x < baseX + 310; x += 10) {
+                    mCtx.beginPath();
+                    mCtx.moveTo(x, baseY - 15);
+                    mCtx.lineTo(x - 4, baseY - 1);
+                    mCtx.stroke();
+                }
+
+                // Fixed Jaw
+                mCtx.fillStyle = '#2563eb';
+                mCtx.fillRect(baseX + 20, baseY - 75, 45, 95);
+                mCtx.fillRect(baseX, baseY + 15, 340, 22);
+
+                // Movable Jaw
+                const movX = baseX + 110 + jawOffset;
+                mCtx.fillStyle = '#38bdf8';
+                mCtx.fillRect(movX, baseY - 75, 45, 90);
+
+                // Rotating Handle
+                mCtx.strokeStyle = '#f59e0b';
+                mCtx.lineWidth = 6;
+                mCtx.beginPath();
+                const hLen = Math.cos(angle1) * 35;
+                mCtx.moveTo(baseX + 325, baseY - 8 - hLen);
+                mCtx.lineTo(baseX + 325, baseY - 8 + hLen);
+                mCtx.stroke();
+
+                mCtx.fillStyle = '#e2e8f0';
+                mCtx.font = 'bold 12px Vazirmatn';
+                mCtx.textAlign = 'center';
+                mCtx.fillText('گیره رومیزی (ساز و کار پیچ حرکتی: تبدیل چرخش پیچ به حرکت خطی فک متحرک)', 300, 275);
+            }
+
+            // Speed telemetry on canvas
+            mCtx.fillStyle = '#94a3b8';
+            mCtx.font = '12px Vazirmatn';
+            mCtx.textAlign = 'right';
+            const outSpeed = (mechSpeed * 10 / mechRatio).toFixed(1);
+            mCtx.fillText(`دور ورودی: ${mechSpeed * 10} RPM | دور خروجی: ${outSpeed} RPM`, 580, 28);
+
+            requestAnimationFrame(renderMechCanvas);
+        }
+        requestAnimationFrame(renderMechCanvas);
+
+        // --- TAB 2: CRANE SIMULATOR ---
+        const craneCanvas = document.getElementById('craneCanvas');
+        const cCtx = craneCanvas.getContext('2d');
+        let craneState = 'stop'; // 'up', 'down', 'stop'
+        let hookY = 185; // range 105 to 265
+        let cranePulleyAngle = 0;
+        let selectedPartIdx = 0;
+
+        const cranePartsInfo = [
+            {
+                title: '۱. موتور الکتریکی کوچک ۹ ولت و بست فلزی',
+                desc: 'در انتهای بازوی چوبی نصب می‌شود. برای ثابت کردن آن از تسمه فلزی خم‌کاری و سوراخ‌کاری‌شده به ضخامت ۱ یا ۲ میلی‌متر و عرض ۱۰ میلی‌متر به همراه پیچ و مهره استفاده می‌شود (شکل ۱۳-۳ الف).',
+                tip: '💡 نکته تحقیق کنید (ص ۳۳): استفاده از چرخ و تسمه در خروجی موتور، سرعت تند موتور را کم کرده و قدرت کشش نخ را بالا می‌برد.'
+            },
+            {
+                title: '۲. ساز و کار چرخ تسمه (پولی بزرگ و قرقره نخ)',
+                desc: 'از ترکیب درب بطری پلاستیکی و قرقره نخ پلاستیکی ساخته می‌شود. تسمه حرکت موتور را به پولی بزرگ منتقل می‌کند و نخ ۵ متری به دور قرقره جمع یا باز می‌شود (شکل ۱۳-۳ پ).',
+                tip: '💡 هنگام نصب باید دقت کنید که تسمه در راستا باشد تا از روی پولی‌های تعبیه‌شده خارج نشود.'
+            },
+            {
+                title: '۳. بازوی چوبی شیاردار (اهرم جرثقیل)',
+                desc: 'قطعه چوبی بلندی است که روی ستون قرار گرفته و سر جلویی آن با اره شیار داده شده است تا قرقره سر بازو درون شیار قرار گیرد (شکل ۱۲-۳ ث).',
+                tip: '💡 وزن موتور و قرقره در عقب بازو به تعادل اهرم در برابر وزن بار در جلوی بازو کمک می‌کند.'
+            },
+            {
+                title: '۴. قرقره مرکب (ماسوره چرخ خیاطی) و قلاب فلزی',
+                desc: 'در این بخش از ماسوره چرخ خیاطی به عنوان قرقره و از مفتول فلزی به قطر ۲ میلی‌متر برای ساخت قلاب استفاده شده است (شکل ۱۳-۳ ب).',
+                tip: '💡 استفاده از قرقره مرکب (ثابت و متحرک) باعث دو برابر شدن مزیت مکانیکی و نصف شدن نیروی لازم برای بلند کردن بار می‌شود.'
+            },
+            {
+                title: '۵. کلید دوجهته دست‌ساز (مهم‌ترین بخش الکترونیکی)',
+                desc: 'روی پایه چوبی نصب شده و با تغییر جهت فشار دست، جای قطب‌های مثبت و منفی ورودی به موتور را عوض می‌کند تا بار بالا یا پایین برود (شکل ۱۳-۳ ت و ث).',
+                tip: '💡 تعادل قطعه بالایی کلید بسیار مهم است؛ زیرا در غیر این صورت، کلید همیشه وصل مانده و باعث حرکت ناخواسته قلاب جرثقیل می‌شود!'
+            },
+            {
+                title: '۶. منبع تغذیه (باتری‌ها) و پایه و ستون چوبی/MDF',
+                desc: 'شامل ۲ عدد باتری قلمی ۱.۵ ولت درون جاباتری است که روی صفحه پایه از جنس چوب معمولی یا MDF در کنار ستون عمودی جرثقیل نصب شده‌اند.',
+                tip: '💡 پس از مونتاژ کامل قطعات، جرثقیل را آزمایش کرده و اشکالات احتمالی آن را برطرف نمایید.'
+            }
+        ];
+
+        function setCraneSwitch(state) {
+            craneState = state;
+            const badge = document.getElementById('crane-status-badge');
+            document.getElementById('crane-btn-up').classList.remove('ring-2', 'ring-white');
+            document.getElementById('crane-btn-stop').classList.remove('ring-2', 'ring-white');
+            document.getElementById('crane-btn-down').classList.remove('ring-2', 'ring-white');
+
+            if (state === 'up') {
+                badge.textContent = 'وضعیت کلید: بالا بردن بار ⬆️ (چرخش ساعت‌گرد)';
+                badge.className = 'bg-emerald-900/60 text-emerald-300 text-xs px-3 py-1 rounded-full border border-emerald-400 font-bold';
+                document.getElementById('crane-btn-up').classList.add('ring-2', 'ring-white');
+            } else if (state === 'down') {
+                badge.textContent = 'وضعیت کلید: پایین آوردن بار ⬇️ (چرخش پاد-ساعت‌گرد)';
+                badge.className = 'bg-rose-900/60 text-rose-300 text-xs px-3 py-1 rounded-full border border-rose-400 font-bold';
+                document.getElementById('crane-btn-down').classList.add('ring-2', 'ring-white');
+            } else {
+                badge.textContent = 'وضعیت کلید دوجهته: حالت تعادل (متوقف ⏹️)';
+                badge.className = 'bg-slate-800 text-amber-300 text-xs px-3 py-1 rounded-full border border-amber-500/40 font-bold';
+                document.getElementById('crane-btn-stop').classList.add('ring-2', 'ring-white');
+            }
+        }
+
+        function selectCranePart(idx) {
+            selectedPartIdx = idx;
+            document.querySelectorAll('.crane-part-btn').forEach((btn, i) => {
+                if (i === idx) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+            const info = cranePartsInfo[idx];
+            document.getElementById('cp-title').textContent = info.title;
+            document.getElementById('cp-desc').textContent = info.desc;
+            document.getElementById('cp-tip').textContent = info.tip;
+        }
+
+        function renderCraneCanvas() {
+            cCtx.clearRect(0, 0, craneCanvas.width, craneCanvas.height);
+
+            if (craneState === 'up' && hookY > 110) {
+                hookY -= 0.8;
+                cranePulleyAngle += 0.08;
+            } else if (craneState === 'down' && hookY < 260) {
+                hookY += 0.8;
+                cranePulleyAngle -= 0.08;
+            }
+
+            const pct = Math.round(((260 - hookY) / 150) * 100);
+            document.getElementById('hook-height-display').textContent = `ارتفاع بار: ${pct}%`;
+
+            // 1. Wooden Base & Pillar (Part 5)
+            cCtx.fillStyle = '#78350f';
+            cCtx.fillRect(190, 305, 250, 22); // Base MDF
+            cCtx.fillStyle = '#92400e';
+            cCtx.fillRect(355, 165, 42, 140); // Vertical pillar
+
+            // 2. Batteries (Part 5)
+            cCtx.fillStyle = '#1d4ed8';
+            cCtx.fillRect(245, 275, 14, 30);
+            cCtx.fillRect(263, 275, 14, 30);
+            cCtx.fillStyle = '#cbd5e1';
+            cCtx.fillRect(248, 271, 8, 4);
+            cCtx.fillRect(266, 271, 8, 4);
+
+            // 3. Two-Way Switch (Part 4)
+            cCtx.save();
+            cCtx.translate(255, 298);
+            cCtx.fillStyle = '#b45309';
+            cCtx.fillRect(-25, -8, 50, 15);
+            let swAngle = craneState === 'up' ? -0.22 : (craneState === 'down' ? 0.22 : 0);
+            cCtx.rotate(swAngle);
+            cCtx.fillStyle = '#f59e0b';
+            cCtx.fillRect(-32, -18, 64, 10);
+            cCtx.restore();
+
+            // 4. Slanted Wooden Arm (Part 2)
+            cCtx.save();
+            cCtx.translate(375, 185);
+            cCtx.rotate(0.28); // Slanted upward to the left
+            cCtx.fillStyle = '#d97706';
+            cCtx.fillRect(-280, -12, 420, 24);
+            cCtx.restore();
+
+            // Top Tip Pulley (Left end of arm: approx x=112, y=110)
+            const tipX = 112, tipY = 110;
+            cCtx.fillStyle = '#cbd5e1';
+            cCtx.beginPath();
+            cCtx.arc(tipX, tipY, 13, 0, Math.PI * 2);
+            cCtx.fill();
+
+            // Rear Motor & Large Pulley (Right end of arm: approx x=495, y=195)
+            const rearX = 485, rearY = 185;
+            // Motor (Part 0)
+            cCtx.fillStyle = '#64748b';
+            cCtx.fillRect(455, 232, 34, 24);
+            // Belt between motor and large pulley
+            cCtx.strokeStyle = '#38bdf8';
+            cCtx.lineWidth = 3;
+            cCtx.beginPath();
+            cCtx.moveTo(472, 232);
+            cCtx.lineTo(rearX - 15, rearY);
+            cCtx.moveTo(482, 232);
+            cCtx.lineTo(rearX + 15, rearY);
+            cCtx.stroke();
+
+            // Large Bottle-Cap Pulley (Part 1)
+            cCtx.save();
+            cCtx.translate(rearX, rearY);
+            cCtx.rotate(cranePulleyAngle);
+            cCtx.fillStyle = '#f8fafc';
+            cCtx.beginPath();
+            cCtx.arc(0, 0, 34, 0, Math.PI * 2);
+            cCtx.fill();
+            cCtx.strokeStyle = '#334155';
+            cCtx.lineWidth = 4;
+            cCtx.stroke();
+            cCtx.beginPath();
+            cCtx.moveTo(-30, 0);
+            cCtx.lineTo(30, 0);
+            cCtx.moveTo(0, -30);
+            cCtx.lineTo(0, 30);
+            cCtx.stroke();
+            cCtx.restore();
+
+            // String (نخ ۵ متری) from rear spool to tip pulley and compound pulley
+            cCtx.strokeStyle = '#e2e8f0';
+            cCtx.lineWidth = 2;
+            cCtx.beginPath();
+            cCtx.moveTo(rearX, rearY - 20);
+            cCtx.lineTo(tipX, tipY - 12);
+            // Compound pulley strings (قرقره مرکب)
+            cCtx.lineTo(tipX - 8, hookY);
+            cCtx.lineTo(tipX + 18, tipY + 6);
+            cCtx.stroke();
+
+            // Movable Bobbin Pulley & Hook (Part 3)
+            const hookX = tipX + 5;
+            cCtx.fillStyle = '#94a3b8';
+            cCtx.fillRect(hookX - 10, hookY - 12, 20, 24);
+            cCtx.fillStyle = '#0f172a';
+            cCtx.beginPath();
+            cCtx.arc(hookX, hookY, 4, 0, Math.PI * 2);
+            cCtx.fill();
+
+            // Metal Hook (مفتول ۲ میلی‌متری)
+            cCtx.strokeStyle = '#f59e0b';
+            cCtx.lineWidth = 3;
+            cCtx.beginPath();
+            cCtx.moveTo(hookX, hookY + 12);
+            cCtx.lineTo(hookX, hookY + 26);
+            cCtx.arc(hookX - 5, hookY + 26, 6, 0, Math.PI * 1.3);
+            cCtx.stroke();
+
+            // Load Box attached to hook
+            cCtx.fillStyle = '#0284c7';
+            cCtx.fillRect(hookX - 22, hookY + 33, 44, 32);
+            cCtx.fillStyle = '#ffffff';
+            cCtx.font = 'bold 11px Vazirmatn';
+            cCtx.textAlign = 'center';
+            cCtx.fillText('بار', hookX, hookY + 53);
+
+            // Highlight circle on selected part
+            const partCoords = [
+                { x: 472, y: 244, label: '۱. موتور ۹ ولت و بست فلزی' },
+                { x: 485, y: 185, label: '۲. پولی درب بطری و چرخ تسمه' },
+                { x: 280, y: 158, label: '۳. بازوی چوبی شیاردار (اهرم)' },
+                { x: hookX, y: hookY + 10, label: '۴. قرقره مرکب (ماسوره) و قلاب' },
+                { x: 255, y: 292, label: '۵. کلید دوجهته جرثقیل' },
+                { x: 355, y: 280, label: '۶. پایه MDF، ستون و باتری‌ها' }
+            ];
+            const sel = partCoords[selectedPartIdx];
+            cCtx.strokeStyle = '#38bdf8';
+            cCtx.lineWidth = 2.5;
+            cCtx.setLineDash([5, 3]);
+            cCtx.beginPath();
+            cCtx.arc(sel.x, sel.y, 28, 0, Math.PI * 2);
+            cCtx.stroke();
+            cCtx.setLineDash([]);
+
+            cCtx.fillStyle = '#38bdf8';
+            cCtx.font = 'bold 12px Vazirmatn';
+            cCtx.textAlign = 'right';
+            cCtx.fillText('قطعه انتخاب‌شده: ' + sel.label, 600, 30);
+
+            requestAnimationFrame(renderCraneCanvas);
+        }
+        requestAnimationFrame(renderCraneCanvas);
+
+        function calcAvicenna() {
+            const val = parseInt(document.getElementById('avicenna-input').value);
+            document.getElementById('av-in').textContent = val + ' من';
+            document.getElementById('av-out').textContent = (val * 1000).toLocaleString('en-US');
+        }
+
+        // --- TAB 3: SNAIL TOY & KHEZR BRIDGE ---
+        const snailCanvas = document.getElementById('snailCanvas');
+        const sCtx = snailCanvas.getContext('2d');
+        let snailMoving = true;
+        let snailAngle = 0;
+        let snailEcc = 18; // Eccentricity (خروج از مرکز محور)
+
+        function updateSnailParams() {
+            snailEcc = parseInt(document.getElementById('snail-ecc').value);
+            const label = document.getElementById('ecc-val');
+            if (snailEcc === 0) {
+                label.textContent = 'در مرکز چرخ (حرکت صاف و بدون موج)';
+            } else {
+                label.textContent = `خارج از مرکز (${snailEcc} میلی‌متر - چرخ لنگ)`;
+            }
+        }
+
+        function toggleSnailMove() {
+            snailMoving = !snailMoving;
+        }
+
+        function renderSnailCanvas() {
+            sCtx.clearRect(0, 0, snailCanvas.width, snailCanvas.height);
+
+            if (snailMoving) {
+                snailAngle += 0.05;
+            }
+
+            // Ground line
+            sCtx.strokeStyle = '#475569';
+            sCtx.lineWidth = 3;
+            sCtx.beginPath();
+            sCtx.moveTo(20, 215);
+            sCtx.lineTo(500, 215);
+            sCtx.stroke();
+
+            const wheelCenterX = 250;
+            const wheelRadius = 52;
+            const wheelCenterY = 215 - wheelRadius;
+
+            // Off-center axle position (محور خارج از مرکز)
+            const axleX = wheelCenterX + Math.cos(snailAngle) * snailEcc;
+            const axleY = wheelCenterY + Math.sin(snailAngle) * snailEcc;
+
+            // Draw Wooden Snail Body attached to the eccentric axle
+            sCtx.save();
+            sCtx.translate(axleX, axleY);
+            const bodyTilt = Math.sin(snailAngle) * (snailEcc * 0.012);
+            sCtx.rotate(bodyTilt);
+
+            // Tail (قطعه دم حلزون)
+            sCtx.fillStyle = '#ef4444';
+            sCtx.beginPath();
+            sCtx.ellipse(-85, -10 + Math.cos(snailAngle) * 5, 34, 12, -0.25, 0, Math.PI * 2);
+            sCtx.fill();
+
+            // Main Body bar
+            sCtx.fillStyle = '#dc2626';
+            sCtx.fillRect(-65, -10, 145, 18);
+
+            // Head & Antennae (قطعه سر حلزون)
+            sCtx.fillStyle = '#1e293b';
+            sCtx.beginPath();
+            sCtx.arc(90, 0, 20, 0, Math.PI * 2);
+            sCtx.fill();
+            // Red Antennae
+            sCtx.fillStyle = '#ef4444';
+            sCtx.beginPath();
+            sCtx.arc(95, -18, 6, 0, Math.PI * 2);
+            sCtx.arc(82, -16, 6, 0, Math.PI * 2);
+            sCtx.fill();
+
+            // Wooden Pins (پین‌های چوبی اتصال سر و دم)
+            sCtx.fillStyle = '#fde047';
+            sCtx.beginPath();
+            sCtx.arc(-58, -1, 4, 0, Math.PI * 2);
+            sCtx.arc(68, -1, 4, 0, Math.PI * 2);
+            sCtx.fill();
+            sCtx.restore();
+
+            // Draw Round Wooden Wheel (قطعه گرد چوبی چرخ)
+            sCtx.save();
+            sCtx.translate(wheelCenterX, wheelCenterY);
+            sCtx.rotate(snailAngle);
+            sCtx.fillStyle = '#111827';
+            sCtx.beginPath();
+            sCtx.arc(0, 0, wheelRadius, 0, Math.PI * 2);
+            sCtx.fill();
+            sCtx.fillStyle = '#dc2626';
+            sCtx.beginPath();
+            sCtx.arc(0, 0, wheelRadius - 12, 0, Math.PI * 2);
+            sCtx.fill();
+            // Spiral pattern on shell
+            sCtx.strokeStyle = '#fca5a5';
+            sCtx.lineWidth = 2;
+            sCtx.beginPath();
+            for (let a = 0; a < Math.PI * 4; a += 0.2) {
+                const r = a * 2.5;
+                sCtx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+            }
+            sCtx.stroke();
+            // True Center Dot
+            sCtx.fillStyle = '#64748b';
+            sCtx.beginPath();
+            sCtx.arc(0, 0, 4, 0, Math.PI * 2);
+            sCtx.fill();
+            sCtx.restore();
+
+            // Draw Eccentric Wooden Axle (محور چرخ خارج از مرکز)
+            sCtx.fillStyle = '#facc15';
+            sCtx.beginPath();
+            sCtx.arc(axleX, axleY, 8, 0, Math.PI * 2);
+            sCtx.fill();
+            sCtx.strokeStyle = '#000';
+            sCtx.lineWidth = 2;
+            sCtx.stroke();
+
+            // Pull String (نخ ۱ متری)
+            sCtx.strokeStyle = '#f43f5e';
+            sCtx.lineWidth = 3;
+            sCtx.beginPath();
+            sCtx.moveTo(axleX + 108, axleY + 5);
+            sCtx.lineTo(495, 195);
+            sCtx.stroke();
+
+            sCtx.fillStyle = '#f8fafc';
+            sCtx.font = '12px Vazirmatn';
+            sCtx.textAlign = 'right';
+            sCtx.fillText('نقطه زرد = محور خارج از مرکز (چرخ لنگ) | نقطه خاکستری = مرکز واقعی چرخ', 500, 26);
+
+            requestAnimationFrame(renderSnailCanvas);
+        }
+        requestAnimationFrame(renderSnailCanvas);
+
+        // --- KHEZR FLOATING BRIDGE SIMULATOR ---
+        const khezrCanvas = document.getElementById('khezrCanvas');
+        const kCtx = khezrCanvas.getContext('2d');
+        let khezrGear = 'reverse'; // 'forward' -> moves left, 'reverse' -> moves right
+        let bargeX = 220;
+        let ringAngle = 0;
+
+        function setKhezrGear(gear) {
+            khezrGear = gear;
+            const lbl = document.getElementById('khezr-gear-label');
+            if (gear === 'forward') {
+                lbl.textContent = 'دنده جلو تراکتور ⬅️ حرکت پل خضر به عقب!';
+                lbl.className = 'text-sky-400 font-bold';
+            } else if (gear === 'reverse') {
+                lbl.textContent = 'دنده عقب تراکتور ➡️ حرکت پل خضر به جلو!';
+                lbl.className = 'text-emerald-400 font-bold';
+            } else {
+                lbl.textContent = 'دنده خلاص ⏹️ توقف دوبه روی اروندرود';
+                lbl.className = 'text-amber-400 font-bold';
+            }
+        }
+
+        function renderKhezrCanvas() {
+            kCtx.clearRect(0, 0, khezrCanvas.width, khezrCanvas.height);
+
+            // Arvand River Water background
+            kCtx.fillStyle = '#0c4a6e';
+            kCtx.fillRect(0, 0, khezrCanvas.width, khezrCanvas.height);
+
+            // River Banks (ساحل اروندرود و فاو)
+            kCtx.fillStyle = '#78350f';
+            kCtx.fillRect(0, 0, 48, 260);
+            kCtx.fillRect(472, 0, 48, 260);
+
+            kCtx.fillStyle = '#fde68a';
+            kCtx.font = 'bold 11px Vazirmatn';
+            kCtx.textAlign = 'center';
+            kCtx.fillText('ساحل خرمشهر', 24, 30);
+            kCtx.fillText('ساحل فاو', 496, 30);
+
+            // Update Barge Position
+            if (khezrGear === 'reverse') {
+                bargeX += 0.9;
+                ringAngle -= 0.08;
+                if (bargeX > 345) bargeX = 345;
+            } else if (khezrGear === 'forward') {
+                bargeX -= 0.9;
+                ringAngle += 0.08;
+                if (bargeX < 60) bargeX = 60;
+            }
+
+            // 3 Steel Cables (۳ رشته سیم‌بکسل مهارشده با شمع‌کوبی و بتن‌ریزی)
+            kCtx.strokeStyle = '#94a3b8';
+            kCtx.lineWidth = 3;
+            // Cable 1 (Top guide)
+            kCtx.beginPath(); kCtx.moveTo(40, 75); kCtx.lineTo(480, 75); kCtx.stroke();
+            // Cable 2 (Bottom guide)
+            kCtx.beginPath(); kCtx.moveTo(40, 195); kCtx.lineTo(480, 195); kCtx.stroke();
+            // Cable 3 (Middle traction cable around tractor ring)
+            kCtx.strokeStyle = '#facc15';
+            kCtx.beginPath(); kCtx.moveTo(40, 135); kCtx.lineTo(480, 135); kCtx.stroke();
+
+            // Floating Barge ("دوبه")
+            kCtx.fillStyle = '#334155';
+            kCtx.strokeStyle = '#cbd5e1';
+            kCtx.lineWidth = 2;
+            kCtx.fillRect(bargeX, 70, 115, 130);
+            kCtx.strokeRect(bargeX, 70, 115, 130);
+
+            // Guide Rings ("گوشواره‌های هدایت دوبه")
+            kCtx.fillStyle = '#38bdf8';
+            kCtx.fillRect(bargeX + 10, 68, 14, 12);
+            kCtx.fillRect(bargeX + 90, 68, 14, 12);
+            kCtx.fillRect(bargeX + 10, 190, 14, 12);
+            kCtx.fillRect(bargeX + 90, 190, 14, 12);
+
+            // Tractor with Special Rim (تراکتور با رینگ مخصوص بدون لاستیک)
+            const trX = bargeX + 58;
+            const trY = 135;
+            kCtx.fillStyle = '#dc2626';
+            kCtx.fillRect(trX - 24, trY - 18, 48, 36);
+
+            // Rotating Rim with Cable 3 wrapped around it
+            kCtx.save();
+            kCtx.translate(trX, trY);
+            kCtx.rotate(ringAngle);
+            kCtx.fillStyle = '#facc15';
+            kCtx.beginPath();
+            kCtx.arc(0, 0, 18, 0, Math.PI * 2);
+            kCtx.fill();
+            kCtx.strokeStyle = '#0f172a';
+            kCtx.lineWidth = 3;
+            kCtx.beginPath();
+            kCtx.moveTo(-15, 0); kCtx.lineTo(15, 0);
+            kCtx.moveTo(0, -15); kCtx.lineTo(0, 15);
+            kCtx.stroke();
+            kCtx.restore();
+
+            kCtx.fillStyle = '#ffffff';
+            kCtx.font = 'bold 11px Vazirmatn';
+            kCtx.textAlign = 'center';
+            kCtx.fillText('صفحه شناور «دوبه» و تراکتور', bargeX + 57, 175);
+            kCtx.fillText('عرض اروندرود: ۹۰۰ متر | سیم‌بکسل‌های ۱ و ۲: ریل هدایت‌کننده | سیم‌بکسل ۳: رینگ تراکتور', 260, 245);
+
+            requestAnimationFrame(renderKhezrCanvas);
+        }
+        requestAnimationFrame(renderKhezrCanvas);
+
+        // --- TAB 4: SELF-EVALUATION CALCULATOR ---
+        function calcEval() {
+            const v1 = Math.min(450, Math.max(0, parseFloat(document.getElementById('ev-1').value) || 0));
+            const v2 = Math.min(100, Math.max(0, parseFloat(document.getElementById('ev-2').value) || 0));
+            const v3 = Math.min(200, Math.max(0, parseFloat(document.getElementById('ev-3').value) || 0));
+            const v4 = Math.min(250, Math.max(0, parseFloat(document.getElementById('ev-4').value) || 0));
+            const total = v1 + v2 + v3 + v4;
+            document.getElementById('ev-total').textContent = total;
+            document.getElementById('ev-grade').textContent = (total / 50).toFixed(2);
+        }
+    </script>
+</body>
+</html>
