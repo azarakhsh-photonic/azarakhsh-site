@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#070b14">
+    <title>شبیه‌ساز تعاملی چرخ لنگ (اسباب‌بازی حلزون) | استاد محمدحسن پورصالحی</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background-color: #070b14;
+            color: #f1f5f9;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        /* Auto-hiding hardware-accelerated header */
+        #smart-header {
+            transform: translate3d(0, 0, 0);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform;
+            background-color: #090e1a;
+        }
+        #smart-header.header-hidden {
+            transform: translate3d(0, -105%, 0);
+        }
+        .pro-card {
+            background-color: #0f172a;
+            border: 1px solid #1e293b;
+            box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.7);
+        }
+        .part-btn.active {
+            border-color: #fb7185 !important;
+            background-color: rgba(244, 63, 94, 0.18) !important;
+            box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.35);
+        }
+        canvas {
+            display: block;
+            touch-action: pan-y;
+            transform: translateZ(0);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-rose-500 selection:text-white">
+
+    <!-- ==================== AUTO-HIDE TOP HEADER ==================== -->
+    <header id="smart-header" class="fixed top-0 left-0 right-0 z-50 border-b border-rose-500/30 shadow-2xl">
+        <div class="max-w-7xl mx-auto px-3 sm:px-5 py-2.5 flex items-center justify-between gap-2">
+            <!-- Title -->
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-rose-500 to-red-700 flex items-center justify-center text-xl shadow-md border border-rose-400/40 shrink-0">
+                    🐌
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                        <span class="bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full">
+                            پودمان ۳ کار و فناوری نهم (صفحات ۳۴ و ۳۵)
+                        </span>
+                        <span class="bg-sky-500/20 text-sky-300 border border-sky-400/40 text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full hidden sm:inline-block">
+                            Azarakhshphotonic.ir
+                        </span>
+                    </div>
+                    <h1 class="text-xs sm:text-base md:text-lg font-black text-white mt-0.5">
+                        پویانمایی و کارگاه تعاملی «ساز و کار چرخ لنگ» (اسباب‌بازی حلزون)
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Teacher Name & Fullscreen Button -->
+            <div class="flex items-center gap-2 shrink-0">
+                <div class="bg-slate-900 border border-amber-400/40 px-2.5 sm:px-3.5 py-1 rounded-xl text-right">
+                    <p class="text-[9px] sm:text-[10px] text-sky-300 font-medium leading-tight">طراحی و توسعه سامانه آموزشی:</p>
+                    <p class="text-xs sm:text-sm font-black text-amber-400">
+                        استاد محمدحسن پورصالحی
+                    </p>
+                </div>
+
+                <button onclick="toggleFullscreen()" id="fs-btn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-2.5 sm:px-3.5 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow-lg border border-emerald-400/40 transition active:scale-95">
+                    <span class="text-sm sm:text-base leading-none">⛶</span>
+                    <span id="fs-text" class="text-[11px] sm:text-xs font-bold">تمام‌صفحه</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Spacer for fixed header -->
+    <div class="h-20 sm:h-24"></div>
+
+    <!-- ==================== MAIN WORKSPACE ==================== -->
+    <main class="max-w-7xl mx-auto px-3 sm:px-5 py-3 flex-grow w-full space-y-6">
+
+        <!-- Top Educational Concept Banner -->
+        <div class="pro-card rounded-2xl p-4 border-r-4 border-rose-500">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                <h2 class="text-sm sm:text-base font-black text-rose-400 flex items-center gap-2">
+                    <span>⚙️</span> اصل علمی پروژه: «چرخ لنگ» (Eccentric Wheel Mechanism) چیست؟
+                </h2>
+                <span class="text-[11px] bg-rose-950 text-rose-300 border border-rose-500/40 px-2.5 py-0.5 rounded-full font-bold">
+                    شکل ۱۵-۳ تا ۱۷-۳ کتاب درسی
+                </span>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+                این اسباب‌بازی یک حلزون چوبی است که اساس حرکت آن یک <strong>«چرخ لنگ»</strong> می‌باشد؛ در واقع <strong>محور چرخ به صورت خارج از مرکز به چرخ‌ها متصل شده است</strong>. وقتی نخ ۱ متری کشیده می‌شود و چرخ‌ها روی زمین می‌غلتند، به دلیل خارج از مرکز بودن محور، ارتفاع محور در هر دور چرخش به صورت سینوسی کم و زیاد شده و باعث می‌شود بدن، سر و دم حلزون حرکتی موجی و خزنده داشته باشند!
+            </p>
+        </div>
+
+        <!-- Simulator & Interactive Part Inspector Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+            <!-- Left 8 Cols: Realistic Interactive Canvas & Controls -->
+            <div class="lg:col-span-8 pro-card rounded-2xl p-4 flex flex-col justify-between">
+                <div>
+                    <!-- Canvas Status Bar -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" id="status-dot"></span>
+                            <h3 class="font-black text-white text-xs sm:text-sm" id="mode-title">
+                                نمای زنده کارکرد اسباب‌بازی حلزون (حالت چرخ لنگ فعال)
+                            </h3>
+                        </div>
+                        <div class="flex gap-1.5">
+                            <button onclick="toggleXray()" id="xray-btn" class="bg-slate-800 hover:bg-slate-700 text-sky-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700 transition">
+                                🔍 نمای شفاف (دیدن پین‌ها و محور داخل)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- High-Precision HTML5 Canvas -->
+                    <div class="relative bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden shadow-inner">
+                        <canvas id="snailCanvas" width="760" height="390" class="w-full h-auto cursor-pointer"></canvas>
+                    </div>
+                </div>
+
+                <!-- Control Panel -->
+                <div class="mt-3 bg-slate-900/95 p-3.5 rounded-xl border border-slate-800 space-y-3">
+                    <!-- Fast Action Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        <button onclick="togglePulling()" id="pull-btn" class="bg-rose-600 hover:bg-rose-500 text-white font-black py-2.5 px-3 rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-1.5">
+                            <span>⏸️</span> <span id="pull-btn-text">توقف کشیدن نخ</span>
+                        </button>
+                        <button onclick="setPresetMode('eccentric')" id="preset-ecc" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition shadow flex items-center justify-center gap-1.5 ring-2 ring-white">
+                            <span>🐌</span> حالت چرخ لنگ (خارج از مرکز)
+                        </button>
+                        <button onclick="setPresetMode('centered')" id="preset-cen" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 px-3 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5">
+                            <span>⭕</span> حالت چرخ معمولی (در مرکز)
+                        </button>
+                    </div>
+
+                    <!-- Sliders for Eccentricity and Speed -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-800">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">میزان خروج محور از مرکز چرخ (e):</span>
+                                <strong id="ecc-label" class="text-amber-400 font-bold">20 میلی‌متر (لنگ کامل)</strong>
+                            </div>
+                            <input type="range" id="ecc-slider" min="0" max="28" value="20" class="w-full accent-amber-500 cursor-pointer" oninput="onSliderChange()">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1">
+                                <span class="text-slate-300">سرعت کشیدن نخ ۱ متری:</span>
+                                <strong id="spd-label" class="text-sky-400 font-bold">متوسط (5x)</strong>
+                            </div>
+                            <input type="range" id="spd-slider" min="1" max="10" value="5" class="w-full accent-sky-500 cursor-pointer" oninput="onSliderChange()">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right 4 Cols: Interactive Parts Inspector -->
+            <div class="lg:col-span-4 flex flex-col gap-4">
+                <div class="pro-card rounded-2xl p-4 flex-grow flex flex-col justify-between border-t-4 border-amber-400">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-black text-amber-300 text-sm">
+                                🔍 کالبدشکافی قطعات حلزون:
+                            </h3>
+                            <span class="text-[10px] text-slate-400">روی هر قطعه کلیک کنید</span>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <button onclick="selectPart(0)" class="part-btn active text-right p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs transition">
+                                <span class="font-bold text-amber-300 block">۱. محور خارج از مرکز</span>
+                                <span class="text-[10px] text-slate-400">ایجاد ساز و کار چرخ لنگ</span>
+                            </button>
+                            <button onclick="selectPart(1)" class="part-btn text-right p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs transition">
+                                <span class="font-bold text-amber-300 block">۲. چرخ‌های گرد چوبی</span>
+                                <span class="text-[10px] text-slate-400">برش با ابزار گردبُر دریل</span>
+                            </button>
+                            <button onclick="selectPart(2)" class="part-btn text-right p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs transition">
+                                <span class="font-bold text-amber-300 block">۳. تنه اصلی حلزون</span>
+                                <span class="text-[10px] text-slate-400">سوار شده روی محور چرخ</span>
+                            </button>
+                            <button onclick="selectPart(3)" class="part-btn text-right p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs transition">
+                                <span class="font-bold text-amber-300 block">۴. پین‌های چوبی مفصل</span>
+                                <span class="text-[10px] text-slate-400">اتصال متحرک سر و دم</span>
+                            </button>
+                            <button onclick="selectPart(4)" class="part-btn text-right p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs transition">
+                                <span class="font-bold text-amber-300 block">۵. سر و شاخک‌ها و دم</span>
+                                <span class="text-[10px] text-slate-400">ایجاد حرکت موجی خزنده</span>
+                            </button>
+                            <button onclick="selectPart(5)" class="part-btn text-right p-2.5 rounded-xl bg-slate-800/90 border border-slate-700 text-xs transition">
+                                <span class="font-bold text-amber-300 block">۶. نخ کشنده (۱ متر)</span>
+                                <span class="text-[10px] text-slate-400">اعمال نیروی محرک کششی</span>
+                            </button>
+                        </div>
+
+                        <!-- Part Detail Box -->
+                        <div class="mt-3 p-3.5 rounded-xl bg-slate-950 border border-rose-500/40 text-xs space-y-2 leading-relaxed">
+                            <div class="font-black text-rose-400 text-sm" id="part-title">
+                                ۱. محور چرخ (متصل به صورت خارج از مرکز)
+                            </div>
+                            <p class="text-slate-200" id="part-desc">
+                                استوانه چوبی باریکی است (شکل ۱۶-۳ پ) که به جای مرکز دایره، در سوراخی با فاصله از مرکز به دو چرخ متصل می‌شود (شکل ۱۷-۳ پ). همین خروج از مرکز باعث می‌شود با چرخش چرخ، محور در یک مسیر دایره‌ای بالا و پایین برود.
+                            </p>
+                            <div class="p-2 rounded-lg bg-amber-950/50 border border-amber-500/30 text-amber-300 font-medium text-[11px]" id="part-tip">
+                                💡 نکته فنی: سوراخ روی چرخ‌ها باید محور را کاملاً محکم نگه دارد، اما سوراخ تنه حلزون باید کمی آزادتر باشد تا محور بتواند درون تنه بچرخد.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Answer to Textbook Question (Page 35) -->
+                    <div class="mt-3 p-3 rounded-xl bg-emerald-950/50 border border-emerald-500/40 text-xs leading-relaxed">
+                        <strong class="text-emerald-300 block mb-1">📌 پاسخ پرسش صفحه ۳۵ کتاب درسی:</strong>
+                        <span class="text-slate-200">
+                            • <strong>نام ساز و کار:</strong> ساز و کار حرکتی <strong>«چرخ لنگ» (محور خارج از مرکز)</strong>.
+                            <br>• <strong>مثال از کاربردهای دیگر:</strong> میل‌لنگ در موتور خودرو، میله اتصال چرخ‌های لوکوموتیو بخار، پمپ‌های پیستونی آب و مکانیزم سوزن چرخ خیاطی.
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Bottom Section: Tools, 6 Fabrication Steps (Fig 3-16) & 6 Assembly Steps (Fig 3-17) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+            <!-- Box 1: Tools & Materials (Page 34) -->
+            <div class="pro-card rounded-2xl p-4 border-t-4 border-sky-400">
+                <h3 class="font-black text-sky-300 text-sm mb-2.5 flex items-center gap-1.5">
+                    <span>🧰</span> ابزار و وسایل مورد نیاز (صفحه ۳۴ کتاب)
+                </h3>
+                <div class="flex flex-wrap gap-1.5 text-xs">
+                    <span class="bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">۱. پیچ‌گوشتی و انبردست</span>
+                    <span class="bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">۲. گیره رومیزی کارگاه</span>
+                    <span class="bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">۳. دریل و مته</span>
+                    <span class="bg-amber-950/80 text-amber-300 font-bold px-2.5 py-1 rounded-lg border border-amber-500/40">۴. ابزار گِردبُر دریل (برش چرخ)</span>
+                    <span class="bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">۵. چوب</span>
+                    <span class="bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">۶. چوب‌سوهان و سنباده</span>
+                    <span class="bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">۷. چسب چوب</span>
+                    <span class="bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">۸. نخ به طول ۱ متر</span>
+                    <span class="bg-slate-800 text-slate-200 px-2.5 py-1 rounded-lg border border-slate-700">۹. وسایل رنگ‌آمیزی</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-3 leading-relaxed">
+                    <strong>روش کار کلی:</strong> مرحله ۱: ترسیم روندنمای پروژه با رایانه ← مرحله ۲: طراحی و چاپ نقشه‌ها ← مرحله ۳: ساخت قطعات ← مرحله ۴: مونتاژ قطعات.
+                </p>
+            </div>
+
+            <!-- Box 2: 6 Fabrication Steps (Figure 3-16 Page 35) -->
+            <div class="pro-card rounded-2xl p-4 border-t-4 border-amber-400">
+                <h3 class="font-black text-amber-300 text-sm mb-2.5 flex items-center gap-1.5">
+                    <span>🪚</span> مراحل ساخت قطعات (شکل ۱۶-۳ صفحه ۳۵)
+                </h3>
+                <ul class="text-xs text-slate-200 space-y-1.5 leading-relaxed">
+                    <li><strong class="text-amber-400">الف)</strong> ساخت قطعات چوبی بدن حلزون (با چوب‌سوهان، سنباده و دستکش ایمنی).</li>
+                    <li><strong class="text-amber-400">ب)</strong> ساخت پین‌های چوبی (برای اتصال مفصلی سر و دم به بدن).</li>
+                    <li><strong class="text-amber-400">پ)</strong> ساخت محور چرخ (میله استوانه‌ای چوبی).</li>
+                    <li><strong class="text-amber-400">ت)</strong> ساخت قطعات چوبی گرد چرخ (توسط <strong>ابزار گردبُر دریل</strong>).</li>
+                    <li><strong class="text-amber-400">ث)</strong> سوراخ‌کاری قطعات با دریل (سوراخ خارج از مرکز روی چرخ‌ها).</li>
+                    <li><strong class="text-amber-400">ج)</strong> رنگ‌آمیزی قطعات و طراحی خطوط مارپیچ روی چرخ.</li>
+                </ul>
+            </div>
+
+            <!-- Box 3: 6 Assembly Steps (Figure 3-17 Page 35) -->
+            <div class="pro-card rounded-2xl p-4 border-t-4 border-rose-500">
+                <h3 class="font-black text-rose-400 text-sm mb-2.5 flex items-center gap-1.5">
+                    <span>🔧</span> مراحل مونتاژ اسباب‌بازی (شکل ۱۷-۳ صفحه ۳۵)
+                </h3>
+                <ul class="text-xs text-slate-200 space-y-1.5 leading-relaxed">
+                    <li><strong class="text-rose-400">الف)</strong> اتصال قطعه دم حلزون به بدن (به وسیله پین چوبی).</li>
+                    <li><strong class="text-rose-400">ب)</strong> اتصال قطعه سر حلزون به بدن (به وسیله پین چوبی).</li>
+                    <li><strong class="text-rose-400">پ)</strong> اتصال محور به یکی از چرخ‌ها (در سوراخ خارج از مرکز).</li>
+                    <li><strong class="text-rose-400">ت)</strong> اتصال بدن حلزون به چرخ و قرار دادن آن روی محور.</li>
+                    <li><strong class="text-rose-400">ث)</strong> اتصال چرخ دوم به سر دیگر محور به صورت هم‌راستا.</li>
+                    <li><strong class="text-rose-400">ج)</strong> مونتاژ کامل قطعات حلزون و بستن نخ ۱ متری به جلوی سر.</li>
+                </ul>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-4 mt-8 text-center text-xs text-slate-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+            <p>طراحی و توسعه سامانه آموزشی: <strong class="text-amber-400">استاد محمدحسن پورصالحی</strong> | دبیر کار و فناوری</p>
+            <p class="text-sky-400 font-bold">پودمان ۳ پایه نهم: ساز و کارهای حرکتی | Azarakhshphotonic.ir</p>
+        </div>
+    </footer>
+
+    <!-- ==================== STANDALONE JAVASCRIPT ENGINE ==================== -->
+    <script>
+        // 1. Smart Auto-Hide Header on Scroll
+        const smartHeader = document.getElementById('smart-header');
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const currentY = window.scrollY;
+            if (currentY > 55 && currentY > lastScrollY + 4) {
+                smartHeader.classList.add('header-hidden');
+            } else if (currentY < lastScrollY - 4 || currentY <= 20) {
+                smartHeader.classList.remove('header-hidden');
+            }
+            lastScrollY = currentY;
+        }, { passive: true });
+
+        // 2. Fullscreen API
+        function toggleFullscreen() {
+            const doc = document.documentElement;
+            const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+            if (!isFs) {
+                if (doc.requestFullscreen) doc.requestFullscreen();
+                else if (doc.webkitRequestFullscreen) doc.webkitRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            }
+        }
+        document.addEventListener('fullscreenchange', () => {
+            const isFs = document.fullscreenElement || document.webkitFullscreenElement;
+            document.getElementById('fs-text').textContent = isFs ? 'خروج' : 'تمام‌صفحه';
+        });
+
+        // 3. Snail & Eccentric Wheel Simulation Variables
+        const canvas = document.getElementById('snailCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let isPulling = true;
+        let wheelAngle = 0;
+        let eccentricity = 20; // Distance from center in px
+        let pullSpeed = 5;
+        let xrayMode = false;
+        let selectedPart = 0;
+        let groundScroll = 0;
+        const waveHistory = [];
+
+        const partsData = [
+            {
+                title: '۱. محور چرخ (متصل به صورت خارج از مرکز)',
+                desc: 'استوانه چوبی باریکی است (شکل ۱۶-۳ پ) که به جای مرکز دایره، در سوراخی با فاصله از مرکز به دو چرخ متصل می‌شود (شکل ۱۷-۳ پ). همین خروج از مرکز باعث می‌شود با چرخش چرخ، محور در یک مسیر دایره‌ای بالا و پایین برود.',
+                tip: '💡 نکته فنی: سوراخ روی چرخ‌ها باید محور را کاملاً محکم نگه دارد، اما سوراخ تنه حلزون باید کمی آزادتر باشد تا محور بتواند درون تنه بچرخد.'
+            },
+            {
+                title: '۲. قطعات چوبی گرد چرخ (لاک حلزون)',
+                desc: 'دو دیسک گرد چوبی هستند که با استفاده از «ابزار گردبُر دریل» برش داده می‌شوند (شکل ۱۶-۳ ت). روی سطح بیرونی آن‌ها به رنگ مشکی و قرمز رنگ‌آمیزی شده و طرح مارپیچ صدف حلزون کشیده می‌شود.',
+                tip: '💡 هنگام برش چرخ‌ها با گردبُر دریل و سوراخ‌کاری حتماً قطعه را در گیره ببندید و از دستکش ایمنی استفاده کنید.'
+            },
+            {
+                title: '۳. قطعه چوبی بدن (تنه میانی) حلزون',
+                desc: 'قطعه چوبی کشیده‌ای است که در بین دو چرخ قرار می‌گیرد و محور چرخ از سوراخ میانی آن عبور می‌کند (شکل ۱۷-۳ ت). دو سر این قطعه شیار دارد تا سر و دم حلزون درون آن مفصل شوند.',
+                tip: '💡 برای فرم‌دهی و صاف کردن لبه‌های چوب بدن از چوب‌سوهان و کاغذ سنباده استفاده می‌شود (شکل ۱۶-۳ الف).'
+            },
+            {
+                title: '۴. پین‌های چوبی (مفاصل حرکتی سر و دم)',
+                desc: 'دو میله چوبی کوچک هستند (شکل ۱۶-۳ ب) که قطعه دم را به عقب بدن (شکل ۱۷-۳ الف) و قطعه سر را به جلوی بدن (شکل ۱۷-۳ ب) به صورت لولایی و متحرک متصل می‌کنند.',
+                tip: '💡 وجود این پین‌ها باعث می‌شود وقتی تنه بالا و پایین می‌رود، سر و دم نیز با زاویه نرم نوسان کنند.'
+            },
+            {
+                title: '۵. قطعات سر، شاخک‌ها و دم حلزون',
+                desc: 'قطعه دم در انتهای بدن و قطعه سر (شامل دو گوی چوبی کوچک به عنوان شاخک‌ها) در جلوی بدن نصب می‌شوند تا شکل ظاهری حلزون کامل شود (شکل ۱۵-۳).',
+                tip: '💡 برای اتصال شاخک‌ها به سر حلزون از چسب چوب استفاده می‌شود.'
+            },
+            {
+                title: '۶. نخ کشنده به طول ۱ متر',
+                desc: 'نخ محکمی به طول ۱ متر است که به جلوی سر حلزون بسته می‌شود. با کشیدن این نخ روی زمین، اصطکاک چرخ‌ها با زمین باعث چرخش چرخ لنگ و به کار افتادن کل ساز و کار می‌شود.',
+                tip: '💡 اگر نخ را نکشیم یا چرخ‌ها روی سطح بدون اصطکاک لیز بخورند، چرخ لنگ نمی‌چرخد.'
+            }
+        ];
+
+        function selectPart(idx) {
+            selectedPart = idx;
+            document.querySelectorAll('.part-btn').forEach((btn, i) => {
+                btn.classList.toggle('active', i === idx);
+            });
+            document.getElementById('part-title').textContent = partsData[idx].title;
+            document.getElementById('part-desc').textContent = partsData[idx].desc;
+            document.getElementById('part-tip').textContent = partsData[idx].tip;
+        }
+
+        function togglePulling() {
+            isPulling = !isPulling;
+            const btn = document.getElementById('pull-btn');
+            const dot = document.getElementById('status-dot');
+            if (isPulling) {
+                btn.innerHTML = '<span>⏸️</span> <span>توقف کشیدن نخ</span>';
+                btn.className = 'bg-rose-600 hover:bg-rose-500 text-white font-black py-2.5 px-3 rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-1.5';
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+            } else {
+                btn.innerHTML = '<span>▶️</span> <span>ادامه کشیدن نخ حلزون</span>';
+                btn.className = 'bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-3 rounded-xl text-xs transition shadow-lg flex items-center justify-center gap-1.5';
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-400';
+            }
+        }
+
+        function toggleXray() {
+            xrayMode = !xrayMode;
+            const btn = document.getElementById('xray-btn');
+            if (xrayMode) {
+                btn.textContent = '🎨 نمای عادی (رنگ کامل)';
+                btn.className = 'bg-sky-600 text-white text-[11px] font-bold px-2.5 py-1 rounded-lg border border-sky-400 transition shadow';
+            } else {
+                btn.textContent = '🔍 نمای شفاف (دیدن پین‌ها و محور داخل)';
+                btn.className = 'bg-slate-800 hover:bg-slate-700 text-sky-300 text-[11px] font-bold px-2.5 py-1 rounded-lg border border-slate-700 transition';
+            }
+        }
+
+        function setPresetMode(mode) {
+            const slider = document.getElementById('ecc-slider');
+            const btnEcc = document.getElementById('preset-ecc');
+            const btnCen = document.getElementById('preset-cen');
+            const title = document.getElementById('mode-title');
+
+            if (mode === 'eccentric') {
+                slider.value = 20;
+                btnEcc.className = 'bg-amber-600 hover:bg-amber-500 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition shadow flex items-center justify-center gap-1.5 ring-2 ring-white';
+                btnCen.className = 'bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 px-3 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5';
+                title.textContent = 'نمای زنده کارکرد اسباب‌بازی حلزون (حالت چرخ لنگ فعال)';
+            } else {
+                slider.value = 0;
+                btnCen.className = 'bg-sky-600 hover:bg-sky-500 text-white font-bold py-2.5 px-3 rounded-xl text-xs transition shadow flex items-center justify-center gap-1.5 ring-2 ring-white';
+                btnEcc.className = 'bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 px-3 rounded-xl text-xs transition border border-slate-700 flex items-center justify-center gap-1.5';
+                title.textContent = 'حالت چرخ معمولی (محور در مرکز: حرکت صاف و بدون موج!)';
+            }
+            onSliderChange();
+        }
+
+        function onSliderChange() {
+            eccentricity = parseFloat(document.getElementById('ecc-slider').value);
+            pullSpeed = parseFloat(document.getElementById('spd-slider').value);
+
+            const eccLbl = document.getElementById('ecc-label');
+            if (eccentricity === 0) {
+                eccLbl.textContent = '0 میلی‌متر (در مرکز چرخ - بدون لنگ)';
+                eccLbl.className = 'text-sky-400 font-bold';
+            } else {
+                eccLbl.textContent = eccentricity + ' میلی‌متر (خارج از مرکز - چرخ لنگ)';
+                eccLbl.className = 'text-amber-400 font-bold';
+            }
+            document.getElementById('spd-label').textContent = pullSpeed + 'x';
+        }
+
+        // Click on Canvas Hotspots
+        canvas.addEventListener('click', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+            const my = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+            const wheelCX = 350;
+            const wheelR = 68;
+            const groundY = 320;
+            const wheelCY = groundY - wheelR;
+            const axleX = wheelCX + Math.cos(wheelAngle) * eccentricity;
+            const axleY = wheelCY + Math.sin(wheelAngle) * eccentricity;
+
+            const hotspots = [
+                { x: axleX, y: axleY, r: 22 },                  // 0: Eccentric Axle
+                { x: wheelCX, y: wheelCY, r: 45 },              // 1: Wooden Wheel
+                { x: axleX - 45, y: axleY, r: 28 },             // 2: Body
+                { x: axleX + 85, y: axleY, r: 25 },             // 3: Wooden Pins
+                { x: axleX + 125, y: axleY - 5, r: 30 },        // 4: Head & Tail
+                { x: 640, y: 280, r: 45 }                       // 5: Pull String
+            ];
+
+            for (let i = 0; i < hotspots.length; i++) {
+                if (Math.hypot(mx - hotspots[i].x, my - hotspots[i].y) <= hotspots[i].r) {
+                    selectPart(i);
+                    break;
+                }
+            }
+        });
+
+        // 4. Master 60FPS Render Loop
+        function renderLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Subtle Engineering Grid
+            ctx.strokeStyle = 'rgba(51, 65, 85, 0.22)';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += 38) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += 38) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            const groundY = 320;
+            const wheelCX = 350;
+            const wheelR = 68;
+            const wheelCY = groundY - wheelR;
+
+            if (isPulling) {
+                const dt = 0.012 * pullSpeed;
+                wheelAngle += dt;
+                groundScroll = (groundScroll + dt * wheelR) % 40;
+            }
+
+            // Calculate Eccentric Axle Position
+            const axleX = wheelCX + Math.cos(wheelAngle) * eccentricity;
+            const axleY = wheelCY + Math.sin(wheelAngle) * eccentricity;
+
+            // Record Wave History for Top Graph
+            if (isPulling) {
+                waveHistory.unshift(axleY - wheelCY);
+                if (waveHistory.length > 220) waveHistory.pop();
+            }
+
+            // --- A. TOP LIVE MOTION WAVE GRAPH ---
+            ctx.save();
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.roundRect(20, 16, 310, 82, 12);
+            ctx.fill();
+            ctx.stroke();
+
+            // Center reference dashed line in graph
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(30, 62);
+            ctx.lineTo(320, 62);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Sine wave path
+            ctx.strokeStyle = eccentricity === 0 ? '#38bdf8' : '#fb7185';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let i = 0; i < waveHistory.length; i++) {
+                const gx = 315 - i * 1.25;
+                const gy = 62 + waveHistory[i] * 0.75;
+                if (i === 0) ctx.moveTo(gx, gy);
+                else ctx.lineTo(gx, gy);
+            }
+            ctx.stroke();
+
+            // Current point dot on graph
+            if (waveHistory.length > 0) {
+                ctx.fillStyle = '#facc15';
+                ctx.beginPath();
+                ctx.arc(315, 62 + waveHistory[0] * 0.75, 4.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            ctx.fillStyle = '#cbd5e1';
+            ctx.font = 'bold 11px Vazirmatn';
+            ctx.textAlign = 'right';
+            ctx.fillText('نمودار زنده حرکت عمودی بدن حلزون:', 318, 34);
+            ctx.restore();
+
+            // --- B. MOVING WOODEN FLOOR & RULER ---
+            const floorGrad = ctx.createLinearGradient(0, groundY, 0, canvas.height);
+            floorGrad.addColorStop(0, '#334155');
+            floorGrad.addColorStop(1, '#0f172a');
+            ctx.fillStyle = floorGrad;
+            ctx.fillRect(0, groundY, canvas.width, canvas.height - groundY);
+
+            ctx.strokeStyle = '#64748b';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.lineTo(canvas.width, groundY);
+            ctx.stroke();
+
+            // Moving floor ticks to show forward travel
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2;
+            for (let x = -groundScroll; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, groundY);
+                ctx.lineTo(x - 12, groundY + 18);
+                ctx.stroke();
+            }
+
+            // --- C. BACK WHEEL (چرخ عقب حلزون - شکل ۱۷-۳ پ) ---
+            ctx.save();
+            ctx.translate(wheelCX - 18, wheelCY - 10);
+            ctx.rotate(wheelAngle);
+            ctx.fillStyle = '#090d14';
+            ctx.beginPath();
+            ctx.arc(0, 0, wheelR, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.restore();
+
+            // --- D. SNAIL WOODEN BODY, TAIL & HEAD (سوار بر محور خارج از مرکز) ---
+            ctx.save();
+            ctx.translate(axleX, axleY);
+            // Body pitch oscillation caused by eccentric lift
+            const bodyTilt = Math.sin(wheelAngle) * (eccentricity * 0.012);
+            ctx.rotate(bodyTilt);
+
+            // 1. Tail Piece (قطعه دم حلزون - شکل ۱۷-۳ الف)
+            ctx.save();
+            ctx.translate(-92, -3);
+            const tailWag = -0.32 + Math.cos(wheelAngle) * (eccentricity * 0.01);
+            ctx.rotate(tailWag);
+            const tailGrad = ctx.createLinearGradient(-45, -14, 15, 14);
+            tailGrad.addColorStop(0, '#f43f5e');
+            tailGrad.addColorStop(1, '#9f1239');
+            ctx.fillStyle = tailGrad;
+            ctx.beginPath();
+            ctx.ellipse(-26, 0, 42, 14, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = selectedPart === 4 ? '#facc15' : '#4c0519';
+            ctx.lineWidth = selectedPart === 4 ? 3 : 1.5;
+            ctx.stroke();
+            ctx.restore();
+
+            // 2. Central Wooden Body Bar (قطعه چوبی بدن حلزون - شکل ۱۶-۳ الف)
+            const bodyGrad = ctx.createLinearGradient(-95, -14, 95, 14);
+            bodyGrad.addColorStop(0, '#dc2626');
+            bodyGrad.addColorStop(0.5, '#ef4444');
+            bodyGrad.addColorStop(1, '#b91c1c');
+            ctx.fillStyle = bodyGrad;
+            ctx.beginPath();
+            ctx.roundRect(-98, -13, 198, 26, 10);
+            ctx.fill();
+            ctx.strokeStyle = selectedPart === 2 ? '#facc15' : '#450a0a';
+            ctx.lineWidth = selectedPart === 2 ? 3 : 1.5;
+            ctx.stroke();
+
+            // 3. Head Piece & Red Antennae (قطعه سر حلزون - شکل ۱۷-۳ ب)
+            ctx.save();
+            ctx.translate(104, 2);
+            const headNod = Math.sin(wheelAngle) * (eccentricity * 0.009);
+            ctx.rotate(headNod);
+
+            // Black painted wooden head
+            ctx.fillStyle = '#111827';
+            ctx.beginPath();
+            ctx.ellipse(18, 0, 28, 20, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = selectedPart === 4 ? '#facc15' : '#374151';
+            ctx.lineWidth = selectedPart === 4 ? 3 : 1.5;
+            ctx.stroke();
+
+            // Yellow front stripe pattern (مطابق شکل ۱۵-۳ کتاب)
+            ctx.fillStyle = '#fde047';
+            ctx.beginPath();
+            ctx.arc(32, 2, 12, -Math.PI * 0.45, Math.PI * 0.45);
+            ctx.fill();
+
+            // Two Red Spherical Antennae (دو شاخک کروی قرمز)
+            ctx.fillStyle = '#e11d48';
+            ctx.beginPath();
+            ctx.arc(14, -21, 7.5, 0, Math.PI * 2);
+            ctx.arc(28, -18, 7.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Pull String Eye-Hook at the nose
+            ctx.fillStyle = '#cbd5e1';
+            ctx.beginPath();
+            ctx.arc(47, 4, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // 4. Wooden Dowel Pins (پین‌های چوبی اتصال سر و دم - شکل ۱۶-۳ ب)
+            ctx.fillStyle = selectedPart === 3 ? '#38bdf8' : '#fde68a';
+            ctx.strokeStyle = '#090d14';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(-88, 0, selectedPart === 3 ? 7 : 5, 0, Math.PI * 2);
+            ctx.arc(90, 0, selectedPart === 3 ? 7 : 5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.restore();
+
+            // --- E. FRONT WHEEL (چرخ جلویی حلزون با لاک قرمز مارپیچ - شکل ۱۵-۳) ---
+            ctx.save();
+            ctx.translate(wheelCX, wheelCY);
+            ctx.rotate(wheelAngle);
+            ctx.globalAlpha = xrayMode ? 0.32 : 1.0;
+
+            // Outer Black Rim
+            ctx.fillStyle = '#18181b';
+            ctx.beginPath();
+            ctx.arc(0, 0, wheelR, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = selectedPart === 1 ? '#facc15' : '#3f3f46';
+            ctx.lineWidth = selectedPart === 1 ? 4 : 2.5;
+            ctx.stroke();
+
+            // Red Domed Shell Center
+            const shellGrad = ctx.createRadialGradient(-14, -14, 6, 0, 0, wheelR - 14);
+            shellGrad.addColorStop(0, '#fb7185');
+            shellGrad.addColorStop(0.45, '#dc2626');
+            shellGrad.addColorStop(1, '#7f1d1d');
+            ctx.fillStyle = shellGrad;
+            ctx.beginPath();
+            ctx.arc(0, 0, wheelR - 14, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Spiral Groove Pattern on Shell
+            ctx.strokeStyle = 'rgba(15, 23, 42, 0.55)';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            for (let a = 0; a < Math.PI * 5.5; a += 0.18) {
+                const r = a * 2.7;
+                if (a === 0) ctx.moveTo(0, 0);
+                else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+            }
+            ctx.stroke();
+
+            ctx.globalAlpha = 1.0;
+
+            // Geometric Center Point of the Wheel (مرکز هندسی واقعی چرخ)
+            ctx.fillStyle = '#38bdf8';
+            ctx.beginPath();
+            ctx.arc(0, 0, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Eccentric Distance Vector Line (فاصله خروج از مرکز e)
+            if (eccentricity > 0) {
+                ctx.strokeStyle = '#facc15';
+                ctx.lineWidth = 2.5;
+                ctx.setLineDash([3, 3]);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(eccentricity, 0);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+            ctx.restore();
+
+            // Circular Orbit Path of the Eccentric Axle (مدار چرخش محور لنگ)
+            if (eccentricity > 0) {
+                ctx.strokeStyle = 'rgba(250, 204, 21, 0.45)';
+                ctx.lineWidth = 1.5;
+                ctx.setLineDash([4, 4]);
+                ctx.beginPath();
+                ctx.arc(wheelCX, wheelCY, eccentricity, 0, Math.PI * 2);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            }
+
+            // --- F. OFF-CENTER WOODEN AXLE (محور چرخ خارج از مرکز - شکل ۱۶-۳ پ) ---
+            ctx.save();
+            ctx.fillStyle = '#facc15';
+            ctx.strokeStyle = '#090d14';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(axleX, axleY, selectedPart === 0 ? 11 : 8.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+
+            // --- G. 1-METER RED PULL STRING (نخ کشنده ۱ متری) ---
+            const noseX = axleX + 148;
+            const noseY = axleY + 6 + Math.sin(wheelAngle) * (eccentricity * 0.25);
+            ctx.save();
+            ctx.strokeStyle = selectedPart === 5 ? '#facc15' : '#f43f5e';
+            ctx.lineWidth = selectedPart === 5 ? 4.5 : 3;
+            ctx.beginPath();
+            ctx.moveTo(noseX, noseY);
+            ctx.quadraticCurveTo(580, noseY + 25, 735, 265);
+            ctx.stroke();
+
+            // Pulling Handle / Hand Icon at right edge
+            ctx.fillStyle = '#f43f5e';
+            ctx.beginPath();
+            ctx.arc(735, 265, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#e2e8f0';
+            ctx.font = 'bold 11px Vazirmatn';
+            ctx.textAlign = 'right';
+            ctx.fillText('نخ کشنده (به طول ۱ متر) ➡️', 720, 250);
+            ctx.restore();
+
+            // --- H. ON-CANVAS EDUCATIONALCALLOUTS ---
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = 'bold 12px Vazirmatn';
+            ctx.textAlign = 'right';
+            ctx.fillText('🔵 نقطه آبی: مرکز هندسی چرخ | 🟡 دایره زرد: محور خارج از مرکز (چرخ لنگ)', 740, 36);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '11px Vazirmatn';
+            ctx.fillText('💡 برای بررسی هر قطعه، روی بخش‌های مختلف حلزون یا دکمه‌های سمت چپ کلیک کنید.', 740, 58);
+
+            requestAnimationFrame(renderLoop);
+        }
+
+        requestAnimationFrame(renderLoop);
+    </script>
+</body>
+</html>
