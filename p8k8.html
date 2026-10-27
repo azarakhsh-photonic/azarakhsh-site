@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آموزش تعاملی پودمان ۸ کار و فناوری هشتم - امور اداری و مالی</title>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #198754;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #212529;
+            --border-radius: 12px;
+        }
+        body {
+            font-family: Tahoma, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+        header {
+            background: linear-gradient(135deg, #0d6efd, #0d47a1);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.8rem;
+        }
+        header p {
+            margin: 0;
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-right: 5px solid var(--primary-color);
+        }
+        h2 {
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            margin-top: 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+        }
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s;
+            margin: 5px 0;
+        }
+        .btn:hover {
+            background-color: #0b5ed7;
+        }
+        .btn-success {
+            background-color: var(--secondary-color);
+        }
+        .btn-success:hover {
+            background-color: #157347;
+        }
+        input, select {
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .ledger-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        .ledger-table th, .ledger-table ledger-td, .ledger-table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: center;
+        }
+        .ledger-table th {
+            background-color: #f1f3f5;
+        }
+        .blockchain-box {
+            background: #212529;
+            color: #00ff66;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            margin-top: 10px;
+        }
+        .flex-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        @media (max-width: 600px) {
+            .flex-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>سامانه آموزشی پودمان ۸: امور اداری و مالی</h1>
+        <p>کار و فناوری پایه هشتم - دبیر: محمدحسن پورصالحی (Azarakhshphotonic.ir)</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- بخش اول: ساختار سازمانی و دبیرخانه -->
+        <div class="card">
+            <h2>۱. شناخت بخش‌های اداری و سازمانی</h2>
+            <p>در هر سازمان یا مدرسه، بخش‌های مختلفی مثل <strong>دبیرخانه</strong> (ثبت نامه‌ها)، <strong>کارگزینی</strong> (امور کارکنان)، <strong>تدارکات</strong> و <strong>حسابداری</strong> وظایف مشخصی را بر عهده دارند.</p>
+            <label for="deptSelect">انتخاب بخش اداری برای مشاهده وظیفه:</label>
+            <select id="deptSelect" onchange="showDeptInfo()">
+                <option value="">-- یک بخش را انتخاب کنید --</option>
+                <option value="دبیرخانه: دریافت، ثبت و ارسال نامه‌های اداری و دفتر اندیکاتور.">دبیرخانه</option>
+                <option value="کارگزینی: تأمین و سازمان‌دهی نیروی انسانی و برقراری حقوق و مزایا.">کارگزینی</option>
+                <option value="تدارکات و پشتیبانی: آماده کردن نیازمندی‌ها و نگهداری انبارها.">تدارکات و پشتیبانی</option>
+                <option value="حسابداری: ثبت رویدادهای مالی، تهیه گزارش‌های مالی و پرداخت دستمزد.">حسابداری</option>
+            </select>
+            <p id="deptResult" style="font-weight: bold; color: var(--secondary-color); margin-top: 10px;"></p>
+        </div>
+        <!-- شروع بخش دوم (ادامه کد را مستقیماً زیر بخش اول قرار دهید) -->
+
+        <!-- بخش دوم: معادله اساسی حسابداری -->
+        <div class="card">
+            <h2>۲. محاسبه‌گر معادله اساسی حسابداری (ترازنامه)</h2>
+            <p>بر اساس معادله اساسی حسابداری: <strong>دارایی‌ها = بدهی‌ها + سرمایه</strong>. مقادیر سرمایه و بدهی گروه خود (مثلاً در پروژه پرورش بلدرچین) را وارد کنید:</p>
+            <div class="flex-grid">
+                <div>
+                    <label for="capitalInput">سرمایه اولیه گروه (ریال):</label>
+                    <input type="number" id="capitalInput" value="125000" placeholder="مثلاً 125000">
+                </div>
+                <div>
+                    <label for="debtInput">مجموع بدهی‌ها / قرض و نسیه (ریال):</label>
+                    <input type="number" id="debtInput" value="82500" placeholder="مثلاً 82500">
+                </div>
+            </div>
+            <button class="btn" onclick="calcAccounting()">محاسبه کل دارایی‌ها</button>
+            <p id="accountingResult" style="font-weight: bold; color: var(--primary-color); margin-top: 10px;"></p>
+        </div>
+
+        <!-- بخش سوم: شبیه‌ساز دفتر مالی و بلاک‌چین -->
+        <div class="card">
+            <h2>۳. شبیه‌ساز دفتر مالی ضدتقلب (مفهوم بلاک‌چین)</h2>
+            <p>در دفترهای سنتی امکان خط‌خوردگی یا گم شدن وجود دارد؛ اما در <strong>بلاک‌چین</strong>، هر رویداد مالی یک «کد اثر انگشت دیجیتال (هش)» می‌گیرد که به رکورد قبلی زنجیر می‌شود و قابل دستکاری نیست:</p>
+            <div class="flex-grid">
+                <div>
+                    <label for="txDesc">شرح رویداد مالی (درآمد / هزینه):</label>
+                    <input type="text" id="txDesc" placeholder="مثلاً: خرید دان بلدرچین">
+                </div>
+                <div>
+                    <label for="txAmount">مبلغ (ریال):</label>
+                    <input type="number" id="txAmount" placeholder="مثلاً: 40000">
+                </div>
+            </div>
+            <button class="btn btn-success" onclick="addTransactionBlock()">ثبت در دفتر کل و قفل در بلاک‌چین</button>
+
+            <table class="ledger-table" id="ledgerTable">
+                <thead>
+                    <tr>
+                        <th>شماره بلاک (ردیف)</th>
+                        <th>شرح رویداد مالی</th>
+                        <th>مبلغ (ریال)</th>
+                        <th>کد امنیتی زنجیره (Hash)</th>
+                    </tr>
+                </thead>
+                <tbody id="ledgerBody">
+                    <tr>
+                        <td>۱ (بلاک آغازین)</td>
+                        <td>ثبت سرمایه اولیه گروه</td>
+                        <td>۱۲۵,۰۰۰</td>
+                        <td><code>0000a8f49b</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="blockchain-box" id="blockchainLog">
+                [System Ready] دفتر کل توزیع‌شده آماده ثبت تراکنش‌های جدید بدون امکان قلم‌خوردگی است...
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // ۱. تابع نمایش وظایف بخش‌های اداری
+        function showDeptInfo() {
+            const select = document.getElementById('deptSelect');
+            const result = document.getElementById('deptResult');
+            result.textContent = select.value ? 'وظیفه: ' + select.value : '';
+        }
+
+        // ۲. تابع محاسبه معادله اساسی حسابداری
+        function calcAccounting() {
+            const capital = parseFloat(document.getElementById('capitalInput').value) || 0;
+            const debt = parseFloat(document.getElementById('debtInput').value) || 0;
+            const assets = capital + debt;
+            document.getElementById('accountingResult').textContent = 
+                `مجموع دارایی‌های شما: ${assets.toLocaleString('fa-IR')} ریال (ترازنامه برقرار است: دارایی = بدهی + سرمایه)`;
+        }
+
+        // ۳. تابع شبیه‌ساز ثبت در بلاک‌چین
+        let blockCount = 1;
+        let previousHash = "0000a8f49b";
+
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = ((hash << 5) - hash) + str.charCodeAt(i);
+                hash |= 0;
+            }
+            return "0000" + Math.abs(hash).toString(16).padStart(6, '0').slice(0, 6);
+        }
+
+        function addTransactionBlock() {
+            const desc = document.getElementById('txDesc').value.trim();
+            const amount = document.getElementById('txAmount').value.trim();
+
+            if (!desc || !amount) {
+                alert('لطفاً شرح رویداد مالی و مبلغ را کامل وارد کنید.');
+                return;
+            }
+
+            blockCount++;
+            const rawData = blockCount + desc + amount + previousHash;
+            const currentHash = simpleHash(rawData);
+
+            const tbody = document.getElementById('ledgerBody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${blockCount.toLocaleString('fa-IR')}</td>
+                <td>${desc}</td>
+                <td>${Number(amount).toLocaleString('fa-IR')}</td>
+                <td><code>${currentHash}</code></td>
+            `;
+            tbody.appendChild(row);
+
+            const logBox = document.getElementById('blockchainLog');
+            logBox.innerHTML = `[Block #${blockCount} Mined] تراکنش «${desc}» به هش قبلی (${previousHash}) زنجیر شد. هش جدید: ${currentHash}`;
+
+            previousHash = currentHash;
+            document.getElementById('txDesc').value = '';
+            document.getElementById('txAmount').value = '';
+        }
+    </script>
+</body>
+</html>
+<!-- پایان بخش دوم (پایان کل کد) -->
