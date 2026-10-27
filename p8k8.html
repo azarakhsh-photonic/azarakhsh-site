@@ -2,272 +2,2645 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>آموزش تعاملی پودمان ۸ کار و فناوری هشتم - امور اداری و مالی</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>امپراتوری اقتصاد و بلاک‌چین | پودمان ۸ کار و فناوری هشتم</title>
     <style>
+        /* =========================================================
+           ۱. متغیرهای رنگی نئونی، سایبرپانک و بازی‌محور (مخصوص نوجوانان)
+           ========================================================= */
         :root {
-            --primary-color: #0d6efd;
-            --secondary-color: #198754;
-            --bg-color: #f8f9fa;
-            --card-bg: #ffffff;
-            --text-color: #212529;
-            --border-radius: 12px;
+            --bg-dark: #070b19;
+            --bg-panel: rgba(16, 24, 52, 0.85);
+            --bg-card: rgba(23, 35, 75, 0.9);
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff007f;
+            --neon-green: #00ff66;
+            --neon-gold: #ffd700;
+            --neon-purple: #b537f2;
+            --neon-orange: #ff6b00;
+            --neon-red: #ff2a2a;
+            --text-light: #f0f6ff;
+            --text-muted: #94a3b8;
+            --border-glow: 0 0 15px rgba(0, 243, 255, 0.4);
+            --gold-glow: 0 0 20px rgba(255, 215, 0, 0.6);
         }
-        body {
-            font-family: Tahoma, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            line-height: 1.8;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
-        header {
-            background: linear-gradient(135deg, #0d6efd, #0d47a1);
-            color: white;
-            text-align: center;
-            padding: 2rem 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.7;
+            position: relative;
         }
-        header h1 {
-            margin: 0 0 10px 0;
-            font-size: 1.8rem;
+
+        /* بوم نقاشی متحرک پس‌زمینه (شبکه هندسی بلاک‌چین) */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
         }
-        header p {
-            margin: 0;
-            font-size: 1rem;
-            opacity: 0.9;
-        }
-        .container {
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-right: 5px solid var(--primary-color);
-        }
-        h2 {
-            color: var(--primary-color);
-            font-size: 1.3rem;
-            margin-top: 0;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 8px;
-        }
-        .btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
+
+        /* =========================================================
+           ۲. نوار وضعیت بازیکن (HUD) در بالای صفحه با قابلیت مخفی شدن
+           ========================================================= */
+        .hud-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(7, 11, 25, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 4px 25px rgba(0, 243, 255, 0.25);
             padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.2s;
-            margin: 5px 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s ease-in-out;
         }
-        .btn:hover {
-            background-color: #0b5ed7;
+
+        .hud-header.hidden-bar {
+            transform: translateY(-100%);
         }
-        .btn-success {
-            background-color: var(--secondary-color);
+
+        .brand-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .btn-success:hover {
-            background-color: #157347;
+
+        .brand-logo {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            box-shadow: var(--border-glow);
+            animation: floatSlow 3s ease-in-out infinite;
         }
-        input, select {
-            padding: 8px;
-            margin: 5px 0;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            width: 100%;
-            box-sizing: border-box;
-            font-family: inherit;
+
+        .brand-title h1 {
+            font-size: 1.05rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
         }
-        .ledger-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            font-size: 0.9rem;
+
+        .brand-title span {
+            font-size: 0.78rem;
+            color: var(--neon-gold);
+            display: block;
         }
-        .ledger-table th, .ledger-table ledger-td, .ledger-table td {
-            border: 1px solid #dee2e6;
-            padding: 10px;
-            text-align: center;
-        }
-        .ledger-table th {
-            background-color: #f1f3f5;
-        }
-        .blockchain-box {
-            background: #212529;
-            color: #00ff66;
-            padding: 15px;
-            border-radius: 8px;
-            font-family: monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
-            margin-top: 10px;
-        }
-        .flex-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+
+        .stats-bar {
+            display: flex;
+            align-items: center;
             gap: 15px;
+            flex-wrap: wrap;
         }
-        @media (max-width: 600px) {
-            .flex-grid {
+
+        .stat-pill {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 6px 14px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-pill.gold-pill {
+            border-color: var(--neon-gold);
+            color: var(--neon-gold);
+            box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .stat-pill.xp-pill {
+            border-color: var(--neon-green);
+            color: var(--neon-green);
+            min-width: 170px;
+        }
+
+        .xp-progress-bg {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            height: 4px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .xp-progress-fill {
+            height: 100%;
+            width: 10%;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .hud-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: rgba(0, 243, 255, 0.12);
+            border: 1px solid var(--neon-blue);
+            color: var(--text-light);
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: var(--neon-blue);
+            color: #000;
+            transform: scale(1.1);
+            box-shadow: var(--border-glow);
+        }
+
+        /* =========================================================
+           ۳. انیمیشن‌های کلیدی و موشن‌گرافیک (Keyframes)
+           ========================================================= */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-7px) rotate(3deg); }
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(0, 243, 255, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(0, 243, 255, 0.8), 0 0 10px var(--neon-pink); }
+        }
+
+        @keyframes spinFan {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes stampSlam {
+            0% { transform: scale(4) rotate(-25deg); opacity: 0; }
+            60% { transform: scale(0.85) rotate(-12deg); opacity: 1; }
+            80% { transform: scale(1.08) rotate(-12deg); }
+            100% { transform: scale(1) rotate(-12deg); opacity: 1; }
+        }
+
+        @keyframes screenShake {
+            0%, 100% { transform: translate(0, 0); }
+            20% { transform: translate(-8px, 6px); }
+            40% { transform: translate(8px, -6px); }
+            60% { transform: translate(-6px, -4px); }
+            80% { transform: translate(6px, 4px); }
+        }
+
+        @keyframes quailHop {
+            0%, 100% { transform: translateY(0) scaleX(1); }
+            25% { transform: translateY(-14px) rotate(-6deg); }
+            50% { transform: translateY(0) scaleX(1.05); }
+            75% { transform: translateY(-8px) rotate(6deg); }
+        }
+
+        @keyframes laserFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        @keyframes hackAlert {
+            0%, 100% { background: rgba(255, 42, 42, 0.15); border-color: var(--neon-red); }
+            50% { background: rgba(255, 42, 42, 0.45); border-color: #fff; box-shadow: 0 0 40px var(--neon-red); }
+        }
+
+        .shake-anim {
+            animation: screenShake 0.4s ease-in-out;
+        }
+
+        /* =========================================================
+           ۴. کانتینر اصلی، منوی مراحل (Quest Map) و کارت‌های بازی
+           ========================================================= */
+        .main-wrapper {
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 0 15px 60px 15px;
+        }
+
+        .hero-banner {
+            background: linear-gradient(135deg, rgba(16, 24, 52, 0.95), rgba(45, 12, 78, 0.9));
+            border: 2px solid var(--neon-purple);
+            border-radius: 22px;
+            padding: 25px;
+            margin-bottom: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 35px rgba(181, 55, 242, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hero-text {
+            flex: 1;
+            min-width: 280px;
+        }
+
+        .hero-text h2 {
+            font-size: 1.6rem;
+            color: var(--neon-gold);
+            margin-bottom: 10px;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .hero-text p {
+            color: var(--text-light);
+            font-size: 0.98rem;
+            margin-bottom: 15px;
+        }
+
+        .channel-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-purple));
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+            transition: transform 0.2s;
+        }
+
+        .channel-badge:hover {
+            transform: translateY(-3px) scale(1.03);
+        }
+
+        /* نقشه انتخاب مراحل بازی */
+        .quest-nav {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+
+        .quest-tab {
+            background: var(--bg-card);
+            border: 2px solid rgba(0, 243, 255, 0.25);
+            border-radius: 16px;
+            padding: 14px 12px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quest-tab:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-blue);
+            box-shadow: var(--border-glow);
+        }
+
+        .quest-tab.active {
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.2), rgba(181, 55, 242, 0.25));
+            border-color: var(--neon-gold);
+            box-shadow: var(--gold-glow);
+        }
+
+        .quest-tab .q-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .quest-tab .q-title {
+            font-weight: bold;
+            font-size: 0.92rem;
+            color: var(--text-light);
+        }
+
+        .quest-tab .q-sub {
+            font-size: 0.75rem;
+            color: var(--neon-blue);
+            margin-top: 3px;
+            display: block;
+        }
+
+        /* بخش‌های مراحل */
+        .stage-section {
+            display: none;
+            animation: fadeInStage 0.4s ease-out;
+        }
+
+        .stage-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInStage {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .game-panel {
+            background: var(--bg-panel);
+            border: 2px solid rgba(0, 243, 255, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px dashed rgba(0, 243, 255, 0.25);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            color: var(--neon-blue);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .reward-tag {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid var(--neon-gold);
+            color: var(--neon-gold);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: bold;
+        }
+
+        /* =========================================================
+           ۵. استایل اختصاصی مرحله ۱: بازی مهر زدن نامه‌ها و چارت سازمانی
+           ========================================================= */
+        .desk-arena {
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        @media (max-width: 768px) {
+            .desk-arena {
                 grid-template-columns: 1fr;
             }
         }
+
+        .paper-letter {
+            background: #fffef0;
+            color: #1e293b;
+            border-radius: 14px;
+            padding: 22px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 0 30px rgba(212, 175, 55, 0.15);
+            border: 2px solid #cbd5e1;
+            min-height: 270px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .letter-header-strip {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 2px solid #94a3b8;
+            padding-bottom: 8px;
+            font-size: 0.82rem;
+            color: #475569;
+            font-weight: bold;
+        }
+
+        .client-avatar-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 15px 0;
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 12px;
+            border-right: 4px solid #0284c7;
+        }
+
+        .client-emoji {
+            font-size: 2.8rem;
+            animation: floatSlow 2.5s infinite;
+        }
+
+        .rubber-stamp {
+            position: absolute;
+            top: 38%;
+            left: 18%;
+            border: 5px double #dc2626;
+            color: #dc2626;
+            padding: 8px 18px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            border-radius: 10px;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.85);
+            pointer-events: none;
+            display: none;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .rubber-stamp.stamped {
+            display: block;
+            animation: stampSlam 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .dept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .dept-btn {
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 2px solid var(--neon-blue);
+            color: var(--text-light);
+            border-radius: 14px;
+            padding: 14px 10px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .dept-btn:hover {
+            background: rgba(0, 243, 255, 0.2);
+            transform: scale(1.04);
+            box-shadow: var(--border-glow);
+        }
+
+        .dept-btn span.d-icon {
+            font-size: 1.8rem;
+        }
+
+        /* =========================================================
+           ۶. استایل اختصاصی مرحله ۲: ترازوی متحرک حسابداری و مزرعه بلدرچین
+           ========================================================= */
+        .scale-stage {
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.12), transparent 70%);
+            padding: 30px 10px 10px 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .balance-beam-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            height: 210px;
+        }
+
+        .scale-beam {
+            width: 86%;
+            height: 12px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-gold), var(--neon-pink));
+            margin: 40px auto 0 auto;
+            border-radius: 10px;
+            position: relative;
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        .scale-pan {
+            width: 170px;
+            background: rgba(15, 23, 42, 0.95);
+            border: 2px solid var(--neon-gold);
+            border-radius: 16px;
+            padding: 10px;
+            position: absolute;
+            top: 25px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .scale-pan.pan-right {
+            right: -20px;
+            border-color: var(--neon-green);
+        }
+
+        .scale-pan.pan-left {
+            left: -20px;
+            border-color: var(--neon-pink);
+        }
+
+        .scale-pillar {
+            width: 24px;
+            height: 120px;
+            background: linear-gradient(180deg, var(--neon-gold), #b45309);
+            margin: 0 auto;
+            border-radius: 6px 6px 0 0;
+            position: relative;
+            top: -10px;
+            z-index: -1;
+        }
+
+        .scale-base {
+            width: 180px;
+            height: 18px;
+            background: var(--neon-gold);
+            margin: -10px auto 0 auto;
+            border-radius: 10px;
+            box-shadow: var(--gold-glow);
+        }
+
+        /* مزرعه پرورش بلدرچین */
+        .quail-farm-pen {
+            background: linear-gradient(180deg, #134e4a 0%, #064e3b 100%);
+            border: 3px dashed #34d399;
+            border-radius: 18px;
+            min-height: 130px;
+            padding: 15px;
+            margin: 15px 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quail-bird {
+            font-size: 2.2rem;
+            cursor: pointer;
+            animation: quailHop 1.8s infinite;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.4));
+            transition: transform 0.2s;
+        }
+
+        .quail-bird:hover {
+            transform: scale(1.3);
+        }
+
+        /* =========================================================
+           ۷. استایل مرحله ۳: ماشین‌حساب غول‌پیکر نئونی (شکل ۱۰-۸)
+           ========================================================= */
+        .calc-machine {
+            max-width: 460px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, #1e293b, #090d16);
+            border: 3px solid var(--neon-blue);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 15px 40px rgba(0, 243, 255, 0.2);
+        }
+
+        .calc-screen {
+            background: #062c1b;
+            border: 3px inset #10b981;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 15px;
+            text-align: left;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--neon-green);
+            box-shadow: inset 0 0 15px rgba(0, 255, 102, 0.25);
+        }
+
+        .calc-screen .calc-digits {
+            font-size: 2rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            overflow-x: auto;
+        }
+
+        .calc-screen .calc-hint {
+            font-family: Tahoma, sans-serif;
+            font-size: 0.82rem;
+            color: #a7f3d0;
+            text-align: right;
+            margin-top: 6px;
+            border-top: 1px dashed rgba(16, 185, 129, 0.4);
+            padding-top: 6px;
+        }
+
+        .calc-keys-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .c-key {
+            padding: 12px 6px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.15);
+            background: #334155;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.15s;
+            box-shadow: 0 4px 0 #0f172a;
+        }
+
+        .c-key:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #0f172a;
+        }
+
+        .c-key.special-mem {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-color: var(--neon-blue);
+        }
+
+        .c-key.special-danger {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            border-color: #f87171;
+        }
+
+        .c-key.special-gt {
+            background: linear-gradient(135deg, #7c3aed, #5b21b6);
+            border-color: var(--neon-purple);
+        }
+
+        /* =========================================================
+           ۸. استایل مرحله ۴: ریگ ماینینگ کارت گرافیک و زنجیره بلاک‌چین
+           ========================================================= */
+        .mining-rig-box {
+            background: linear-gradient(135deg, #090d16, #1a103c);
+            border: 2px solid var(--neon-purple);
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: inset 0 0 30px rgba(181, 55, 242, 0.25);
+        }
+
+        .gpu-fan-container {
+            display: flex;
+            gap: 15px;
+            background: #111827;
+            padding: 15px 25px;
+            border-radius: 16px;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .gpu-fan {
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            border: 3px dashed var(--neon-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            animation: spinFan 2s linear infinite;
+            background: radial-gradient(circle, rgba(0,243,255,0.2), transparent);
+        }
+
+        .gpu-fan.turbo {
+            animation-duration: 0.25s;
+            border-color: var(--neon-green);
+            box-shadow: 0 0 25px var(--neon-green);
+        }
+
+        .blocks-chain-track {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 20px 10px;
+            background: rgba(0, 0, 0, 0.35);
+            border-radius: 16px;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+        }
+
+        .crypto-block {
+            min-width: 230px;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border: 2px solid var(--neon-green);
+            border-radius: 16px;
+            padding: 15px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+
+        .crypto-block.hacked-block {
+            animation: hackAlert 0.6s infinite;
+        }
+
+        .chain-link-icon {
+            font-size: 2rem;
+            color: var(--neon-gold);
+            flex-shrink: 0;
+            text-shadow: 0 0 10px var(--neon-gold);
+        }
+
+        .hash-badge {
+            font-family: monospace;
+            background: #000;
+            color: var(--neon-green);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            display: block;
+            margin-top: 5px;
+            direction: ltr;
+            text-align: left;
+        }
+
+        /* دکمه‌های عمومی بازی */
+        .action-btn {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 243, 255, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 25px rgba(0, 243, 255, 0.6);
+        }
+
+        .action-btn.danger-btn {
+            background: linear-gradient(90deg, var(--neon-red), var(--neon-orange));
+            box-shadow: 0 4px 15px rgba(255, 42, 42, 0.4);
+        }
+
+        .action-btn.gold-btn {
+            background: linear-gradient(90deg, #f59e0b, #eab308);
+            color: #000;
+            box-shadow: var(--gold-glow);
+        }
+
+        /* نوتیفیکیشن شناور جایزه */
+        #toastPopup {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            background: rgba(16, 185, 129, 0.95);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border: 2px solid #fff;
+        }
+
+        #toastPopup.show {
+            transform: translateX(-50%) translateY(0);
+        }
     </style>
 </head>
+<!-- پایان بخش اول -->
+<!-- شروع بخش دوم (این کد را مستقیماً در ادامه بخش اول قرار دهید) -->
 <body>
 
-    <header>
-        <h1>سامانه آموزشی پودمان ۸: امور اداری و مالی</h1>
-        <p>کار و فناوری پایه هشتم - دبیر: محمدحسن پورصالحی (Azarakhshphotonic.ir)</p>
+    <!-- بوم انیمیشن شبکه نئونی بلاک‌چین در پس‌زمینه -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- نوتیفیکیشن شناور جایزه و امتیاز -->
+    <div id="toastPopup">🎉 +۵۰ سکه پاداش دریافت کردید!</div>
+
+    <!-- =========================================================
+         نوار وضعیت بازیکن (HUD) با قابلیت تمام‌صفحه، صدا و مخفی شدن در اسکرول
+         ========================================================= -->
+    <header class="hud-header" id="topHud">
+        <div class="brand-box">
+            <div class="brand-logo">⚡</div>
+            <div class="brand-title">
+                <h1>امپراتوری اقتصاد و بلاک‌چین (پودمان ۸ هشتم)</h1>
+                <span>طراح و مدرس: محمدحسن پورصالحی | Azarakhshphotonic.ir</span>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-pill gold-pill" title="سکه‌های جمع‌آوری‌شده در بازی">
+                <span>🪙 دارایی:</span>
+                <span id="coinDisplay">100</span>
+                <span>سکه</span>
+            </div>
+
+            <div class="stat-pill xp-pill" title="سطح مهارت و رتبه سازمانی شما">
+                <span>🏆 رتبه:</span>
+                <span id="rankDisplay">کارآموز اداری (Lv.1)</span>
+                <div class="xp-progress-bg">
+                    <div class="xp-progress-fill" id="xpBarFill"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hud-controls">
+            <button class="icon-btn" onclick="toggleSound()" id="soundBtn" title="قطع/وصل افکت‌های صوتی">🔊</button>
+            <button class="icon-btn" onclick="toggleFullScreen()" title="نمایش تمام‌صفحه (مخصوص موبایل و تبلت)">⛶</button>
+        </div>
     </header>
 
-    <div class="container">
-        
-        <!-- بخش اول: ساختار سازمانی و دبیرخانه -->
-        <div class="card">
-            <h2>۱. شناخت بخش‌های اداری و سازمانی</h2>
-            <p>در هر سازمان یا مدرسه، بخش‌های مختلفی مثل <strong>دبیرخانه</strong> (ثبت نامه‌ها)، <strong>کارگزینی</strong> (امور کارکنان)، <strong>تدارکات</strong> و <strong>حسابداری</strong> وظایف مشخصی را بر عهده دارند.</p>
-            <label for="deptSelect">انتخاب بخش اداری برای مشاهده وظیفه:</label>
-            <select id="deptSelect" onchange="showDeptInfo()">
-                <option value="">-- یک بخش را انتخاب کنید --</option>
-                <option value="دبیرخانه: دریافت، ثبت و ارسال نامه‌های اداری و دفتر اندیکاتور.">دبیرخانه</option>
-                <option value="کارگزینی: تأمین و سازمان‌دهی نیروی انسانی و برقراری حقوق و مزایا.">کارگزینی</option>
-                <option value="تدارکات و پشتیبانی: آماده کردن نیازمندی‌ها و نگهداری انبارها.">تدارکات و پشتیبانی</option>
-                <option value="حسابداری: ثبت رویدادهای مالی، تهیه گزارش‌های مالی و پرداخت دستمزد.">حسابداری</option>
-            </select>
-            <p id="deptResult" style="font-weight: bold; color: var(--secondary-color); margin-top: 10px;"></p>
-        </div>
-        <!-- شروع بخش دوم (ادامه کد را مستقیماً زیر بخش اول قرار دهید) -->
+    <div class="main-wrapper">
 
-        <!-- بخش دوم: معادله اساسی حسابداری -->
-        <div class="card">
-            <h2>۲. محاسبه‌گر معادله اساسی حسابداری (ترازنامه)</h2>
-            <p>بر اساس معادله اساسی حسابداری: <strong>دارایی‌ها = بدهی‌ها + سرمایه</strong>. مقادیر سرمایه و بدهی گروه خود (مثلاً در پروژه پرورش بلدرچین) را وارد کنید:</p>
-            <div class="flex-grid">
-                <div>
-                    <label for="capitalInput">سرمایه اولیه گروه (ریال):</label>
-                    <input type="number" id="capitalInput" value="125000" placeholder="مثلاً 125000">
-                </div>
-                <div>
-                    <label for="debtInput">مجموع بدهی‌ها / قرض و نسیه (ریال):</label>
-                    <input type="number" id="debtInput" value="82500" placeholder="مثلاً 82500">
-                </div>
+        <!-- بنر قهرمانانه ابتدای بازی -->
+        <div class="hero-banner">
+            <div class="hero-text">
+                <h2>🎮 ماموریت بزرگ: از دبیرخانه سنتی تا استخراج رمزارز!</h2>
+                <p>فرماندهٔ جوان! در این بازی ۵ مرحله‌ای، قراره اول مدیریت یک سازمان بزرگ و مهر زدن نامه‌ها رو یاد بگیری، بعد مزرعهٔ پرورش بلدرچین خودت رو راه بندازی و ترازنامه ببندی، راز دکمه‌های مخفی ماشین‌حساب رو کشف کنی و در نهایت با کارت گرافیک (Miner) بلاک‌چین بسازی و جلوی هکرها رو بگیری!</p>
+                <a href="https://azarakhshphotonic.ir" target="_blank" class="channel-badge">
+                    🚀 ورود به سامانه آموزشی آذرخش فوتونیک (Azarakhshphotonic.ir)
+                </a>
             </div>
-            <button class="btn" onclick="calcAccounting()">محاسبه کل دارایی‌ها</button>
-            <p id="accountingResult" style="font-weight: bold; color: var(--primary-color); margin-top: 10px;"></p>
-        </div>
-
-        <!-- بخش سوم: شبیه‌ساز دفتر مالی و بلاک‌چین -->
-        <div class="card">
-            <h2>۳. شبیه‌ساز دفتر مالی ضدتقلب (مفهوم بلاک‌چین)</h2>
-            <p>در دفترهای سنتی امکان خط‌خوردگی یا گم شدن وجود دارد؛ اما در <strong>بلاک‌چین</strong>، هر رویداد مالی یک «کد اثر انگشت دیجیتال (هش)» می‌گیرد که به رکورد قبلی زنجیر می‌شود و قابل دستکاری نیست:</p>
-            <div class="flex-grid">
-                <div>
-                    <label for="txDesc">شرح رویداد مالی (درآمد / هزینه):</label>
-                    <input type="text" id="txDesc" placeholder="مثلاً: خرید دان بلدرچین">
-                </div>
-                <div>
-                    <label for="txAmount">مبلغ (ریال):</label>
-                    <input type="number" id="txAmount" placeholder="مثلاً: 40000">
-                </div>
-            </div>
-            <button class="btn btn-success" onclick="addTransactionBlock()">ثبت در دفتر کل و قفل در بلاک‌چین</button>
-
-            <table class="ledger-table" id="ledgerTable">
-                <thead>
-                    <tr>
-                        <th>شماره بلاک (ردیف)</th>
-                        <th>شرح رویداد مالی</th>
-                        <th>مبلغ (ریال)</th>
-                        <th>کد امنیتی زنجیره (Hash)</th>
-                    </tr>
-                </thead>
-                <tbody id="ledgerBody">
-                    <tr>
-                        <td>۱ (بلاک آغازین)</td>
-                        <td>ثبت سرمایه اولیه گروه</td>
-                        <td>۱۲۵,۰۰۰</td>
-                        <td><code>0000a8f49b</code></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div class="blockchain-box" id="blockchainLog">
-                [System Ready] دفتر کل توزیع‌شده آماده ثبت تراکنش‌های جدید بدون امکان قلم‌خوردگی است...
+            <!-- گرافیک وکتوری متحرک سکه و زنجیره بلاک -->
+            <div style="text-align: center; min-width: 140px;">
+                <svg width="130" height="130" viewBox="0 0 120 120" style="animation: floatSlow 3s ease-in-out infinite;">
+                    <defs>
+                        <linearGradient id="cyberGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f3ff" />
+                            <stop offset="50%" stop-color="#b537f2" />
+                            <stop offset="100%" stop-color="#ff007f" />
+                        </linearGradient>
+                    </defs>
+                    <polygon points="60,8 108,34 108,86 60,112 12,86 12,34" fill="rgba(0,243,255,0.1)" stroke="url(#cyberGrad)" stroke-width="4" />
+                    <circle cx="60" cy="60" r="32" fill="rgba(255,215,0,0.15)" stroke="#ffd700" stroke-width="3" stroke-dasharray="6,4" />
+                    <text x="60" y="70" font-size="30" text-anchor="middle" fill="#ffd700" font-weight="bold">₿</text>
+                </svg>
             </div>
         </div>
 
-    </div>
+        <!-- منوی انتخاب ۵ مرحله اصلی بازی (Quest Tabs) -->
+        <nav class="quest-nav">
+            <div class="quest-tab active" onclick="switchStage(1)" id="tab1">
+                <span class="q-icon">🏢</span>
+                <span class="q-title">مرحله ۱: برج سازمان</span>
+                <span class="q-sub">بازی مهر زدن و اندیکاتور</span>
+            </div>
+            <div class="quest-tab" onclick="switchStage(2)" id="tab2">
+                <span class="q-icon">🐣</span>
+                <span class="q-title">مرحله ۲: مزرعه و ترازو</span>
+                <span class="q-sub">معادله حسابداری و بلدرچین</span>
+            </div>
+            <div class="quest-tab" onclick="switchStage(3)" id="tab3">
+                <span class="q-icon">🧮</span>
+                <span class="q-title">مرحله ۳: ماشین‌حساب</span>
+                <span class="q-sub">شبیه‌ساز دکمه‌ها و فاکتور</span>
+            </div>
+            <div class="quest-tab" onclick="switchStage(4)" id="tab4">
+                <span class="q-icon">⛏️</span>
+                <span class="q-title">مرحله ۴: آزمایشگاه ماینر</span>
+                <span class="q-sub">بلاک‌چین و ضد هک اکسل</span>
+            </div>
+            <div class="quest-tab" onclick="switchStage(5)" id="tab5">
+                <span class="q-icon">🏆</span>
+                <span class="q-title">مرحله ۵: نبرد نهایی</span>
+                <span class="q-sub">مسابقه سرعتی و کارنامه</span>
+            </div>
+        </nav>
+
+        <!-- =========================================================
+             مرحله ۱: برج فرماندهی سازمان، چارت اداری و بازی مهر دبیرخانه
+             ========================================================= -->
+        <section class="stage-section active" id="stage1">
+            
+            <!-- بخش الف: مینی‌گیم ارجاع نامه‌ها و مهر لاستیکی -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">📬 بازی اول: رئیس دبیرخانه و مهر ارجاع نامه (جدول ۱-۸ کتاب)</div>
+                    <span class="reward-tag">پاداش هر ارجاع درست: +۳۰ سکه</span>
+                </div>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">
+                    در هر سازمان ۵ بخش کلیدی وجود دارد. مراجعه‌کنندگان یکی‌یکی وارد اتاق شما می‌شوند؛ درخواست آن‌ها را بخوانید و دکمهٔ بخش مربوطه را بزنید تا نامه‌شان در <strong>دفتر اندیکاتور</strong> ثبت و مهر شود!
+                </p>
+
+                <div class="desk-arena">
+                    <!-- برگه نامه روی میز -->
+                    <div class="paper-letter" id="letterCard">
+                        <div>
+                            <div class="letter-header-strip">
+                                <span id="letterNum">شماره ثبت اندیکاتور: ۱۴۰۵/۸۰۱</span>
+                                <span id="letterDate">تاریخ: ۱۴۰۵/۰۸/۰۵</span>
+                            </div>
+                            <div class="client-avatar-box">
+                                <span class="client-emoji" id="clientEmoji">👷‍♂️</span>
+                                <div>
+                                    <strong id="clientName" style="color: #0f172a; font-size: 1rem;">پدر یکی از دانش‌آموزان (تولیدکننده)</strong>
+                                    <span style="display: block; font-size: 0.8rem; color: #64748b;">موضوع: درخواست راهنمایی اداری</span>
+                                </div>
+                            </div>
+                            <p id="clientText" style="font-size: 1.02rem; font-weight: bold; color: #1e293b; line-height: 1.8;">
+                                «سلام خسته نباشید! من یک کارگاه تولیدی راه‌اندازی کرده‌ام و می‌خواهم یک نامهٔ رسمی به سازمان بفرستم تا شماره ثبت بگیرد و به دست رئیس برسد. باید به کدام واحد بروم؟»
+                            </p>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #cbd5e1; padding-top: 10px; font-size: 0.82rem; color: #475569;">
+                            <span>امضای ارباب‌رجوع: ✍️ تایید شد</span>
+                            <span id="caseCounter">پرونده ۱ از ۶</span>
+                        </div>
+
+                        <!-- مهر لاستیکی متحرک -->
+                        <div class="rubber-stamp" id="rubberStamp">ارجاع شد ✅</div>
+                    </div>
+
+                    <!-- دکمه‌های انتخاب واحد سازمانی -->
+                    <div>
+                        <h3 style="margin-bottom: 12px; font-size: 1rem; color: var(--neon-gold);">👇 این پرونده مربوط به کدام واحد سازمان است؟</h3>
+                        <div class="dept-grid">
+                            <button class="dept-btn" onclick="submitDeptChoice('دبیرخانه')">
+                                <span class="d-icon">📨</span>
+                                <span>۱. دبیرخانه</span>
+                                <small style="color: var(--text-muted); font-weight: normal; font-size: 0.75rem;">دریافت، ثبت و پخش نامه‌ها</small>
+                            </button>
+                            <button class="dept-btn" onclick="submitDeptChoice('کارگزینی')">
+                                <span class="d-icon">👥</span>
+                                <span>۲. کارگزینی</span>
+                                <small style="color: var(--text-muted); font-weight: normal; font-size: 0.75rem;">استخدام، حقوق و مزایا</small>
+                            </button>
+                            <button class="dept-btn" onclick="submitDeptChoice('تدارکات')">
+                                <span class="d-icon">📦</span>
+                                <span>۳. تدارکات و پشتیبانی</span>
+                                <small style="color: var(--text-muted); font-weight: normal; font-size: 0.75rem;">خرید وسایل و اداره انبارها</small>
+                            </button>
+                            <button class="dept-btn" onclick="submitDeptChoice('بایگانی')">
+                                <span class="d-icon">🗄️</span>
+                                <span>۴. بایگانی</span>
+                                <small style="color: var(--text-muted); font-weight: normal; font-size: 0.75rem;">نگهداری اسناد و پرونده‌ها</small>
+                            </button>
+                            <button class="dept-btn" style="grid-column: span 2;" onclick="submitDeptChoice('حسابداری')">
+                                <span class="d-icon">💰</span>
+                                <span>۵. حسابداری و امور مالی</span>
+                                <small style="color: var(--text-muted); font-weight: normal; font-size: 0.75rem;">ثبت گزارش‌های مالی، تسویه‌حساب و پرداخت دستمزد</small>
+                            </button>
+                        </div>
+                        <div id="deptFeedback" style="margin-top: 14px; font-weight: bold; min-height: 28px; text-align: center;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بخش ب: چارت سازمانی تعاملی و شبیه‌ساز دفتر اندیکاتور و پیگیری -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">📗 دفتر اندیکاتور (جدول ۴-۸) و چارت سازمانی مدرسه (نمودار ۲-۸)</div>
+                    <span class="reward-tag">ثبت زنده نامه‌ها</span>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 12px;">
+                    هر نامه‌ای که در بازی بالا مهر می‌کنید، به صورت خودکار در <strong>دفتر اندیکاتور (دفتر ارسال و رسید نامه‌ها)</strong> در جدول زیر ثبت می‌شود. همچنین با کلیک روی گره‌های چارت سازمانی، وظیفهٔ هر سمت را ببینید:
+                </p>
+
+                <!-- چارت سازمانی گرافیکی تعاملی -->
+                <div style="background: rgba(0,0,0,0.3); border-radius: 14px; padding: 15px; text-align: center; margin-bottom: 18px; border: 1px solid rgba(0,243,255,0.2);">
+                    <div style="display: inline-block; background: linear-gradient(90deg, #f59e0b, #d97706); color: #000; font-weight: bold; padding: 8px 25px; border-radius: 10px; cursor: pointer;" onclick="showToast('👑 مدیر مدرسه/مدیرعامل: راهبری، برنامه‌ریزی و نظارت کلان بر تمام بخش‌های سازمان')">
+                        👑 مدیر دبیرستان / مدیرعامل سازمان (کلیک کنید)
+                    </div>
+                    <div style="height: 20px; width: 3px; background: var(--neon-blue); margin: 0 auto;"></div>
+                    <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                        <span class="stat-pill" style="cursor:pointer;" onclick="showToast('📚 معاون آموزشی: برنامه‌ریزی کلاس‌ها، امتحانات و کیفیت تدریس')">📚 معاون آموزشی</span>
+                        <span class="stat-pill" style="cursor:pointer;" onclick="showToast('📝 معاون اجرایی و دبیرخانه: ثبت نامه‌ها، پرونده دانش‌آموزان و امور اداری')">📝 معاون اجرایی (اداری)</span>
+                        <span class="stat-pill" style="cursor:pointer;" onclick="showToast('💳 امور مالی و حسابداری: بودجه مدرسه، خرید تجهیزات و پرداخت هزینه‌ها')">💳 حسابداری و مالی</span>
+                    </div>
+                </div>
+
+                <!-- جدول زنده دفتر اندیکاتور -->
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.88rem; text-align: center;">
+                        <thead>
+                            <tr style="background: rgba(0, 243, 255, 0.15); color: var(--neon-blue);">
+                                <th style="padding: 10px; border: 1px solid rgba(255,255,255,0.1);">شماره ردیف</th>
+                                <th style="padding: 10px; border: 1px solid rgba(255,255,255,0.1);">تاریخ</th>
+                                <th style="padding: 10px; border: 1px solid rgba(255,255,255,0.1);">صاحبان نامه (فرستنده)</th>
+                                <th style="padding: 10px; border: 1px solid rgba(255,255,255,0.1);">شرح کوتاه نامه رسیده</th>
+                                <th style="padding: 10px; border: 1px solid rgba(255,255,255,0.1);">ارجاع به واحد</th>
+                                <th style="padding: 10px; border: 1px solid rgba(255,255,255,0.1);">وضعیت بایگانی</th>
+                            </tr>
+                        </thead>
+                        <tbody id="indicatorTableBody">
+                            <tr>
+                                <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">۸۰۰ (نمونه)</td>
+                                <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">۱۴۰۵/۰۸/۰۱</td>
+                                <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">اداره آموزش و پرورش</td>
+                                <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">بخشنامه مسابقات کار و فناوری</td>
+                                <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1); color: var(--neon-gold);">دبیرخانه مرکزی</td>
+                                <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1); color: var(--neon-green);">ثبت در زونکن ۱ ✅</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+<!-- پایان بخش دوم -->
+<!-- شروع بخش سوم (این کد را مستقیماً در ادامه بخش دوم قرار دهید) -->
+
+        <!-- =========================================================
+             مرحله ۲: مزرعه پرورش بلدرچین، ترازوی معادله حسابداری و قلک احسان
+             ========================================================= -->
+        <section class="stage-section" id="stage2">
+            
+            <!-- بخش الف: ترازوی نئونی معادله اساسی حسابداری و مزرعه بلدرچین (جدول ۸-۸) -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">⚖️ بازی دوم: ترازوی طلایی حسابداری و مزرعه بلدرچین (جدول ۸-۸)</div>
+                    <span class="reward-tag">پاداش تعادل ترازو: +۵۰ سکه</span>
+                </div>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">
+                    در حسابداری یک قانون جادویی و همیشگی وجود دارد به نام <strong>معادله اساسی حسابداری (معادله ترازنامه): دارایی‌ها = بدهی‌ها + سرمایه</strong>. در پروژه پرورش ۱۰ جوجه بلدرچین در مدرسه، هر رویداد مالی را مرحله‌به‌مرحله اجرا کنید و ببینید چطور ترازو همیشه در تعادل می‌ماند!
+                </p>
+
+                <!-- دکمه‌های شبیه‌ساز ۳ مرحله جدول ۸-۸ کتاب درسی -->
+                <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px;">
+                    <button class="action-btn" onclick="setQuailStage(1)">
+                        ۱️⃣ مرحله اول: آورده ۵ عضو گروه (نفری ۲۵,۰۰۰ ریال)
+                    </button>
+                    <button class="action-btn" onclick="setQuailStage(2)">
+                        ۲️⃣ مرحله دوم: قرض از اولیا (+۴۲,۵۰۰ ریال بدهی)
+                    </button>
+                    <button class="action-btn" onclick="setQuailStage(3)">
+                        ۳️⃣ مرحله سوم: خرید نسیه خوراک (+۴۰,۰۰۰ ریال بدهی)
+                    </button>
+                </div>
+
+                <!-- گرافیک متحرک ترازوی دوکفه‌ای حسابداری -->
+                <div class="scale-stage">
+                    <!-- SVG هولوگرام بالای ترازو -->
+                    <svg width="90" height="50" viewBox="0 0 100 60" style="margin-bottom: -25px;">
+                        <polygon points="50,5 90,55 10,55" fill="rgba(255,215,0,0.15)" stroke="#ffd700" stroke-width="2" />
+                        <circle cx="50" cy="38" r="8" fill="#00f3ff" />
+                    </svg>
+
+                    <div class="balance-beam-wrapper">
+                        <!-- کفه راست: دارایی‌ها -->
+                        <div class="scale-pan pan-right" id="rightPan" style="transform: translateY(0px);">
+                            <div style="font-size: 1.5rem;">🏦</div>
+                            <span style="font-size: 0.82rem; color: var(--neon-green); font-weight: bold;">کفه دارایی‌ها</span>
+                            <div id="assetsValDisplay" style="font-size: 1.15rem; font-weight: 900; color: #fff; margin-top: 4px;">۲۰۷,۵۰۰ ریال</div>
+                            <small style="font-size: 0.7rem; color: var(--text-muted); display: block;">نقد + تجهیزات + خوراک</small>
+                        </div>
+
+                        <!-- شاهین (میله) ترازو -->
+                        <div class="scale-beam" id="scaleBeam" style="transform: rotate(0deg);"></div>
+
+                        <!-- کفه چپ: بدهی‌ها + سرمایه -->
+                        <div class="scale-pan pan-left" id="leftPan" style="transform: translateY(0px);">
+                            <div style="font-size: 1.5rem;">🤝 + 💎</div>
+                            <span style="font-size: 0.82rem; color: var(--neon-pink); font-weight: bold;">بدهی‌ها + سرمایه</span>
+                            <div id="liabCapDisplay" style="font-size: 1.15rem; font-weight: 900; color: #fff; margin-top: 4px;">۲۰۷,۵۰۰ ریال</div>
+                            <small id="liabCapSub" style="font-size: 0.7rem; color: var(--neon-gold); display: block;">۸۲,۵۰۰ بدهی + ۱۲۵,۰۰۰ سرمایه</small>
+                        </div>
+                    </div>
+                    <div class="scale-pillar"></div>
+                    <div class="scale-base"></div>
+                </div>
+
+                <!-- پنل تنظیم دستی ترازو و آزمایشگاه قیمت گوشت بلدرچین -->
+                <div style="background: rgba(0,0,0,0.35); padding: 20px; border-radius: 16px; margin-top: 25px; border: 1px solid rgba(0,243,255,0.25);">
+                    <h3 style="font-size: 1.05rem; color: var(--neon-gold); margin-bottom: 12px;">🧪 آزمایشگاه آزاد معادله حسابداری (اعداد را تغییر دهید تا حرکت ترازو را ببینید):</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px;">
+                        <div>
+                            <label style="font-size: 0.85rem; color: var(--neon-blue);">💎 سرمایه مالک/گروه (ریال):</label>
+                            <input type="number" id="qCapital" value="125000" step="5000" oninput="updateQuailAccounting()" style="background:#0f172a; color:#fff; border:2px solid var(--neon-blue); font-weight:bold; font-size:1rem;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.85rem; color: var(--neon-pink);">💳 بدهی‌ها / وام و نسیه (ریال):</label>
+                            <input type="number" id="qDebt" value="82500" step="2500" oninput="updateQuailAccounting()" style="background:#0f172a; color:#fff; border:2px solid var(--neon-pink); font-weight:bold; font-size:1rem;">
+                        </div>
+                        <div>
+                            <label style="font-size: 0.85rem; color: var(--neon-green);">🏦 کل دارایی‌های واحد (ریال):</label>
+                            <input type="number" id="qAssets" value="207500" step="5000" oninput="updateQuailAccounting()" style="background:#0f172a; color:#fff; border:2px solid var(--neon-green); font-weight:bold; font-size:1rem;">
+                        </div>
+                    </div>
+
+                    <div id="accountingStatusMsg" style="text-align: center; font-weight: bold; color: var(--neon-green); font-size: 1rem; padding: 10px; background: rgba(0,255,102,0.1); border-radius: 10px; margin-bottom: 18px;">
+                        ✅ ترازنامه کاملاً متوازن است! (۲۰۷,۵۰۰ = ۸۲,۵۰۰ + ۱۲۵,۰۰۰)
+                    </div>
+
+                    <!-- شبیه‌ساز مزرعه بلدرچین و محاسبه قیمت تمام‌شده هر ۲۰۰ گرم گوشت -->
+                    <div style="border-top: 2px dashed rgba(255,255,255,0.15); padding-top: 15px;">
+                        <h4 style="color: var(--neon-blue); font-size: 1rem; margin-bottom: 8px;">
+                            🐣 مزرعه زنده پرورش بلدرچین (۱۰ جوجه = ۲,۰۰۰ گرم گوشت خالص):
+                        </h4>
+                        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 10px;">
+                            طبق کتاب، از ۱۰ جوجه بلدرچین حدود <strong>۲ کیلوگرم (۲۰۰۰ گرم)</strong> گوشت به دست می‌آید. با کل هزینهٔ <strong>۲۰۷,۵۰۰ ریال</strong>، قیمت تمام‌شدهٔ هر بسته <strong>۲۰۰ گرمی</strong> برابر با <strong>۲۰,۷۵۰ ریال</strong> می‌شود. روی جوجه‌ها کلیک کنید تا غذا بخورند و رشد کنند!
+                        </p>
+
+                        <div class="quail-farm-pen" id="quailPen">
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐥</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐦</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐥</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐦</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐥</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐦</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐥</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐦</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐥</div>
+                            <div class="quail-bird" onclick="feedQuail(this)" title="کلیک کن تا دانه بخوره!">🐦</div>
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; background: rgba(255,215,0,0.08); padding: 12px 16px; border-radius: 12px; border: 1px solid var(--neon-gold);">
+                            <div>
+                                <label style="font-size: 0.85rem; color: var(--neon-gold); font-weight: bold;">💰 تعیین قیمت فروش هر بسته ۲۰۰ گرمی در بازارچه مدرسه (ریال):</label>
+                                <input type="number" id="quailSellPrice" value="28000" step="1000" oninput="calcQuailProfit()" style="max-width: 160px; background: #000; color: var(--neon-gold); border: 1px solid var(--neon-gold); font-weight: bold; text-align: center;">
+                            </div>
+                            <div id="quailProfitResult" style="font-weight: bold; color: var(--neon-green); font-size: 0.95rem;">
+                                سود هر بسته: ۷,۲۵۰ ریال | کل سود ۱۰ بسته: ۷۲,۵۰۰ ریال (سهم هر یک از ۵ عضو: ۱۴,۵۰۰ ریال)
+                            </div>
+                            <button class="action-btn gold-btn" onclick="spawnNewQuail()">➕ افزودن جوجه به گله (+۱۰ سکه)</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بخش ب: مینی‌گیم جدول هزینه‌های ماهانه احسان (جدول ۶-۸ کتاب) -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">🐷 شبیه‌ساز قلک و جدول هزینه‌های ماهانه احسان (جدول ۶-۸)</div>
+                    <span class="reward-tag">مدیریت دخل‌وخرج شخصی</span>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 15px;">
+                    احسان در ابتدای ماه <strong>۳۰۰,۰۰۰ ریال</strong> پول توجیبی (دریافت وجه ماهانه) می‌گیرد و تمام مخارجش را به ترتیب تاریخ یادداشت می‌کند تا در روز ۳۰ ماه، <strong>۱۱۰,۰۰۰ ریال</strong> پس‌انداز برایش بماند. شما هم می‌توانید یک رویداد مالی به جدول احسان اضافه کنید:
+                </p>
+
+                <!-- نوار گرافیکی وضعیت کیف پول احسان -->
+                <div style="background: #090d16; padding: 15px; border-radius: 14px; border: 1px solid var(--neon-blue); margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; margin-bottom: 8px;">
+                        <span style="color: var(--neon-blue);">💵 کل دریافتی اول ماه: ۳۰۰,۰۰۰ ریال</span>
+                        <span id="ehsanSpentText" style="color: var(--neon-pink);">🔻 کل هزینه‌ها: ۱۹۰,۰۰۰ ریال</span>
+                        <span id="ehsanBalanceText" style="color: var(--neon-green);">🐷 مانده پس‌انداز: ۱۱۰,۰۰۰ ریال</span>
+                    </div>
+                    <div style="height: 16px; width: 100%; background: rgba(255,0,127,0.3); border-radius: 10px; overflow: hidden;">
+                        <div id="ehsanSavingsBar" style="height: 100%; width: 36.6%; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); transition: width 0.4s;"></div>
+                    </div>
+                </div>
+
+                <!-- فرم افزودن هزینه یا درآمد جدید به جدول احسان -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 15px;">
+                    <input type="text" id="ehsanDate" placeholder="تاریخ (مثلاً ۱۰/۳۱)" style="background:#0f172a; color:#fff;">
+                    <input type="text" id="ehsanDesc" placeholder="شرح (مثلاً خرید خودکار)" style="background:#0f172a; color:#fff;">
+                    <select id="ehsanType" style="background:#0f172a; color:#fff;">
+                        <option value="expense">🔻 ثبت هزینه (کسر از مانده)</option>
+                        <option value="income">🔺 ثبت درآمد/عیدی (افزودن به مانده)</option>
+                    </select>
+                    <input type="number" id="ehsanAmount" placeholder="مبلغ (ریال)" style="background:#0f172a; color:#fff;">
+                    <button class="action-btn" onclick="addEhsanRow()" style="justify-content:center;">➕ ثبت در دفتر</button>
+                </div>
+
+                <div style="overflow-x: auto; max-height: 260px;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center;">
+                        <thead>
+                            <tr style="background: rgba(181, 55, 242, 0.25); color: var(--neon-gold); position: sticky; top: 0;">
+                                <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">تاریخ</th>
+                                <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">شرح هزینه و درآمد</th>
+                                <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">مبلغ درآمد (ریال)</th>
+                                <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">مبلغ هزینه (ریال)</th>
+                                <th style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">مبلغ مانده (ریال)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ehsanTableBody">
+                            <tr><td>۱۰/۱</td><td>دریافت وجه ماهانه</td><td style="color:var(--neon-green);">۳۰۰,۰۰۰</td><td>-</td><td>۳۰۰,۰۰۰</td></tr>
+                            <tr><td>۱۰/۲</td><td>کرایه رفت و آمد</td><td>-</td><td style="color:var(--neon-pink);">۵,۰۰۰</td><td>۲۹۵,۰۰۰</td></tr>
+                            <tr><td>۱۰/۶</td><td>خرید کتاب کمک‌آموزشی</td><td>-</td><td style="color:var(--neon-pink);">۴۰,۰۰۰</td><td>۲۴۵,۰۰۰</td></tr>
+                            <tr><td>۱۰/۱۴</td><td>خرید کادو برای خواهر</td><td>-</td><td style="color:var(--neon-pink);">۱۵,۰۰۰</td><td>۲۱۰,۰۰۰</td></tr>
+                            <tr><td>۱۰/۳۰</td><td>خرید جزوه آموزشی (پایان ماه کتاب)</td><td>-</td><td style="color:var(--neon-pink);">۱۰,۰۰۰</td><td style="color:var(--neon-gold); font-weight:bold;">۱۱۰,۰۰۰</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =========================================================
+             مرحله ۳: ماشین‌حساب رومیزی کامل (شکل ۱۰-۸) و بازرس فاکتور (شکل ۸-۸)
+             ========================================================= -->
+        <section class="stage-section" id="stage3">
+            
+            <!-- بخش الف: شبیه‌ساز کامل ماشین‌حساب رومیزی با کلیدهای کشویی -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">🧮 بازی سوم: ماشین‌حساب حرفه‌ای حسابداری (شکل ۱۰-۸ کتاب)</div>
+                    <span class="reward-tag">آموزش زنده تک‌تک دکمه‌ها +۳۵ سکه</span>
+                </div>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">
+                    روی هر دکمه یا کلید کشویی ماشین‌حساب زیر کلیک کنید تا علاوه بر انجام محاسبه واقعی، <strong>کاربرد دقیق امتحانی آن طبق شکل ۱۰-۸ کتاب درسی</strong> در نوار راهنمای سبز رنگ نمایش داده شود!
+                </p>
+
+                <div class="calc-machine">
+                    <!-- نمایشگر دیجیتالی ماشین‌حساب -->
+                    <div class="calc-screen">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #34d399; margin-bottom: 4px;">
+                            <span id="gtStatusBadge">GT: ON</span>
+                            <span id="memBadge">MEMORY (M): 0</span>
+                            <span id="roundStatusBadge">ROUND: 5/4</span>
+                        </div>
+                        <div class="calc-digits" id="calcScreenDigits">0</div>
+                        <div class="calc-hint" id="calcScreenHint">💡 راهنمای دکمه: روی هر کلید کلیک کنید تا وظیفه امتحانی آن را ببینید.</div>
+                    </div>
+
+                    <!-- ردیف کلیدهای کشویی بالای ماشین‌حساب (مطابق شکل ۱۰-۸ کتاب) -->
+                    <div style="display: flex; justify-content: space-between; gap: 6px; background: #0f172a; padding: 10px; border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(0,243,255,0.25); flex-wrap: wrap;">
+                        <div style="font-size: 0.75rem;">
+                            <span style="color: var(--neon-gold); display: block; margin-bottom: 3px;">کلید GT:</span>
+                            <select id="calcGtSwitch" onchange="explainSwitch('GT')" style="padding: 3px 6px; font-size: 0.75rem; background: #1e293b; color: #fff; width: auto;">
+                                <option value="ON">روشن (ON)</option>
+                                <option value="OFF">خاموش (OFF)</option>
+                            </select>
+                        </div>
+                        <div style="font-size: 0.75rem;">
+                            <span style="color: var(--neon-blue); display: block; margin-bottom: 3px;">تنظیم اعشار:</span>
+                            <select id="calcDecSwitch" onchange="explainSwitch('DEC')" style="padding: 3px 6px; font-size: 0.75rem; background: #1e293b; color: #fff; width: auto;">
+                                <option value="F">F (تمامی ارقام اعشاری)</option>
+                                <option value="3">3 (نمایش تا ۳ رقم اعشار)</option>
+                                <option value="2">2 (نمایش تا ۲ رقم اعشار)</option>
+                                <option value="0">0 (بدون رقم اعشار)</option>
+                                <option value="A">A (حالت اعشاری خودکار ADD2)</option>
+                            </select>
+                        </div>
+                        <div style="font-size: 0.75rem;">
+                            <span style="color: var(--neon-pink); display: block; margin-bottom: 3px;">گرد کردن اعداد:</span>
+                            <select id="calcRoundSwitch" onchange="explainSwitch('ROUND')" style="padding: 3px 6px; font-size: 0.75rem; background: #1e293b; color: #fff; width: auto;">
+                                <option value="5/4">5/4 (گرد کردن معمولی)</option>
+                                <option value="UP">↑ (گرد کردن به سمت بالا)</option>
+                                <option value="DOWN">↓ (گرد کردن به سمت پایین)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- صفحه کلید کامل شکل ۱۰-۸ کتاب -->
+                    <div class="calc-keys-grid">
+                        <!-- ردیف ۱: کلیدهای بالای صفحه کلید -->
+                        <button class="c-key special-gt" onclick="calcAction('+/-')">+/-</button>
+                        <button class="c-key special-gt" onclick="calcAction('MU')">MU</button>
+                        <button class="c-key special-mem" onclick="calcPercent()">%</button>
+                        <button class="c-key special-mem" onclick="calcAction('SQRT')">√</button>
+                        <button class="c-key special-danger" onclick="calcAction('CA')">CA</button>
+
+                        <!-- ردیف ۲ -->
+                        <button class="c-key special-gt" onclick="calcGT()">GT</button>
+                        <button class="c-key" onclick="pressCalc('7')">7</button>
+                        <button class="c-key" onclick="pressCalc('8')">8</button>
+                        <button class="c-key" onclick="pressCalc('9')">9</button>
+                        <button class="c-key special-mem" onclick="calcMemClear()">CM</button>
+
+                        <!-- ردیف ۳ -->
+                        <button class="c-key special-danger" onclick="calcAction('BACK')">→</button>
+                        <button class="c-key" onclick="pressCalc('4')">4</button>
+                        <button class="c-key" onclick="pressCalc('5')">5</button>
+                        <button class="c-key" onclick="pressCalc('6')">6</button>
+                        <button class="c-key special-mem" onclick="calcMemRecall()">RM</button>
+
+                        <!-- ردیف ۴ -->
+                        <button class="c-key special-danger" onclick="calcAction('CE')">CE</button>
+                        <button class="c-key" onclick="pressCalc('1')">1</button>
+                        <button class="c-key" onclick="pressCalc('2')">2</button>
+                        <button class="c-key" onclick="pressCalc('3')">3</button>
+                        <button class="c-key special-mem" onclick="calcAction('M-')">M-</button>
+
+                        <!-- ردیف ۵ -->
+                        <button class="c-key special-danger" onclick="calcClear()">C</button>
+                        <button class="c-key" onclick="pressCalc('0')">0</button>
+                        <button class="c-key" onclick="pressCalc('00')">00</button>
+                        <button class="c-key" onclick="pressCalc('.')">.</button>
+                        <button class="c-key special-mem" onclick="calcMemAdd()">M+</button>
+
+                        <!-- ردیف ۶: عملگرهای اصلی -->
+                        <button class="c-key" onclick="pressCalc('+')" style="background:#0284c7;">+</button>
+                        <button class="c-key" onclick="pressCalc('-')" style="background:#0284c7;">−</button>
+                        <button class="c-key" onclick="pressCalc('*')" style="background:#0284c7;">×</button>
+                        <button class="c-key" onclick="pressCalc('/')" style="background:#0284c7;">÷</button>
+                        <button class="c-key" onclick="evalCalc()" style="background:var(--neon-green); color:#000; font-size:1.2rem;">=</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بخش ب: مینی‌گیم بازرس فاکتور فروش (شکل ۸-۸) و چالش تخفیف مینا و میترا -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">🕵️‍♂️ بازی چهارم: کارآگاه اسناد مالی (شکل ۸-۸) و تخفیف مینا و میترا</div>
+                    <span class="reward-tag">پاداش کشف ۵ ویژگی فاکتور: +۵۰ سکه</span>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 15px;">
+                    طبق کتاب درسی، یک برگ خرید (فاکتور) معتبر باید <strong>۵ ویژگی کلیدی</strong> داشته باشد. روی ۵ نقطهٔ مشخص‌شده در فاکتور زردرنگ زیر کلیک کنید تا اعتبار آن‌ها را بررسی و تایید نمایید:
+                </p>
+
+                <!-- شبیه‌ساز گرافیکی فاکتور فروش شماره ۰۲۲۲ (شکل ۸-۸ کتاب) -->
+                <div style="background: #fef9c3; color: #1e293b; border: 3px solid #ca8a04; border-radius: 14px; padding: 18px; max-width: 680px; margin: 0 auto 20px auto; box-shadow: 0 10px 25px rgba(0,0,0,0.4);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #ca8a04; padding-bottom: 10px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                        <button class="action-btn" style="background:#0284c7; padding:6px 12px; font-size:0.8rem;" onclick="inspectInvoicePart(1, this)">
+                            🔍 ۱. بررسی سربرگ و نشانی فروشنده
+                        </button>
+                        <span style="font-size: 1.3rem; font-weight: 900; color: #1d4ed8;">فاکتور فروش (شماره ۰۲۲۲)</span>
+                        <button class="action-btn" style="background:#0284c7; padding:6px 12px; font-size:0.8rem;" onclick="inspectInvoicePart(2, this)">
+                            🔍 ۲. بررسی تاریخ و نام خریدار
+                        </button>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center; background: #fef08a; margin-bottom: 12px;">
+                        <thead>
+                            <tr style="background: #fde047; color: #0f172a;">
+                                <th style="border: 1px solid #ca8a04; padding: 6px;">ردیف</th>
+                                <th style="border: 1px solid #ca8a04; padding: 6px;">شرح کالا و مشخصات</th>
+                                <th style="border: 1px solid #ca8a04; padding: 6px;">تعداد</th>
+                                <th style="border: 1px solid #ca8a04; padding: 6px;">قیمت واحد (ریال)</th>
+                                <th style="border: 1px solid #ca8a04; padding: 6px;">مبلغ کل (ریال)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border: 1px solid #ca8a04; padding: 6px;">۱</td>
+                                <td style="border: 1px solid #ca8a04; padding: 6px;">
+                                    ماشین‌حساب رومیزی حسابداری
+                                    <button onclick="inspectInvoicePart(3, this)" style="background:#7c3aed; color:#fff; border:none; border-radius:6px; padding:3px 8px; cursor:pointer; font-size:0.75rem; margin-right:5px;">
+                                        🔍 ۳. ثبت شماره سریال گارانتی
+                                    </button>
+                                </td>
+                                <td style="border: 1px solid #ca8a04; padding: 6px;">۱ عدد</td>
+                                <td style="border: 1px solid #ca8a04; padding: 6px;">۵۰۰,۰۰۰</td>
+                                <td style="border: 1px solid #ca8a04; padding: 6px;">۵۰۰,۰۰۰</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding-top: 8px; border-top: 2px dashed #ca8a04;">
+                        <button class="action-btn" style="background:#d97706; padding:6px 12px; font-size:0.8rem;" onclick="inspectInvoicePart(4, this)">
+                            🔍 ۴. بررسی عدم قلم‌خوردگی مبلغ
+                        </button>
+                        <button class="action-btn" style="background:#059669; padding:6px 12px; font-size:0.8rem;" onclick="inspectInvoicePart(5, this)">
+                            🔍 ۵. بررسی مهر و امضای صادرکننده
+                        </button>
+                    </div>
+                    <div id="invoiceInspectLog" style="margin-top: 10px; font-weight: bold; color: #b91c1c; text-align: center; font-size: 0.9rem;">
+                        وضعیت بازرسی فاکتور: ۰ از ۵ مورد بررسی شده است.
+                    </div>
+                </div>
+
+                <!-- چالش محاسبه تخفیف لباس مینا و میترا -->
+                <div style="background: rgba(0,0,0,0.35); padding: 18px; border-radius: 14px; border: 1px dashed var(--neon-blue); text-align: center;">
+                    <h4 style="color: var(--neon-gold); font-size: 1.05rem; margin-bottom: 8px;">👗 ماموریت فروشگاه لباس: کمک به مینا و میترا!</h4>
+                    <p id="invoiceChallengeText" style="font-size: 0.92rem; margin-bottom: 12px;">
+                        مینا و میترا برای خرید لباس به فروشگاه رفته‌اند. قیمت اولیهٔ یک مانتو <strong>۵۰۰,۰۰۰ ریال</strong> است و برچسب <strong>۲۰٪ تخفیف</strong> روی آن خورده است. قیمت خرید پس از کسر تخفیف چند ریال می‌شود؟ (می‌توانید با دکمه «تخفیف ۲۰٪» یا ماشین‌حساب بالا حساب کنید!)
+                    </p>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                        <input type="number" id="invoiceAnswerInput" placeholder="مثلاً 400000" style="max-width: 220px; background:#090d16; color:#fff; border:2px solid var(--neon-blue); text-align:center; font-size:1rem; font-weight:bold;">
+                        <button class="action-btn gold-btn" onclick="checkInvoiceAnswer()">✅ ثبت قیمت پس از تخفیف</button>
+                        <button class="action-btn" onclick="generateNewDiscountQuestion()">🔄 سوال تخفیف جدید</button>
+                    </div>
+                    <div id="invoiceFeedback" style="margin-top: 10px; font-weight: bold; min-height: 24px;"></div>
+                </div>
+            </div>
+
+        </section>
+<!-- پایان بخش سوم -->
+<!-- شروع بخش چهارم (این کد را مستقیماً در ادامه بخش سوم قرار دهید) -->
+
+        <!-- =========================================================
+             مرحله ۴: آزمایشگاه ماینر، بلاک‌چین ضد هک و گاوصندوق رمزگذاری اکسل
+             ========================================================= -->
+        <section class="stage-section" id="stage4">
+            
+            <!-- بخش الف: ریگ ماینینگ کارت گرافیک و شبیه‌ساز حمله هکر به بلاک‌چین -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">⛏️ بازی پنجم: آزمایشگاه ماینر (Miner) و دفتر کل ضدتقلب بلاک‌چین</div>
+                    <span class="reward-tag">پاداش استخراج هر بلاک: +۴۵ سکه</span>
+                </div>
+                <p style="margin-bottom: 15px; color: var(--text-muted);">
+                    همان‌طور که یاد گرفتی، <strong>بلاک‌چین</strong> مثل یک دفتر حسابداری مشترک بین هزاران کامپیوتر است. دستگاه‌های <strong>ماینر (Miner)</strong> با کارت‌های گرافیک قدرتمند، معادلات ریاضی را حل می‌کنند تا تراکنش‌های مالی را داخل یک «بلاک» قفل کنند و پاداش (رمزارز) بگیرند!
+                </p>
+
+                <!-- گرافیک متحرک ریگ ماینینگ (کارت گرافیک سه فنه نئونی) -->
+                <div class="mining-rig-box">
+                    <div>
+                        <div style="font-size: 0.85rem; color: var(--neon-blue); margin-bottom: 6px; font-weight: bold;">
+                            ⚡ وضعیت دستگاه ماینر (RTX-CRYPTO RIG 9000):
+                        </div>
+                        <div class="gpu-fan-container" id="gpuRigBox">
+                            <div class="gpu-fan" id="fan1">☢️</div>
+                            <div class="gpu-fan" id="fan2">⚙️</div>
+                            <div class="gpu-fan" id="fan3">☢️</div>
+                        </div>
+                    </div>
+
+                    <!-- داشبورد فنی ماینر -->
+                    <div style="flex: 1; min-width: 240px; background: rgba(0,0,0,0.5); padding: 14px; border-radius: 14px; border: 1px solid rgba(0,243,255,0.25);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+                            <span>🚀 قدرت پردازش (Hashrate):</span>
+                            <strong id="rigHashrate" style="color: var(--neon-green); font-family: monospace;">125.4 MH/s</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+                            <span>🌡️ دمای کارت گرافیک:</span>
+                            <strong id="rigTemp" style="color: var(--neon-gold); font-family: monospace;">62 °C</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
+                            <span>🔐 وضعیت امنیت شبکه (۳۰ گره فعال):</span>
+                            <strong id="networkSecStatus" style="color: var(--neon-blue);">۱۰۰٪ ایمن ✅</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- فرم ثبت تراکنش جدید و دکمه حمله هکر -->
+                <div style="background: rgba(0,0,0,0.3); padding: 18px; border-radius: 16px; border: 1px solid rgba(181,55,242,0.3); margin-bottom: 18px;">
+                    <h4 style="color: var(--neon-gold); margin-bottom: 10px; font-size: 1rem;">➕ افزودن تراکنش مالی جدید به زنجیره بلاک‌چین:</h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 12px;">
+                        <input type="text" id="bcSender" placeholder="فرستنده (مثلاً: علی)" style="background:#0f172a; color:#fff;">
+                        <input type="text" id="bcReceiver" placeholder="گیرنده (مثلاً: رضا)" style="background:#0f172a; color:#fff;">
+                        <input type="number" id="bcAmount" placeholder="مبلغ (مثلاً: 50000)" style="background:#0f172a; color:#fff;">
+                    </div>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="action-btn" onclick="mineNewBlock()">
+                            ⛏️ استخراج بلاک با ماینر و قفل در زنجیره (+۴۵ سکه)
+                        </button>
+                        <button class="action-btn danger-btn" onclick="simulateHackerAttack()">
+                            👾 شبیه‌سازی حمله هکر (تلاش برای تقلب و دستکاری دفتر!)
+                        </button>
+                        <button class="action-btn gold-btn" id="repairChainBtn" style="display: none;" onclick="repairBlockchain()">
+                            🛡️ بازیابی خودکار از روی دفترچه بقیه اعضای شبکه (+۳۰ سکه)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ریل قطار زنجیره بلاک‌ها (Blockchain Track) -->
+                <div class="blocks-chain-track" id="blocksTrack">
+                    <!-- بلاک شماره ۱ (پیدایش) -->
+                    <div class="crypto-block" id="blockCard1">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--neon-gold); margin-bottom: 6px;">
+                            <span>📦 بلاک #1 (آغازین)</span>
+                            <span>🔒 قفل‌شده</span>
+                        </div>
+                        <div style="font-size: 0.85rem; margin-bottom: 8px;">
+                            <div>👤 رویداد: <strong>سرمایه اولیه کلاس</strong></div>
+                            <div>💰 مبلغ: <strong>۱۲۵,۰۰۰ ریال</strong></div>
+                        </div>
+                        <span style="font-size: 0.72rem; color: var(--text-muted);">هش قبلی (Prev Hash):</span>
+                        <code class="hash-badge">000000000000</code>
+                        <span style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; display: block;">هش این بلاک (Hash):</span>
+                        <code class="hash-badge">0000a8f49b12</code>
+                    </div>
+
+                    <div class="chain-link-icon">🔗</div>
+
+                    <!-- بلاک شماره ۲ -->
+                    <div class="crypto-block" id="blockCard2">
+                        <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--neon-blue); margin-bottom: 6px;">
+                            <span>📦 بلاک #2</span>
+                            <span id="b2LockIcon">🔒 قفل‌شده</span>
+                        </div>
+                        <div style="font-size: 0.85rem; margin-bottom: 8px;">
+                            <div>👤 انتقال: <strong>علی ⬅ رضا</strong></div>
+                            <div>💰 مبلغ: <strong id="b2AmountText">۱۰,۰۰۰ تومان</strong></div>
+                        </div>
+                        <span style="font-size: 0.72rem; color: var(--text-muted);">هش قبلی (Prev Hash):</span>
+                        <code class="hash-badge">0000a8f49b12</code>
+                        <span style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; display: block;">هش این بلاک (Hash):</span>
+                        <code class="hash-badge" id="b2HashText">00007c91e305</code>
+                    </div>
+                </div>
+
+                <div id="blockchainConsole" style="background: #050811; color: var(--neon-green); font-family: monospace; padding: 12px; border-radius: 10px; margin-top: 12px; font-size: 0.85rem; border-right: 4px solid var(--neon-green);">
+                    [SYSTEM LOG]: تمام ۳۰ دفترچه دانش‌آموزان کلاس با هم برابرند. هیچ قلم‌خوردگی یا تقلبی وجود ندارد.
+                </div>
+            </div>
+
+            <!-- بخش ب: آزمایشگاه اکسل، نمودار ۲۴ ساعت شبانه‌روز و رمزگذاری فایل (صفحات پایانی پودمان ۸) -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">📊 بازی ششم: نمودار ستونی اکسل و گاوصندوق رمزگذاری (Encrypt)</div>
+                    <span class="reward-tag">پاداش قفل کردن فایل اکسل: +۴۰ سکه</span>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 15px;">
+                    در پایان پودمان ۸، دانش‌آموزان فعالیت‌های <strong>۲۴ ساعت شبانه‌روز</strong> خود را در نرم‌افزار صفحه‌گسترده <strong>اکسل (Excel)</strong> وارد کرده و نمودار ستونی می‌کشند؛ سپس برای جلوگیری از فاش شدن یا دستکاری اطلاعات مالی، روی فایل رمز می‌گذارند و با رایانامه برای دبیر می‌فرستند[span_1](start_span)[span_1](end_span):
+                </p>
+
+                <div class="desk-arena">
+                    <!-- شبیه‌ساز نمودار ستونی ۲۴ ساعت شبانه‌روز اکسل -->
+                    <div style="background: rgba(0,0,0,0.4); padding: 16px; border-radius: 16px; border: 1px solid rgba(0,243,255,0.25);">
+                        <h4 style="color: var(--neon-blue); font-size: 0.95rem; margin-bottom: 12px; text-align: center;">
+                            📈 نمودار ستونی فعالیت‌های شبانه‌روز در اکسل (جمع کل: ۲۴ ساعت)[span_2](start_span)[span_2](end_span)
+                        </h4>
+                        <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 170px; padding: 15px 5px 5px 5px; border-bottom: 2px solid var(--neon-blue); gap: 6px;">
+                            <div style="text-align: center; flex: 1;">
+                                <span style="font-size: 0.72rem; color: var(--neon-gold);">۸ ساعت</span>
+                                <div style="height: 115px; background: linear-gradient(180deg, var(--neon-blue), #1d4ed8); border-radius: 6px 6px 0 0; cursor: pointer;" onclick="showToast('😴 خواب شبانه: ۸ ساعت در شبانه‌روز')"></div>
+                                <small style="font-size: 0.7rem; display: block; margin-top: 4px;">خواب</small>
+                            </div>
+                            <div style="text-align: center; flex: 1;">
+                                <span style="font-size: 0.72rem; color: var(--neon-gold);">۶ ساعت</span>
+                                <div style="height: 88px; background: linear-gradient(180deg, var(--neon-green), #047857); border-radius: 6px 6px 0 0; cursor: pointer;" onclick="showToast('🏫 تحصیل در مدرسه: ۶ ساعت در روز')"></div>
+                                <small style="font-size: 0.7rem; display: block; margin-top: 4px;">مدرسه</small>
+                            </div>
+                            <div style="text-align: center; flex: 1;">
+                                <span style="font-size: 0.72rem; color: var(--neon-gold);">۲ ساعت</span>
+                                <div style="height: 35px; background: linear-gradient(180deg, var(--neon-purple), #6d28d9); border-radius: 6px 6px 0 0; cursor: pointer;" onclick="showToast('📚 مطالعه و تکالیف: ۲ ساعت')"></div>
+                                <small style="font-size: 0.7rem; display: block; margin-top: 4px;">مطالعه</small>
+                            </div>
+                            <div style="text-align: center; flex: 1;">
+                                <span style="font-size: 0.72rem; color: var(--neon-gold);">۲ ساعت</span>
+                                <div style="height: 35px; background: linear-gradient(180deg, var(--neon-pink), #be185d); border-radius: 6px 6px 0 0; cursor: pointer;" onclick="showToast('🕌 نماز و عبادت: ۲ ساعت')"></div>
+                                <small style="font-size: 0.7rem; display: block; margin-top: 4px;">عبادت</small>
+                            </div>
+                            <div style="text-align: center; flex: 1;">
+                                <span style="font-size: 0.72rem; color: var(--neon-gold);">۱.۵ ساعت</span>
+                                <div style="height: 25px; background: linear-gradient(180deg, var(--neon-orange), #c2410c); border-radius: 6px 6px 0 0; cursor: pointer;" onclick="showToast('🎮 استراحت و سرگرمی: ۱.۵ ساعت')"></div>
+                                <small style="font-size: 0.7rem; display: block; margin-top: 4px;">سرگرمی</small>
+                            </div>
+                            <div style="text-align: center; flex: 1;">
+                                <span style="font-size: 0.72rem; color: var(--neon-gold);">۴.۵ ساعت</span>
+                                <div style="height: 62px; background: linear-gradient(180deg, var(--neon-gold), #b45309); border-radius: 6px 6px 0 0; cursor: pointer;" onclick="showToast('🤝 همکاری در خانه (۱.۵)، غذا (۱)، رفت‌وآمد (۱)، ورزش (۱): مجموعاً ۴.۵ ساعت')"></div>
+                                <small style="font-size: 0.7rem; display: block; margin-top: 4px;">سایر کارها</small>
+                            </div>
+                        </div>
+                        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 10px; text-align: center;">
+                            💡 روی هر ستون نمودار کلیک کنید تا جزئیات آن طبق جدول اکسل کتاب نمایش داده شود[span_3](start_span)[span_3](end_span).
+                        </p>
+                    </div>
+
+                    <!-- گاوصندوق رمزگذاری فایل اکسل و ارسال ایمیل به دبیر -->
+                    <div style="background: rgba(0,0,0,0.4); padding: 18px; border-radius: 16px; border: 1px solid var(--neon-gold); display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                                <h4 style="color: var(--neon-gold); font-size: 1rem;">🔐 رمزگذاری فایل اکسل (کار کلاسی آخر فصل)[span_4](start_span)[span_4](end_span)</h4>
+                                <span id="vaultLockIcon" style="font-size: 2rem;">🔓</span>
+                            </div>
+                            <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 10px;">
+                                اگر فایل اکسل مالی سازمان بدون رمز باشد، با تغییر یا فاش شدن داده‌ها زحمت چند ماه از بین می‌رود[span_5](start_span)[span_5](end_span). یک رمز عبور قوی بسازید و فایل را برای دبیر (آقای پورصالحی) رایانامه کنید[span_6](start_span)[span_6](end_span):
+                            </p>
+                            <input type="text" id="excelPassInput" placeholder="یک رمز قوی وارد کنید (مثلاً Azarakhsh@1405)" oninput="checkPassStrength()" style="background: #090d16; color: var(--neon-green); border: 1px solid var(--neon-blue); font-family: monospace; text-align: center;">
+                            
+                            <div style="height: 8px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; margin: 8px 0;">
+                                <div id="passStrengthBar" style="height: 100%; width: 0%; background: var(--neon-red); transition: all 0.3s;"></div>
+                            </div>
+                            <small id="passStrengthText" style="color: var(--text-muted); font-size: 0.78rem; display: block; margin-bottom: 10px;">
+                                قدرت رمز: هنوز رمزی وارد نشده است.
+                            </small>
+                        </div>
+
+                        <button class="action-btn gold-btn" style="width: 100%; justify-content: center;" onclick="lockAndEmailExcel()">
+                            📧 قفل کردن فایل اکسل و ارسال رایانامه به دبیر (+۴۰ سکه)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =========================================================
+             مرحله ۵: حکمت‌های قرآنی مدیریت (صفحه ۱۲۵) و نبرد نهایی آزمون
+             ========================================================= -->
+        <section class="stage-section" id="stage5">
+            
+            <!-- بخش الف: تطبیق آیات قرآن کریم و مدیریت کارها (صفحه ۱۲۵ کتاب) -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">📖 رادار حکمت: قرآن کریم و مدیریت کارها (صفحه ۱۲۵ کتاب)[span_7](start_span)[span_7](end_span)</div>
+                    <span class="reward-tag">پاداش شناخت هر آیه: +۲۰ سکه</span>
+                </div>
+                <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 15px;">
+                    در صفحه ۱۲۵ کتاب درسی، ۳ اصل بسیار مهم مدیریت از آیات قرآن کریم بیان شده است[span_8](start_span)[span_8](end_span). روی هر کارت کلیک کنید تا پیام مدیریتی آن قفل‌گشایی شود:
+                </p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 15px;">
+                    <div style="background: rgba(0,243,255,0.08); border: 2px solid var(--neon-blue); border-radius: 16px; padding: 16px; cursor: pointer; transition: transform 0.2s;" onclick="unlockQuranCard(1, this)">
+                        <div style="color: var(--neon-gold); font-weight: bold; font-size: 1.05rem; margin-bottom: 6px; text-align: center;">
+                            «... وَ أَمْرُهُمْ شُورىٰ بَيْنَهُمْ ...» (شوری / ۳۸)[span_9](start_span)[span_9](end_span)
+                        </div>
+                        <p style="font-size: 0.85rem; text-align: center; color: #fff;">کارهایشان به طریق مشورت در میان آن‌ها صورت می‌گیرد[span_10](start_span)[span_10](end_span).</p>
+                        <div class="q-secret" style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.2); font-size: 0.82rem; color: var(--neon-green); text-align: center;">
+                            🔍 برای نمایش اصل مدیریتی کلیک کنید
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(181,55,242,0.08); border: 2px solid var(--neon-purple); border-radius: 16px; padding: 16px; cursor: pointer; transition: transform 0.2s;" onclick="unlockQuranCard(2, this)">
+                        <div style="color: var(--neon-gold); font-weight: bold; font-size: 1.05rem; margin-bottom: 6px; text-align: center;">
+                            «... فَإِذا عَزَمْتَ فَتَوَكَّلْ عَلَى اللَّهِ ...» (آل‌عمران / ۱۵۹)[span_11](start_span)[span_11](end_span)
+                        </div>
+                        <p style="font-size: 0.85rem; text-align: center; color: #fff;">هنگامی که تصمیم گرفتی قاطع باش و بر خدا توکل کن[span_12](start_span)[span_12](end_span).</p>
+                        <div class="q-secret" style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.2); font-size: 0.82rem; color: var(--neon-green); text-align: center;">
+                            🔍 برای نمایش اصل مدیریتی کلیک کنید
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(255,0,127,0.08); border: 2px solid var(--neon-pink); border-radius: 16px; padding: 16px; cursor: pointer; transition: transform 0.2s;" onclick="unlockQuranCard(3, this)">
+                        <div style="color: var(--neon-gold); font-weight: bold; font-size: 1.05rem; margin-bottom: 6px; text-align: center;">
+                            «وَ لا تَقُولَنَّ لِشَيْءٍ إِنِّي فاعِلٌ ذٰلِكَ غَدًا» (کهف / ۲۳)[span_13](start_span)[span_13](end_span)
+                        </div>
+                        <p style="font-size: 0.85rem; text-align: center; color: #fff;">و هرگز نگو من فردا کاری انجام می‌دهم[span_14](start_span)[span_14](end_span).</p>
+                        <div class="q-secret" style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(255,255,255,0.2); font-size: 0.82rem; color: var(--neon-green); text-align: center;">
+                            🔍 برای نمایش اصل مدیریتی کلیک کنید
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- بخش ب: مسابقه سرعتی نبرد نهایی و صدور گواهینامه قهرمانی -->
+            <div class="game-panel">
+                <div class="panel-header">
+                    <div class="panel-title">🏆 نبرد نهایی: آزمون جامع امپراتوری مالی و اداری</div>
+                    <span class="reward-tag">پاداش هر پاسخ صحیح: +۵۰ سکه</span>
+                </div>
+
+                <div id="quizBox">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <span id="quizProgressText" style="color: var(--neon-gold); font-weight: bold;">سوال ۱ از ۶</span>
+                        <span id="quizScoreBadge" style="color: var(--neon-green); font-weight: bold;">پاسخ‌های درست: ۰</span>
+                    </div>
+
+                    <div id="quizQuestionText" style="background: rgba(0,0,0,0.45); padding: 18px; border-radius: 14px; border-right: 4px solid var(--neon-blue); font-size: 1.05rem; font-weight: bold; margin-bottom: 15px;">
+                        در حال بارگذاری سوالات آزمون...
+                    </div>
+
+                    <div id="quizOptionsGrid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px;"></div>
+                    <div id="quizFeedbackMsg" style="text-align: center; font-weight: bold; min-height: 26px;"></div>
+                </div>
+
+                <!-- کارت صدور گواهینامه افتخار دانش‌آموز -->
+                <div style="margin-top: 25px; background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(0,243,255,0.1)); border: 2px solid var(--neon-gold); border-radius: 18px; padding: 20px; text-align: center;">
+                    <h3 style="color: var(--neon-gold); margin-bottom: 10px;">🎓 صدور گواهینامه رسمی فرمانده اقتصاد و بلاک‌چین</h3>
+                    <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 12px;">
+                        نام و نام خانوادگی خود را وارد کنید تا کارنامه و لوح تقدیر دیجیتال پودمان ۸ با امضای دبیر برایتان صادر شود:
+                    </p>
+                    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-bottom: 15px;">
+                        <input type="text" id="studentCertName" placeholder="نام و نام خانوادگی دانش‌آموز..." style="max-width: 280px; background: #090d16; color: #fff; border: 2px solid var(--neon-gold); text-align: center; font-weight: bold;">
+                        <button class="action-btn gold-btn" onclick="generateCertificate()">🏅 صدور لوح افتخار من</button>
+                    </div>
+
+                    <div id="certCardOutput" style="display: none; background: #070b19; border: 4px double var(--neon-gold); border-radius: 16px; padding: 20px; max-width: 600px; margin: 0 auto; box-shadow: var(--gold-glow);">
+                        <div style="font-size: 2.5rem;">👑</div>
+                        <h4 style="color: var(--neon-gold); font-size: 1.3rem; margin: 6px 0;">لوح تقدیر فرمانده امور مالی، اداری و بلاک‌چین</h4>
+                        <p id="certBodyText" style="color: #fff; font-size: 0.95rem; margin: 12px 0; line-height: 1.9;"></p>
+                        <div style="display: flex; justify-content: space-around; border-top: 1px dashed rgba(255,215,0,0.4); padding-top: 10px; font-size: 0.82rem; color: var(--neon-blue);">
+                            <span>مدرس: محمدحسن پورصالحی</span>
+                            <span>سامانه: Azarakhshphotonic.ir</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </div> <!-- پایان main-wrapper -->
+<!-- پایان بخش چهارم -->
+<!-- شروع بخش پنجم (این کد را مستقیماً در ادامه بخش چهارم قرار دهید) -->
 
     <script>
-        // ۱. تابع نمایش وظایف بخش‌های اداری
-        function showDeptInfo() {
-            const select = document.getElementById('deptSelect');
-            const result = document.getElementById('deptResult');
-            result.textContent = select.value ? 'وظیفه: ' + select.value : '';
-        }
+        /* =========================================================
+           ۱. موتور تولید صداهای بازی (Web Audio API بدون نیاز به فایل خارجی)
+           ========================================================= */
+        let soundEnabled = true;
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
 
-        // ۲. تابع محاسبه معادله اساسی حسابداری
-        function calcAccounting() {
-            const capital = parseFloat(document.getElementById('capitalInput').value) || 0;
-            const debt = parseFloat(document.getElementById('debtInput').value) || 0;
-            const assets = capital + debt;
-            document.getElementById('accountingResult').textContent = 
-                `مجموع دارایی‌های شما: ${assets.toLocaleString('fa-IR')} ریال (ترازنامه برقرار است: دارایی = بدهی + سرمایه)`;
-        }
-
-        // ۳. تابع شبیه‌ساز ثبت در بلاک‌چین
-        let blockCount = 1;
-        let previousHash = "0000a8f49b";
-
-        function simpleHash(str) {
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = ((hash << 5) - hash) + str.charCodeAt(i);
-                hash |= 0;
+        function initAudio() {
+            if (!audioCtx && AudioCtx) {
+                audioCtx = new AudioCtx();
             }
-            return "0000" + Math.abs(hash).toString(16).padStart(6, '0').slice(0, 6);
         }
 
-        function addTransactionBlock() {
-            const desc = document.getElementById('txDesc').value.trim();
-            const amount = document.getElementById('txAmount').value.trim();
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                initAudio();
+                if (!audioCtx) return;
+                const now = audioCtx.currentTime;
 
-            if (!desc || !amount) {
-                alert('لطفاً شرح رویداد مالی و مبلغ را کامل وارد کنید.');
+                if (type === 'coin') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(987.77, now); // B5
+                    osc.frequency.setValueAtTime(1318.51, now + 0.08); // E6
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'stamp') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.exponentialRampToValueAtTime(45, now + 0.18);
+                    gain.gain.setValueAtTime(0.35, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.18);
+                } else if (type === 'error') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.setValueAtTime(130, now + 0.12);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } else if (type === 'hack') {
+                    for (let i = 0; i < 3; i++) {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'square';
+                        osc.frequency.setValueAtTime(440 - i * 80, now + i * 0.12);
+                        gain.gain.setValueAtTime(0.15, now + i * 0.12);
+                        gain.gain.exponentialRampToValueAtTime(0.01, now + i * 0.12 + 0.1);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start(now + i * 0.12);
+                        osc.stop(now + i * 0.12 + 0.1);
+                    }
+                } else if (type === 'click') {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(600, now);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                }
+            } catch (e) {
+                console.log('Audio error:', e);
+            }
+        }
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+            showToast(soundEnabled ? '🔊 افکت‌های صوتی فعال شد' : '🔇 صدا قطع شد');
+        }
+
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+            }
+        }
+
+        /* مخفی شدن خودکار نوار بالایی در اسکرول رو به پایین برای فضای بیشتر در موبایل */
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+            const hud = document.getElementById('topHud');
+            if (window.scrollY > lastScrollY && window.scrollY > 90) {
+                hud.classList.add('hidden-bar');
+            } else {
+                hud.classList.remove('hidden-bar');
+            }
+            lastScrollY = window.scrollY;
+        });
+
+        /* =========================================================
+           ۲. سیستم امتیاز، سکه، رتبه بازیکن و نوتیفیکیشن
+           ========================================================= */
+        let playerCoins = 100;
+        let toastTimer = null;
+
+        function addCoins(amount, reason) {
+            playerCoins += amount;
+            document.getElementById('coinDisplay').textContent = playerCoins.toLocaleString('fa-IR');
+            playSound('coin');
+            updatePlayerRank();
+            showToast(`🎉 +${amount.toLocaleString('fa-IR')} سکه پاداش: ${reason}`);
+        }
+
+        function updatePlayerRank() {
+            const rankEl = document.getElementById('rankDisplay');
+            const xpFill = document.getElementById('xpBarFill');
+            let percent = Math.min(100, Math.floor((playerCoins / 600) * 100));
+            xpFill.style.width = percent + '%';
+
+            if (playerCoins < 180) {
+                rankEl.textContent = 'کارآموز اداری (Lv.1)';
+            } else if (playerCoins < 280) {
+                rankEl.textContent = 'مسئول دبیرخانه (Lv.2)';
+            } else if (playerCoins < 400) {
+                rankEl.textContent = 'حسابدار خبره (Lv.3)';
+            } else if (playerCoins < 520) {
+                rankEl.textContent = 'مدیر مالی و ماینر (Lv.4)';
+            } else {
+                rankEl.textContent = '👑 فرمانده اقتصاد و بلاک‌چین (MAX)';
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toastPopup');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3200);
+        }
+
+        function switchStage(stageNum) {
+            playSound('click');
+            document.querySelectorAll('.stage-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.quest-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('stage' + stageNum).classList.add('active');
+            document.getElementById('tab' + stageNum).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* =========================================================
+           ۳. مرحله ۱: بازی مهر زدن نامه‌ها و دفتر اندیکاتور (جدول ۱-۸ و ۴-۸)
+           ========================================================= */
+        const officeCases = [
+            {
+                num: '۱۴۰۵/۸۰۱',
+                date: '۱۴۰۵/۰۸/۰۵',
+                emoji: '👷‍♂️',
+                sender: 'پدر دانش‌آموز (تولیدکننده)',
+                shortDesc: 'ثبت و ارسال نامه رسمی به سازمان',
+                text: '«سلام! من یک کارگاه تولیدی راه‌اندازی کرده‌ام و می‌خواهم نامه‌ام ثبت شود، شماره بخورد و در سازمان پخش شود. به کدام بخش بروم؟»',
+                answer: 'دبیرخانه'
+            },
+            {
+                num: '۱۴۰۵/۸۰۲',
+                date: '۱۴۰۵/۰۸/۰۶',
+                emoji: '👨‍💼',
+                sender: 'پدر دانش‌آموز (مراجعه برای تسویه‌حساب)',
+                shortDesc: 'تسویه‌حساب مالی و دریافت گزارش حسابداری',
+                text: '«من کارم در کارگاه تولیدی تمام شده و برای تسویه‌حساب مالی و بررسی صورت‌حساب‌ها به اداره آمده‌ام. کدام واحد کار مرا انجام می‌دهد؟»',
+                answer: 'حسابداری'
+            },
+            {
+                num: '۱۴۰۵/۸۰۳',
+                date: '۱۴۰۵/۰۸/۰۸',
+                emoji: '👩‍🏫',
+                sender: 'کارمند جدید سازمان',
+                shortDesc: 'تأمین نیروی انسانی و برقراری حقوق و مزایا',
+                text: '«سلام! من به تازگی در این سازمان استخدام شده‌ام و می‌خواهم حکم کارگزینی، سازمان‌دهی شغلی و برقراری حقوق و مزایایم انجام شود.»',
+                answer: 'کارگزینی'
+            },
+            {
+                num: '۱۴۰۵/۸۰۴',
+                date: '۱۴۰۵/۰۸/۱۰',
+                emoji: '🚚',
+                sender: 'مسئول تجهیزات کارگاه',
+                shortDesc: 'آماده کردن نیازمندی‌ها و اداره انبارها',
+                text: '«برای کارگاه مدرسه و اداره نیاز به کاغذ، کارتریج و وسایل جدید داریم و باید موجودی انبار بررسی شود. به کدام بخش مراجعه کنم؟»',
+                answer: 'تدارکات'
+            },
+            {
+                num: '۱۴۰۵/۸۰۵',
+                date: '۱۴۰۵/۰۸/۱۲',
+                emoji: '🕵️‍♂️',
+                sender: 'بازرس اسناد قدیمی',
+                shortDesc: 'سازمان‌دهی و نگهداری اسناد برای دسترسی آسان',
+                text: '«ما به پرونده‌ها و قراردادهای سال گذشته نیاز فوری داریم که باید در زونکن‌ها سازمان‌دهی و نگهداری شده باشند. کدام بخش مسئول است؟»',
+                answer: 'بایگانی'
+            },
+            {
+                num: '۱۴۰۵/۸۰۶',
+                date: '۱۴۰۵/۰۸/۱۵',
+                emoji: '👷',
+                sender: 'تکنسین فنی شرکت',
+                shortDesc: 'پرداخت دستمزد و ثبت اطلاعات مالی',
+                text: '«ماه به پایان رسیده و کارمندان منتظر واریز دستمزد و ثبت فیش‌های مالی هستند. این وظیفه مربوط به کدام واحد است؟»',
+                answer: 'حسابداری'
+            }
+        ];
+
+        let currentCaseIdx = 0;
+        let caseLocked = false;
+
+        function loadOfficeCase() {
+            const c = officeCases[currentCaseIdx];
+            document.getElementById('letterNum').textContent = 'شماره ثبت اندیکاتور: ' + c.num;
+            document.getElementById('letterDate').textContent = 'تاریخ: ' + c.date;
+            document.getElementById('clientEmoji').textContent = c.emoji;
+            document.getElementById('clientName').textContent = c.sender;
+            document.getElementById('clientText').textContent = c.text;
+            document.getElementById('caseCounter').textContent = `پرونده ${(currentCaseIdx + 1).toLocaleString('fa-IR')} از ${officeCases.length.toLocaleString('fa-IR')}`;
+            document.getElementById('rubberStamp').classList.remove('stamped');
+            caseLocked = false;
+        }
+
+        function submitDeptChoice(choice) {
+            if (caseLocked) return;
+            const c = officeCases[currentCaseIdx];
+            const feedback = document.getElementById('deptFeedback');
+            const stamp = document.getElementById('rubberStamp');
+
+            if (choice === c.answer) {
+                caseLocked = true;
+                playSound('stamp');
+                stamp.textContent = `ارجاع به ${choice} ✅`;
+                stamp.classList.add('stamped');
+                feedback.style.color = 'var(--neon-green)';
+                feedback.textContent = `👏 آفرین! نامه با موفقیت مهر شد و به واحد «${choice}» ارجاع گردید.`;
+                addCoins(30, `ارجاع صحیح نامه به ${choice}`);
+
+                // افزودن خودکار به جدول دفتر اندیکاتور (جدول ۴-۸)
+                const tbody = document.getElementById('indicatorTableBody');
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">${c.num}</td>
+                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">${c.date}</td>
+                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">${c.sender}</td>
+                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1);">${c.shortDesc}</td>
+                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1); color: var(--neon-gold); font-weight:bold;">${choice}</td>
+                    <td style="padding: 8px; border: 1px solid rgba(255,255,255,0.1); color: var(--neon-green);">ثبت در اندیکاتور ✅</td>
+                `;
+                tbody.appendChild(tr);
+
+                setTimeout(() => {
+                    currentCaseIdx = (currentCaseIdx + 1) % officeCases.length;
+                    loadOfficeCase();
+                    feedback.textContent = 'پرونده بعدی روی میز قرار گرفت!';
+                }, 1700);
+            } else {
+                playSound('error');
+                const card = document.getElementById('letterCard');
+                card.classList.remove('shake-anim');
+                void card.offsetWidth;
+                card.classList.add('shake-anim');
+                feedback.style.color = 'var(--neon-red)';
+                feedback.textContent = `❌ اشتباه شد! وظیفهٔ «${choice}» این نیست. دوباره متن نامه را بخوان!`;
+            }
+        }
+
+        /* =========================================================
+           ۴. مرحله ۲: ترازوی معادله حسابداری، مزرعه بلدرچین و جدول احسان
+           ========================================================= */
+        let balanceRewardGiven = false;
+
+        function setQuailStage(stage) {
+            playSound('click');
+            if (stage === 1) {
+                document.getElementById('qCapital').value = 125000;
+                document.getElementById('qDebt').value = 0;
+                document.getElementById('qAssets').value = 125000;
+            } else if (stage === 2) {
+                document.getElementById('qCapital').value = 125000;
+                document.getElementById('qDebt').value = 42500;
+                document.getElementById('qAssets').value = 167500;
+            } else {
+                document.getElementById('qCapital').value = 125000;
+                document.getElementById('qDebt').value = 82500;
+                document.getElementById('qAssets').value = 207500;
+            }
+            updateQuailAccounting();
+        }
+
+        function updateQuailAccounting() {
+            const cap = parseFloat(document.getElementById('qCapital').value) || 0;
+            const debt = parseFloat(document.getElementById('qDebt').value) || 0;
+            const assets = parseFloat(document.getElementById('qAssets').value) || 0;
+            const rightSide = assets;
+            const leftSide = cap + debt;
+
+            document.getElementById('assetsValDisplay').textContent = rightSide.toLocaleString('fa-IR') + ' ریال';
+            document.getElementById('liabCapDisplay').textContent = leftSide.toLocaleString('fa-IR') + ' ریال';
+            document.getElementById('liabCapSub').textContent = `${debt.toLocaleString('fa-IR')} بدهی + ${cap.toLocaleString('fa-IR')} سرمایه`;
+
+            const diff = rightSide - leftSide;
+            const angle = Math.max(-18, Math.min(18, diff / 8000));
+            document.getElementById('scaleBeam').style.transform = `rotate(${angle}deg)`;
+            document.getElementById('rightPan').style.transform = `translateY(${angle * 1.8}px)`;
+            document.getElementById('leftPan').style.transform = `translateY(${-angle * 1.8}px)`;
+
+            const msg = document.getElementById('accountingStatusMsg');
+            if (Math.abs(diff) < 1) {
+                msg.style.color = 'var(--neon-green)';
+                msg.style.background = 'rgba(0,255,102,0.12)';
+                msg.textContent = `✅ ترازنامه کاملاً متوازن است! (${rightSide.toLocaleString('fa-IR')} = ${debt.toLocaleString('fa-IR')} + ${cap.toLocaleString('fa-IR')})`;
+                if (!balanceRewardGiven) {
+                    balanceRewardGiven = true;
+                    addCoins(50, 'تنظیم دقیق معادله ترازنامه');
+                }
+            } else {
+                msg.style.color = 'var(--neon-red)';
+                msg.style.background = 'rgba(255,42,42,0.15)';
+                msg.textContent = `⚠️ ترازو نامتعادل است! اختلاف دو کفه: ${Math.abs(diff).toLocaleString('fa-IR')} ریال (باید دارایی = بدهی + سرمایه باشد)`;
+            }
+        }
+
+        function feedQuail(el) {
+            playSound('click');
+            el.style.transform = 'scale(1.45) rotate(12deg)';
+            setTimeout(() => { el.style.transform = ''; }, 300);
+            showToast('🌾 جوجه بلدرچین تغذیه شد و وزنش بیشتر شد!');
+        }
+
+        function spawnNewQuail() {
+            const pen = document.getElementById('quailPen');
+            const bird = document.createElement('div');
+            bird.className = 'quail-bird';
+            bird.textContent = Math.random() > 0.5 ? '🐥' : '🐦';
+            bird.onclick = function() { feedQuail(this); };
+            pen.appendChild(bird);
+            addCoins(10, 'پرورش جوجه بلدرچین جدید');
+        }
+
+        function calcQuailProfit() {
+            const sellPrice = parseFloat(document.getElementById('quailSellPrice').value) || 0;
+            const costPerPack = 20750; // طبق کتاب: ۲۰۷۵۰۰ تقسیم بر ۱۰ بسته ۲۰۰ گرمی
+            const profitPerPack = sellPrice - costPerPack;
+            const totalProfit = profitPerPack * 10;
+            const perMember = totalProfit / 5;
+            const res = document.getElementById('quailProfitResult');
+
+            if (profitPerPack > 0) {
+                res.style.color = 'var(--neon-green)';
+                res.textContent = `سود هر بسته: ${profitPerPack.toLocaleString('fa-IR')} ریال | کل سود گروه: ${totalProfit.toLocaleString('fa-IR')} ریال (سهم هر نفر: ${perMember.toLocaleString('fa-IR')} ریال)`;
+            } else {
+                res.style.color = 'var(--neon-red)';
+                res.textContent = `⚠️ قیمت فروش کمتر از قیمت تمام‌شده (۲۰,۷۵۰ ریال) است! گروه ${Math.abs(totalProfit).toLocaleString('fa-IR')} ریال ضرر می‌کند!`;
+            }
+        }
+
+        /* جدول هزینه‌های ماهانه احسان (جدول ۶-۸) */
+        let ehsanBalance = 110000;
+        let ehsanSpent = 190000;
+
+        function addEhsanRow() {
+            const date = document.getElementById('ehsanDate').value.trim() || '۱۰/۳۰';
+            const desc = document.getElementById('ehsanDesc').value.trim();
+            const type = document.getElementById('ehsanType').value;
+            const amount = parseFloat(document.getElementById('ehsanAmount').value) || 0;
+
+            if (!desc || amount <= 0) {
+                playSound('error');
+                showToast('❌ لطفاً شرح رویداد و مبلغ صحیح را وارد کنید!');
                 return;
             }
 
-            blockCount++;
-            const rawData = blockCount + desc + amount + previousHash;
-            const currentHash = simpleHash(rawData);
+            if (type === 'expense') {
+                ehsanBalance -= amount;
+                ehsanSpent += amount;
+            } else {
+                ehsanBalance += amount;
+            }
 
-            const tbody = document.getElementById('ledgerBody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${blockCount.toLocaleString('fa-IR')}</td>
+            const tbody = document.getElementById('ehsanTableBody');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${date}</td>
                 <td>${desc}</td>
-                <td>${Number(amount).toLocaleString('fa-IR')}</td>
-                <td><code>${currentHash}</code></td>
+                <td style="color:var(--neon-green);">${type === 'income' ? amount.toLocaleString('fa-IR') : '-'}</td>
+                <td style="color:var(--neon-pink);">${type === 'expense' ? amount.toLocaleString('fa-IR') : '-'}</td>
+                <td style="color:var(--neon-gold); font-weight:bold;">${ehsanBalance.toLocaleString('fa-IR')}</td>
             `;
-            tbody.appendChild(row);
+            tbody.appendChild(tr);
 
-            const logBox = document.getElementById('blockchainLog');
-            logBox.innerHTML = `[Block #${blockCount} Mined] تراکنش «${desc}» به هش قبلی (${previousHash}) زنجیر شد. هش جدید: ${currentHash}`;
+            document.getElementById('ehsanSpentText').textContent = `🔻 کل هزینه‌ها: ${ehsanSpent.toLocaleString('fa-IR')} ریال`;
+            document.getElementById('ehsanBalanceText').textContent = `🐷 مانده پس‌انداز: ${ehsanBalance.toLocaleString('fa-IR')} ریال`;
+            const pct = Math.max(0, Math.min(100, (ehsanBalance / 300000) * 100));
+            document.getElementById('ehsanSavingsBar').style.width = pct + '%';
 
-            previousHash = currentHash;
-            document.getElementById('txDesc').value = '';
-            document.getElementById('txAmount').value = '';
+            document.getElementById('ehsanDesc').value = '';
+            document.getElementById('ehsanAmount').value = '';
+            addCoins(20, 'ثبت رویداد مالی در دفتر روزانه احسان');
         }
+
+        /* =========================================================
+           ۵. مرحله ۳: ماشین‌حساب رومیزی (شکل ۱۰-۸) و بازرس فاکتور (شکل ۸-۸)
+           ========================================================= */
+        let calcExpr = '';
+        let calcMemory = 0;
+        let calcGrandTotal = 0;
+
+        function updateCalcScreen(val, hintText) {
+            document.getElementById('calcScreenDigits').textContent = val || '0';
+            if (hintText) {
+                document.getElementById('calcScreenHint').innerHTML = `💡 <strong>کاربرد دکمه در کتاب:</strong> ${hintText}`;
+            }
+            document.getElementById('memBadge').textContent = `MEMORY (M): ${calcMemory}`;
+        }
+
+        function explainSwitch(sw) {
+            playSound('click');
+            if (sw === 'GT') {
+                const v = document.getElementById('calcGtSwitch').value;
+                document.getElementById('gtStatusBadge').textContent = 'GT: ' + v;
+                updateCalcScreen(calcExpr || '0', 'کلید کشویی GT: روشن یا خاموش کردن دکمهٔ GT (حافظهٔ جمع کل محاسبه‌های انجام‌شده).');
+            } else if (sw === 'DEC') {
+                const v = document.getElementById('calcDecSwitch').value;
+                const map = {
+                    'F': 'نمایش تمامی رقم‌های اعشار (Floating).',
+                    '3': 'نمایش تا سه رقم اعشار.',
+                    '2': 'نمایش تا دو رقم اعشار.',
+                    '0': 'عدم نمایش رقم اعشار (گرد کردن به عدد صحیح).',
+                    'A': 'حالت ADD2: عملیات روی عددهای اعشاری تایپ‌شده را به صورت خودکار تا دو رقم اعشار نمایش می‌دهد.'
+                };
+                updateCalcScreen(calcExpr || '0', map[v]);
+            } else if (sw === 'ROUND') {
+                const v = document.getElementById('calcRoundSwitch').value;
+                document.getElementById('roundStatusBadge').textContent = 'ROUND: ' + v;
+                const map = {
+                    '5/4': 'گرد کردن معمولی عددها (اگر رقم بعدی ۵ یا بیشتر باشد به بالا، وگرنه به پایین).',
+                    'UP': 'گرد کردن عددها همواره به سمت بالا.',
+                    'DOWN': 'گرد کردن عددها همواره به سمت پایین (برش اعشار).'
+                };
+                updateCalcScreen(calcExpr || '0', map[v]);
+            }
+        }
+
+        function pressCalc(ch) {
+            playSound('click');
+            calcExpr += ch;
+            updateCalcScreen(calcExpr, 'دکمه‌های اعداد و انجام دادن عملیات اصلی چهارگانه (+، −، ×، ÷).');
+        }
+
+        function calcClear() {
+            playSound('click');
+            calcExpr = '';
+            updateCalcScreen('0', 'دکمه C: پاک کردن عددها و محاسبه فعلی.');
+        }
+
+        function evalCalc() {
+            playSound('coin');
+            try {
+                let res = Function('"use strict";return (' + (calcExpr || '0') + ')')();
+                const decMode = document.getElementById('calcDecSwitch').value;
+                if (decMode === '2' || decMode === 'A') res = Number(res.toFixed(2));
+                else if (decMode === '3') res = Number(res.toFixed(3));
+                else if (decMode === '0') res = Math.round(res);
+
+                if (document.getElementById('calcGtSwitch').value === 'ON') {
+                    calcGrandTotal += res;
+                }
+                calcExpr = String(res);
+                updateCalcScreen(calcExpr, 'دکمه (=): محاسبه نتیجه و افزودن خودکار حاصل به حافظه GT.');
+            } catch (e) {
+                updateCalcScreen('Error', 'عبارت ریاضی نامعتبر است.');
+                calcExpr = '';
+            }
+        }
+
+        function calcMemAdd() {
+            evalCalc();
+            calcMemory += parseFloat(calcExpr) || 0;
+            updateCalcScreen(calcExpr, 'دکمه M+: افزودن عدد نمایش‌داده‌شده به عدد ذخیره‌شده در حافظه.');
+        }
+
+        function calcMemRecall() {
+            playSound('click');
+            calcExpr = String(calcMemory);
+            updateCalcScreen(calcExpr, 'دکمه RM (Recall Memory): فراخوانی و نمایش عدد ذخیره‌شده در حافظه.');
+        }
+
+        function calcMemClear() {
+            playSound('click');
+            calcMemory = 0;
+            updateCalcScreen(calcExpr || '0', 'دکمه CM (Clear Memory): پاک کردن کامل حافظه (M).');
+        }
+
+        function calcGT() {
+            playSound('click');
+            calcExpr = String(calcGrandTotal);
+            updateCalcScreen(calcExpr, 'دکمه GT (Grand Total): نمایش حاصل‌جمع تمامی محاسبه‌های انجام‌شده.');
+        }
+
+        function calcPercent() {
+            playSound('click');
+            let val = (parseFloat(calcExpr) || 0) / 100;
+            calcExpr = String(val);
+            updateCalcScreen(calcExpr, 'دکمه %: محاسبه درصد (مثلاً برای محاسبه تخفیف یا کارمزد).');
+        }
+
+        function calcAction(act) {
+            playSound('click');
+            if (act === '+/-') {
+                calcExpr = String((parseFloat(calcExpr) || 0) * -1);
+                updateCalcScreen(calcExpr, 'دکمه +/-: تغییر علامت عددها (مثبت به منفی و برعکس).');
+            } else if (act === 'MU') {
+                updateCalcScreen(calcExpr || '0', 'دکمه MU (Mark Up): محاسبه سود ناخالص و قیمت فروش پس از تخفیف یا سود.');
+            } else if (act === 'SQRT') {
+                let v = Math.sqrt(Math.abs(parseFloat(calcExpr) || 0));
+                calcExpr = String(Number(v.toFixed(4)));
+                updateCalcScreen(calcExpr, 'دکمه √: محاسبه ریشه دوم (جذر) عدد.');
+            } else if (act === 'CA') {
+                calcExpr = '';
+                calcMemory = 0;
+                calcGrandTotal = 0;
+                updateCalcScreen('0', 'دکمه CA (Clear All): پاک کردن تمام نوشته‌ها، صفحه نمایش و حافظه‌ها.');
+            } else if (act === 'CE') {
+                calcExpr = '';
+                updateCalcScreen('0', 'دکمه CE (Clear Entry): پاک کردن آخرین عدد واردشده بدون پاک شدن کل فرمول.');
+            } else if (act === 'BACK') {
+                calcExpr = calcExpr.slice(0, -1);
+                updateCalcScreen(calcExpr || '0', 'دکمه →: پاک کردن رقم آخر (اصلاح اشتباه تایپی).');
+            } else if (act === 'M-') {
+                evalCalc();
+                calcMemory -= parseFloat(calcExpr) || 0;
+                updateCalcScreen(calcExpr, 'دکمه M-: کسر کردن عدد فعلی از عدد ذخیره‌شده در حافظه.');
+            }
+        }
+
+        /* بازرس فاکتور فروش (شکل ۸-۸) */
+        let inspectedParts = new Set();
+        function inspectInvoicePart(partId, btnEl) {
+            inspectedParts.add(partId);
+            btnEl.style.background = '#16a34a';
+            btnEl.textContent = '✅ تایید شد';
+            const msgs = {
+                1: '۱. سربرگ و نشانی دقیق فروشنده روی برگ خرید بررسی و تایید شد.',
+                2: '۲. تاریخ خرید و نام خریدار در بالای فاکتور ثبت شده است.',
+                3: '۳. شماره سریال کالا برای خدمات پشتیبانی و گارانتی درج شده است.',
+                4: '۴. تعداد، مشخصات و بهای کالا کاملاً شفاف و بدون هیچ‌گونه قلم‌خوردگی است.',
+                5: '۵. مهر و امضای معتبر صادرکننده در پایین فاکتور وجود دارد.'
+            };
+            const log = document.getElementById('invoiceInspectLog');
+            log.style.color = '#15803d';
+            log.textContent = `${msgs[partId]} (بررسی شده: ${inspectedParts.size.toLocaleString('fa-IR')} از ۵)`;
+            addCoins(10, `کشف ویژگی فاکتور معتبر (${inspectedParts.size}/5)`);
+        }
+
+        /* چالش تخفیف لباس مینا و میترا */
+        let currentOrigPrice = 500000;
+        let currentDiscPct = 20;
+
+        function generateNewDiscountQuestion() {
+            playSound('click');
+            const prices = [200000, 350000, 400000, 600000, 800000];
+            const pcts = [10, 15, 20, 25, 30, 50];
+            currentOrigPrice = prices[Math.floor(Math.random() * prices.length)];
+            currentDiscPct = pcts[Math.floor(Math.random() * pcts.length)];
+            document.getElementById('invoiceChallengeText').innerHTML =
+                `مینا و میترا لباسی به قیمت اولیه <strong>${currentOrigPrice.toLocaleString('fa-IR')} ریال</strong> با <strong>${currentDiscPct.toLocaleString('fa-IR')}٪ تخفیف</strong> انتخاب کرده‌اند. قیمت خرید پس از کسر تخفیف چند ریال است؟`;
+            document.getElementById('invoiceAnswerInput').value = '';
+            document.getElementById('invoiceFeedback').textContent = '';
+        }
+
+        function checkInvoiceAnswer() {
+            const userAns = parseFloat(document.getElementById('invoiceAnswerInput').value) || 0;
+            const expected = currentOrigPrice * (1 - currentDiscPct / 100);
+            const fb = document.getElementById('invoiceFeedback');
+            if (Math.abs(userAns - expected) < 1) {
+                fb.style.color = 'var(--neon-green)';
+                fb.textContent = `🎉 عالیه! مبلغ تخفیف ${(currentOrigPrice - expected).toLocaleString('fa-IR')} ریال و قیمت نهایی پرداخت ${expected.toLocaleString('fa-IR')} ریال است!`;
+                addCoins(35, 'محاسبه دقیق قیمت لباس پس از کسر تخفیف');
+            } else {
+                playSound('error');
+                fb.style.color = 'var(--neon-red)';
+                fb.textContent = `❌ دقت کن! اول ${currentOrigPrice.toLocaleString('fa-IR')} را در ${currentDiscPct}٪ ضرب کن تا مبلغ تخفیف به دست بیاید، بعد از قیمت اولیه کم کن.`;
+            }
+        }
+
+        /* =========================================================
+           ۶. مرحله ۴: آزمایشگاه ماینینگ، بلاک‌چین ضد هک و رمزگذاری اکسل
+           ========================================================= */
+        let chainBlockNum = 2;
+        let lastChainHash = '00007c91e305';
+
+        function generateFakeHash(str) {
+            let h = 2166136261;
+            for (let i = 0; i < str.length; i++) {
+                h ^= str.charCodeAt(i);
+                h += (h << 1) + (h << 4) + (h << 7) + (h << 8) + (h << 24);
+            }
+            return '0000' + Math.abs(h).toString(16).padStart(8, 'a').slice(0, 8);
+        }
+
+        function mineNewBlock() {
+            const sender = document.getElementById('bcSender').value.trim() || 'حسین';
+            const receiver = document.getElementById('bcReceiver').value.trim() || 'صندوق کلاس';
+            const amount = parseFloat(document.getElementById('bcAmount').value) || 25000;
+
+            // فعال کردن دور تند فن‌های کارت گرافیک ماینر
+            document.querySelectorAll('.gpu-fan').forEach(f => f.classList.add('turbo'));
+            document.getElementById('rigHashrate').textContent = '980.8 MH/s (OVERCLOCK!)';
+            document.getElementById('rigTemp').textContent = '79 °C 🔥';
+            document.getElementById('blockchainConsole').textContent = '⛏️ [MINING...]: کارت‌های گرافیک ماینر در حال حل معادله ریاضی برای قفل کردن بلاک جدید هستند...';
+
+            setTimeout(() => {
+                document.querySelectorAll('.gpu-fan').forEach(f => f.classList.remove('turbo'));
+                document.getElementById('rigHashrate').textContent = '125.4 MH/s';
+                document.getElementById('rigTemp').textContent = '64 °C';
+
+                chainBlockNum++;
+                const newHash = generateFakeHash(chainBlockNum + sender + receiver + amount + lastChainHash);
+                const track = document.getElementById('blocksTrack');
+
+                const linkIcon = document.createElement('div');
+                linkIcon.className = 'chain-link-icon';
+                linkIcon.textContent = '🔗';
+                track.appendChild(linkIcon);
+
+                const blockDiv = document.createElement('div');
+                blockDiv.className = 'crypto-block';
+                blockDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; font-weight: bold; color: var(--neon-green); margin-bottom: 6px;">
+                        <span>📦 بلاک #${chainBlockNum}</span>
+                        <span>🔒 قفل‌شده</span>
+                    </div>
+                    <div style="font-size: 0.85rem; margin-bottom: 8px;">
+                        <div>👤 انتقال: <strong>${sender} ⬅ ${receiver}</strong></div>
+                        <div>💰 مبلغ: <strong>${amount.toLocaleString('fa-IR')} ریال</strong></div>
+                    </div>
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">هش قبلی (Prev Hash):</span>
+                    <code class="hash-badge">${lastChainHash}</code>
+                    <span style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px; display: block;">هش این بلاک (Hash):</span>
+                    <code class="hash-badge">${newHash}</code>
+                `;
+                track.appendChild(blockDiv);
+                track.scrollLeft = -track.scrollWidth;
+
+                lastChainHash = newHash;
+                document.getElementById('blockchainConsole').textContent =
+                    `✅ [BLOCK #${chainBlockNum} MINED]: بلاک جدید با هش ${newHash} استخراج شد و در دفترچه تمام ۳۰ نفر ثبت گردید!`;
+                addCoins(45, `استخراج بلاک #${chainBlockNum} با دستگاه ماینر`);
+            }, 900);
+        }
+
+        function simulateHackerAttack() {
+            playSound('hack');
+            const b2 = document.getElementById('blockCard2');
+            b2.classList.add('hacked-block');
+            document.getElementById('b2LockIcon').textContent = '⚠️ دستکاری شد!';
+            document.getElementById('b2AmountText').innerHTML = '<span style="color:var(--neon-red);">۹۹,۰۰۰,۰۰۰ تومان (تقلب!)</span>';
+            document.getElementById('b2HashText').style.color = 'var(--neon-red)';
+            document.getElementById('b2HashText').textContent = 'ERR_FAKE_999999';
+            document.getElementById('networkSecStatus').style.color = 'var(--neon-red)';
+            document.getElementById('networkSecStatus').textContent = '🚨 هشدار دستکاری در بلاک ۲!';
+            document.getElementById('blockchainConsole').style.color = 'var(--neon-red)';
+            document.getElementById('blockchainConsole').textContent =
+                '🚨 [HACK DETECTED]: یک نفر سعی کرد در دفترچه خودش مبلغ ۱۰,۰۰۰ تومان را به ۹۹ میلیون تغییر دهد! چون هش بلاک خراب شده، ۲۹ کامپیوتر دیگر شبکه فوراً مچ او را گرفتند!';
+            document.getElementById('repairChainBtn').style.display = 'inline-flex';
+        }
+
+        function repairBlockchain() {
+            const b2 = document.getElementById('blockCard2');
+            b2.classList.remove('hacked-block');
+            document.getElementById('b2LockIcon').textContent = '🔒 قفل‌شده';
+            document.getElementById('b2AmountText').textContent = '۱۰,۰۰۰ تومان';
+            document.getElementById('b2HashText').style.color = 'var(--neon-green)';
+            document.getElementById('b2HashText').textContent = '00007c91e305';
+            document.getElementById('networkSecStatus').style.color = 'var(--neon-blue)';
+            document.getElementById('networkSecStatus').textContent = '۱۰۰٪ ایمن ✅';
+            document.getElementById('blockchainConsole').style.color = 'var(--neon-green)';
+            document.getElementById('blockchainConsole').textContent =
+                '🛡️ [CONSENSUS RESTORED]: شبکه بلاک‌چین با مقایسه ۲۹ دفترچه سالم دیگر، عدد جعلی هکر را پاک کرد و سند اصلی را برگرداند!';
+            document.getElementById('repairChainBtn').style.display = 'none';
+            addCoins(30, 'خنثی‌سازی حمله هکر با اجماع بلاک‌چین');
+        }
+
+        /* رمزگذاری فایل اکسل */
+        function checkPassStrength() {
+            const pass = document.getElementById('excelPassInput').value;
+            const bar = document.getElementById('passStrengthBar');
+            const txt = document.getElementById('passStrengthText');
+            let score = 0;
+            if (pass.length >= 6) score += 35;
+            if (/[A-Z0-9]/.test(pass)) score += 35;
+            if (/[^A-Za-z0-9]/.test(pass) || pass.length >= 10) score += 30;
+
+            bar.style.width = score + '%';
+            if (score < 40) {
+                bar.style.background = 'var(--neon-red)';
+                txt.textContent = 'قدرت رمز: ضعیف (حداقل ۶ کاراکتر و شامل عدد باشد)';
+            } else if (score < 80) {
+                bar.style.background = 'var(--neon-gold)';
+                txt.textContent = 'قدرت رمز: متوسط و قابل قبول';
+            } else {
+                bar.style.background = 'var(--neon-green)';
+                txt.textContent = 'قدرت رمز: فوق‌العاده امن و ضد نفوذ ✅';
+            }
+        }
+
+        function lockAndEmailExcel() {
+            const pass = document.getElementById('excelPassInput').value.trim();
+            if (pass.length < 4) {
+                playSound('error');
+                showToast('❌ ابتدا یک رمز عبور (حداقل ۴ حرفی) برای فایل اکسل انتخاب کنید!');
+                return;
+            }
+            document.getElementById('vaultLockIcon').textContent = '🔒';
+            addCoins(40, 'رمزگذاری فایل اکسل و ارسال رایانامه به دبیر');
+        }
+
+        /* =========================================================
+           ۷. مرحله ۵: کارت‌های قرآنی (صفحه ۱۲۵) و نبرد نهایی آزمون
+           ========================================================= */
+        function unlockQuranCard(id, cardEl) {
+            const secretDiv = cardEl.querySelector('.q-secret');
+            if (secretDiv.dataset.unlocked === '1') return;
+            secretDiv.dataset.unlocked = '1';
+
+            const lessons = {
+                1: '✅ اصل اول: اهمیت «مشورت با افراد صاحب‌نظر و خبره» پیش از اجرای کارها (بدون مشورت کارها ناقص‌اند).',
+                2: '✅ اصل دوم: «قاطعیت در تصمیم‌گیری، کنار زدن تردید و توکل بر خدا» پس از بررسی جوانب کار.',
+                3: '✅ اصل سوم: پرهیز از «به تأخیر انداختن کارها به فردا» و استفاده بهینه از فرصت‌ها.'
+            };
+            secretDiv.innerHTML = `<strong style="color:#fff;">${lessons[id]}</strong>`;
+            cardEl.style.boxShadow = '0 0 20px rgba(0,255,102,0.4)';
+            addCoins(20, 'کشف پیام مدیریتی آیات قرآن کریم');
+        }
+
+        const finalQuizQuestions = [
+            {
+                q: '۱. در یک سازمان، وظیفهٔ «دریافت، فرستادن، ثبت نامه‌ها و پخش نامه‌ها» بر عهدهٔ کدام بخش است؟',
+                options: ['کارگزینی', 'دبیرخانه', 'تدارکات و پشتیبانی', 'بایگانی'],
+                ans: 1
+            },
+            {
+                q: '۲. کدام گزینه «معادلهٔ اساسی حسابداری (معادلهٔ ترازنامه)» را به درستی نشان می‌دهد؟',
+                options: ['دارایی‌ها = بدهی‌ها + سرمایه', 'سرمایه = دارایی‌ها + بدهی‌ها', 'بدهی‌ها = دارایی‌ها + سرمایه', 'دارایی‌ها = درآمد + هزینه'],
+                ans: 0
+            },
+            {
+                q: '۳. نامه‌های رسیده به سازمان یا مدرسه در چه دفتری ثبت می‌شوند تا قابل پیگیری باشند؟',
+                options: ['دفتر روزنامه خرید', 'دفتر اندیکاتور (دفتر ارسال و رسید نامه‌ها)', 'دفتر انبارداری', 'دفتر کارگزینی'],
+                ans: 1
+            },
+            {
+                q: '۴. در ماشین‌حساب رومیزی حسابداری (شکل ۱۰-۸)، وظیفهٔ دکمهٔ «GT» چیست؟',
+                options: ['پاک کردن رقم آخر', 'تغییر علامت عددها', 'نمایش حاصل‌جمع محاسبه‌های انجام‌شده', 'محاسبه جذر عدد'],
+                ans: 2
+            },
+            {
+                q: '۵. برای کالاهایی که خدمات پشتیبانی و گارانتی دارند، ثبت چه موردی در برگ خرید (فاکتور) الزامی است؟',
+                options: ['شماره سریال کالا', 'شماره شناسنامه خریدار', 'نام مدیر کارخانه', 'کد پستی انبار'],
+                ans: 0
+            },
+            {
+                q: '۶. چرا فناوری «بلاک‌چین» امن‌ترین دفتر ثبت مالی دیجیتال شناخته می‌شود؟',
+                options: ['چون فقط دست یک نفر است', 'چون نسخه‌ای از دفتر نزد همه اعضای شبکه است و با قفل رمزنگاری (هش) هیچ‌کس نمی‌تواند به تنهایی آن را دستکاری کند', 'چون با مداد نوشته می‌شود', 'چون نیازی به کامپیوتر ندارد'],
+                ans: 1
+            }
+        ];
+
+        let qIndex = 0;
+        let qCorrectCount = 0;
+
+        function renderQuizQuestion() {
+            if (qIndex >= finalQuizQuestions.length) {
+                document.getElementById('quizQuestionText').innerHTML =
+                    `🎉 آزمون به پایان رسید! شما به <strong>${qCorrectCount.toLocaleString('fa-IR')} از ${finalQuizQuestions.length.toLocaleString('fa-IR')}</strong> سوال پاسخ صحیح دادید. اکنون در کادر پایین نام خود را بنویسید و گواهینامه قهرمانی دریافت کنید!`;
+                document.getElementById('quizOptionsGrid').innerHTML =
+                    `<button class="action-btn" onclick="resetQuiz()">🔄 تکرار مجدد آزمون</button>`;
+                return;
+            }
+            const item = finalQuizQuestions[qIndex];
+            document.getElementById('quizProgressText').textContent = `سوال ${(qIndex + 1).toLocaleString('fa-IR')} از ${finalQuizQuestions.length.toLocaleString('fa-IR')}`;
+            document.getElementById('quizQuestionText').textContent = item.q;
+            const grid = document.getElementById('quizOptionsGrid');
+            grid.innerHTML = '';
+
+            item.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'dept-btn';
+                btn.style.padding = '12px';
+                btn.textContent = opt;
+                btn.onclick = () => checkQuizOption(idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        function checkQuizOption(selectedIdx) {
+            const item = finalQuizQuestions[qIndex];
+            const fb = document.getElementById('quizFeedbackMsg');
+            if (selectedIdx === item.ans) {
+                qCorrectCount++;
+                document.getElementById('quizScoreBadge').textContent = `پاسخ‌های درست: ${qCorrectCount.toLocaleString('fa-IR')}`;
+                fb.style.color = 'var(--neon-green)';
+                fb.textContent = '✅ احسنت! پاسخ کاملاً صحیح است.';
+                addCoins(50, 'پاسخ صحیح در آزمون نهایی');
+            } else {
+                playSound('error');
+                fb.style.color = 'var(--neon-red)';
+                fb.textContent = `❌ نادرست! گزینه صحیح: «${item.options[item.ans]}»`;
+            }
+            qIndex++;
+            setTimeout(() => {
+                fb.textContent = '';
+                renderQuizQuestion();
+            }, 1300);
+        }
+
+        function resetQuiz() {
+            qIndex = 0;
+            qCorrectCount = 0;
+            document.getElementById('quizScoreBadge').textContent = 'پاسخ‌های درست: ۰';
+            renderQuizQuestion();
+        }
+
+        function generateCertificate() {
+            const name = document.getElementById('studentCertName').value.trim() || 'دانش‌آموز پرتلاش پایه هشتم';
+            const rank = document.getElementById('rankDisplay').textContent;
+            const card = document.getElementById('certCardOutput');
+            const body = document.getElementById('certBodyText');
+            playSound('coin');
+            card.style.display = 'block';
+            body.innerHTML = `بدین‌وسیله گواهی می‌شود فرماندهٔ جوان <strong>«${name}»</strong> تمامی ماموریت‌های <strong>پودمان ۸ (امور اداری، حسابداری، ماشین‌حساب و فناوری بلاک‌چین)</strong> را با موفقیت به پایان رسانده و با کسب <strong>${playerCoins.toLocaleString('fa-IR')} سکه طلا</strong> به درجهٔ افتخاری <strong>«${rank}»</strong> نائل گردیده است.`;
+        }
+
+        /* =========================================================
+           ۸. موتور گرافیکی پس‌زمینه (شبکه هندسی متحرک گره‌های بلاک‌چین)
+           ========================================================= */
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 38; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                vx: (Math.random() - 0.5) * 0.7,
+                vy: (Math.random() - 0.5) * 0.7,
+                r: Math.random() * 2.5 + 1.5
+            });
+        }
+
+        function animateNetwork() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particles.length; i++) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 243, 255, 0.55)';
+                ctx.fill();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    let p2 = particles[j];
+                    let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                    if (dist < 135) {
+                        ctx.beginPath();
+                        ctx.moveTo(p.x, p.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.strokeStyle = `rgba(0, 243, 255, ${0.15 * (1 - dist / 135)})`;
+                        ctx.lineWidth = 1;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animateNetwork);
+        }
+
+        // راه‌اندازی اولیه بازی پس از بارگذاری صفحه
+        window.addEventListener('DOMContentLoaded', () => {
+            loadOfficeCase();
+            renderQuizQuestion();
+            animateNetwork();
+        });
     </script>
 </body>
 </html>
-<!-- پایان بخش دوم (پایان کل کد) -->
+<!-- پایان بخش پنجم (پایان کل کد) -->
+
+
