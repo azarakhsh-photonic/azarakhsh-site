@@ -2,558 +2,792 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سرزمین جادویی پایتون - پودمان ۶ پایه هفتم</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>قرارگاه پایتون فرمانده‌ی نور | استاد محمدحسن پورصالحی</title>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <style>
+        :root {
+            --neon-blue: #00f2fe;
+            --neon-pink: #ff0844;
+            --neon-gold: #facc15;
+            --neon-green: #00ff87;
+            --neon-purple: #b721ff;
+        }
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Vazirmatn', Tahoma, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-        body {
-            background: linear-gradient(135deg, #0f172a, #1e1b4b, #31104b);
-            color: #f8fafc;
-            min-height: 100vh;
+        html, body {
+            width: 100%;
+            min-height: 100dvh;
+            background: radial-gradient(circle at top, #1e1035 0%, #090514 60%, #020108 100%);
+            color: #ffffff;
             overflow-x: hidden;
             position: relative;
         }
-        /* ذرات متحرک پس‌زمینه */
-        .bg-bubbles {
+        /* شبکه سایبری و ذرات نوری پس‌زمینه */
+        .cyber-grid {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 242, 254, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(183, 33, 255, 0.07) 1px, transparent 1px);
+            background-size: 35px 35px;
             z-index: 0;
+            pointer-events: none;
+        }
+        .floating-icons {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
             pointer-events: none;
             overflow: hidden;
         }
-        .bubble {
+        .float-item {
             position: absolute;
-            bottom: -100px;
-            background: rgba(56, 189, 248, 0.12);
-            border-radius: 50%;
-            animation: rise 15s infinite ease-in;
+            bottom: -60px;
+            font-size: 1.8rem;
+            opacity: 0.25;
+            animation: floatUp 14s linear infinite;
+            filter: drop-shadow(0 0 10px var(--neon-blue));
         }
-        @keyframes rise {
-            0% { bottom: -100px; transform: translateX(0) scale(1); }
-            50% { transform: translateX(60px) scale(1.2); }
-            100% { bottom: 110%; transform: translateX(-60px) scale(0.8); }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            20% { opacity: 0.3; }
+            80% { opacity: 0.3; }
+            100% { transform: translateY(-115vh) rotate(360deg) scale(1.3); opacity: 0; }
         }
-        /* هدر و نوار امتیاز */
+
+        /* نوار اخبار نئونی متحرک */
+        .marquee-bar {
+            position: relative;
+            z-index: 60;
+            background: linear-gradient(90deg, #ff0844, #b721ff, #00f2fe, #b721ff, #ff0844);
+            background-size: 300% 100%;
+            animation: gradientMove 6s infinite linear;
+            color: #fff;
+            padding: 6px 0;
+            font-size: 0.85rem;
+            font-weight: 900;
+            overflow: hidden;
+            white-space: nowrap;
+            box-shadow: 0 2px 15px rgba(255, 8, 68, 0.5);
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        .marquee-content {
+            display: inline-block;
+            animation: scrollMarquee 22s linear infinite;
+        }
+        @keyframes scrollMarquee {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* هدر پر زرق‌وبرق */
         header {
             position: sticky;
             top: 0;
-            z-index: 50;
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(12px);
-            border-bottom: 2px solid rgba(56, 189, 248, 0.35);
-            padding: 14px 24px;
+            z-index: 55;
+            background: rgba(10, 6, 28, 0.92);
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid var(--neon-blue);
+            box-shadow: 0 5px 25px rgba(0, 242, 254, 0.3);
+            padding: 10px 14px;
+        }
+        .header-top {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            gap: 10px;
         }
-        .logo-area {
+        .brand-box {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
-        .snake-icon {
-            font-size: 2.4rem;
-            animation: bounce 2s infinite;
+        .commander-orb {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fff 0%, #facc15 45%, #ff0844 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.9rem;
+            box-shadow: 0 0 20px #facc15, 0 0 35px #ff0844;
+            animation: pulseOrb 2s infinite alternate;
+            flex-shrink: 0;
         }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        @keyframes pulseOrb {
+            from { transform: scale(0.95); box-shadow: 0 0 12px #facc15; }
+            to { transform: scale(1.08); box-shadow: 0 0 28px #facc15, 0 0 45px #00f2fe; }
         }
-        .title-text h1 {
-            font-size: 1.35rem;
-            background: linear-gradient(90deg, #38bdf8, #facc15, #4ade80);
+        .brand-titles h1 {
+            font-size: 1.15rem;
+            font-weight: 900;
+            background: linear-gradient(90deg, #fff, #facc15, #00f2fe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-weight: 900;
+            text-shadow: 0 0 15px rgba(250, 204, 21, 0.3);
         }
-        .title-text p {
-            font-size: 0.85rem;
-            color: #94a3b8;
+        .teacher-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(90deg, rgba(250, 204, 21, 0.2), rgba(0, 242, 254, 0.2));
+            border: 1px solid var(--neon-gold);
+            color: #fde047;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: bold;
+            margin-top: 4px;
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.35);
         }
-        .stats-bar {
+        .hud-controls {
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(255, 255, 255, 0.08);
-            padding: 8px 18px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            gap: 8px;
+            flex-wrap: wrap;
         }
-        .xp-badge {
-            color: #facc15;
+        .xp-pill {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--neon-gold);
+            padding: 5px 12px;
+            border-radius: 25px;
+            font-weight: 900;
+            font-size: 0.88rem;
+            color: var(--neon-gold);
+            box-shadow: 0 0 15px rgba(250, 204, 21, 0.4);
+        }
+        .rank-pill {
+            background: linear-gradient(135deg, #ff0844, #b721ff);
+            padding: 5px 12px;
+            border-radius: 25px;
+            font-size: 0.8rem;
             font-weight: bold;
-            font-size: 1rem;
+            box-shadow: 0 0 15px rgba(183, 33, 255, 0.6);
         }
-        .level-badge {
-            background: linear-gradient(90deg, #8b5cf6, #ec4899);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+        .fs-btn {
+            background: rgba(0, 242, 254, 0.15);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 5px 10px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 0.8rem;
             font-weight: bold;
         }
-        /* بدنه اصلی و تب‌ها */
+        /* نوار انرژی نور */
+        .light-bar-wrap {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .light-bar-fill {
+            height: 100%;
+            width: 15%;
+            background: linear-gradient(90deg, #facc15, #00ff87, #00f2fe);
+            box-shadow: 0 0 12px #00f2fe;
+            transition: width 0.4s ease;
+        }
+
+        /* کانتینر تمام‌صفحه موبایل و دسکتاپ */
         .container {
             position: relative;
             z-index: 10;
-            max-width: 1150px;
-            margin: 25px auto;
-            padding: 0 16px 60px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 10px 70px;
         }
-        .nav-tabs {
+
+        /* بنر فرمانده‌ی نور */
+        .commander-hero {
+            background: linear-gradient(135deg, rgba(183, 33, 255, 0.25), rgba(0, 242, 254, 0.2), rgba(250, 204, 21, 0.15));
+            border: 2px solid rgba(250, 204, 21, 0.6);
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-bottom: 14px;
             display: flex;
+            align-items: center;
+            justify-content: space-between;
             flex-wrap: wrap;
             gap: 10px;
-            justify-content: center;
-            margin-bottom: 25px;
+            box-shadow: 0 0 25px rgba(183, 33, 255, 0.35), inset 0 0 20px rgba(250, 204, 21, 0.15);
+        }
+        .commander-hero-text {
+            font-size: 0.92rem;
+            line-height: 1.7;
+        }
+        .commander-hero-text strong {
+            color: var(--neon-gold);
+            text-shadow: 0 0 8px rgba(250, 204, 21, 0.6);
+        }
+
+        /* دکمه‌های تب نئونی */
+        .nav-tabs {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
         }
         .tab-btn {
-            background: rgba(30, 41, 59, 0.85);
+            background: rgba(15, 23, 42, 0.9);
             color: #cbd5e1;
-            border: 2px solid rgba(56, 189, 248, 0.25);
-            padding: 12px 20px;
-            border-radius: 16px;
-            font-size: 0.95rem;
-            font-weight: bold;
+            border: 2px solid rgba(0, 242, 254, 0.3);
+            padding: 10px 6px;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            font-weight: 900;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.25s;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
         }
         .tab-btn:hover {
-            transform: translateY(-3px);
-            border-color: #38bdf8;
+            border-color: var(--neon-gold);
             color: #fff;
+            transform: translateY(-2px);
         }
         .tab-btn.active {
-            background: linear-gradient(135deg, #0284c7, #4f46e5);
+            background: linear-gradient(135deg, #ff0844, #b721ff);
             color: #fff;
-            border-color: #facc15;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 20px rgba(255, 8, 68, 0.7), 0 0 30px rgba(250, 204, 21, 0.4);
+            transform: scale(1.03);
         }
+
+        /* کارت‌های بخش‌ها */
         .section-card {
             display: none;
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 24px;
-            padding: 28px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-            animation: fadeIn 0.4s ease;
+            background: rgba(13, 18, 38, 0.88);
+            backdrop-filter: blur(14px);
+            border: 2px solid rgba(0, 242, 254, 0.4);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: 0 0 35px rgba(0, 242, 254, 0.2), inset 0 0 25px rgba(183, 33, 255, 0.15);
+            animation: zoomIn 0.35s ease;
         }
         .section-card.active {
             display: block;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
         }
         .sec-title {
-            font-size: 1.4rem;
-            color: #38bdf8;
-            margin-bottom: 15px;
-            border-bottom: 2px dashed rgba(56, 189, 248, 0.3);
-            padding-bottom: 12px;
+            font-size: 1.2rem;
+            color: var(--neon-gold);
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed rgba(250, 204, 21, 0.4);
+            text-shadow: 0 0 10px rgba(250, 204, 21, 0.4);
         }
         .grid-2 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 22px;
-            margin-top: 18px;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 16px;
         }
         .box {
-            background: rgba(15, 23, 42, 0.75);
-            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: linear-gradient(160deg, rgba(24, 24, 56, 0.9), rgba(9, 11, 26, 0.95));
+            border: 1px solid rgba(183, 33, 255, 0.45);
             border-radius: 18px;
-            padding: 20px;
-            transition: all 0.3s;
+            padding: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
         }
-        .box:hover {
-            border-color: rgba(56, 189, 248, 0.5);
+        .box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-gold), var(--neon-pink));
         }
         .box h3 {
-            color: #facc15;
-            margin-bottom: 12px;
-            font-size: 1.15rem;
+            color: var(--neon-blue);
+            margin-bottom: 10px;
+            font-size: 1.05rem;
         }
         .box p {
-            line-height: 1.8;
-            font-size: 0.95rem;
+            line-height: 1.75;
+            font-size: 0.9rem;
             color: #e2e8f0;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .code-block {
             direction: ltr;
             text-align: left;
-            background: #090d16;
-            color: #4ade80;
-            padding: 14px;
+            background: #04060c;
+            color: var(--neon-green);
+            padding: 12px;
             border-radius: 12px;
             font-family: Consolas, monospace;
-            font-size: 0.95rem;
-            border-left: 4px solid #38bdf8;
-            margin: 12px 0;
-            line-height: 1.7;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0, 255, 135, 0.35);
+            border-left: 4px solid var(--neon-blue);
+            margin: 10px 0;
+            line-height: 1.65;
             overflow-x: auto;
+            box-shadow: inset 0 0 12px rgba(0, 255, 135, 0.1);
         }
-        .kw { color: #f472b6; font-weight: bold; }
+        .kw { color: #ff4b82; font-weight: bold; }
         .str { color: #facc15; }
-        .fn { color: #38bdf8; }
-        .num { color: #c084fc; }
+        .fn { color: #00f2fe; }
+        .num { color: #d896ff; }
+
         .btn {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #00b09b, #96c93d);
             color: #fff;
             border: none;
-            padding: 10px 16px;
+            padding: 9px 14px;
             border-radius: 12px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.25s;
+            font-weight: 900;
+            font-size: 0.86rem;
+            transition: all 0.2s;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            margin: 4px;
+            gap: 5px;
+            margin: 3px;
+            box-shadow: 0 4px 12px rgba(0, 255, 135, 0.3);
         }
-        .btn:hover {
-            transform: scale(1.04);
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        .btn:hover, .btn:active {
+            transform: scale(1.05);
+            filter: brightness(1.15);
         }
-        .btn-blue { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        .btn-purple { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-        .btn-orange { background: linear-gradient(135deg, #f59e0b, #d97706); }
-        .btn-red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .btn-blue { background: linear-gradient(135deg, #00c6ff, #0072ff); box-shadow: 0 4px 12px rgba(0, 198, 255, 0.35); }
+        .btn-purple { background: linear-gradient(135deg, #b721ff, #21d4fd); box-shadow: 0 4px 12px rgba(183, 33, 255, 0.35); }
+        .btn-orange { background: linear-gradient(135deg, #f7971e, #ffd200); color: #000; box-shadow: 0 4px 12px rgba(255, 210, 0, 0.35); }
+        .btn-red { background: linear-gradient(135deg, #ff0844, #ffb199); box-shadow: 0 4px 12px rgba(255, 8, 68, 0.35); }
+
         .input-field {
-            background: #1e293b;
-            border: 2px solid #475569;
+            background: #0d1326;
+            border: 2px solid #3b4262;
             color: #fff;
-            padding: 10px 14px;
+            padding: 9px 12px;
             border-radius: 10px;
             width: 100%;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
         }
         .input-field:focus {
             outline: none;
-            border-color: #38bdf8;
+            border-color: var(--neon-gold);
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.4);
         }
         .binary-out {
-            background: #000;
-            color: #22c55e;
+            background: #020409;
+            color: var(--neon-green);
             font-family: monospace;
-            padding: 12px;
+            padding: 10px;
             border-radius: 10px;
-            min-height: 48px;
+            min-height: 44px;
             word-break: break-all;
             direction: ltr;
             text-align: left;
-            border: 1px solid #22c55e;
+            border: 1px solid var(--neon-green);
+            box-shadow: 0 0 12px rgba(0, 255, 135, 0.2);
         }
-        /* شبیه‌ساز جعبه حافظه */
+
+        /* جعبه حافظه نوری */
         .mem-box {
-            width: 160px;
-            height: 125px;
-            margin: 15px auto;
-            background: linear-gradient(180deg, #334155, #1e293b);
-            border: 4px solid #facc15;
+            width: 155px;
+            height: 110px;
+            margin: 14px auto;
+            background: radial-gradient(circle, #1e293b, #0f172a);
+            border: 3px solid var(--neon-gold);
             border-radius: 16px;
             position: relative;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.45);
             transition: all 0.3s;
         }
         .mem-label {
             position: absolute;
-            top: -16px;
-            background: #facc15;
-            color: #0f172a;
-            padding: 3px 14px;
+            top: -14px;
+            background: var(--neon-gold);
+            color: #000;
+            padding: 2px 14px;
             border-radius: 12px;
             font-weight: 900;
             font-family: monospace;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         .mem-val {
             font-size: 1.4rem;
-            font-weight: bold;
-            color: #38bdf8;
+            font-weight: 900;
+            color: var(--neon-blue);
             font-family: monospace;
+            text-shadow: 0 0 10px var(--neon-blue);
         }
         .var-chip {
             display: inline-block;
-            background: #1e293b;
-            border: 2px solid #64748b;
-            padding: 8px 16px;
+            background: #131c38;
+            border: 2px solid #4f5b82;
+            padding: 7px 14px;
             border-radius: 12px;
-            margin: 6px;
+            margin: 4px;
             font-family: monospace;
-            font-size: 1rem;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: all 0.2s;
             direction: ltr;
         }
         .var-chip:hover {
-            transform: scale(1.08);
-            border-color: #facc15;
+            border-color: var(--neon-gold);
+            transform: scale(1.07);
         }
-        /* بوم نقاشی لاک‌پشت */
+
+        /* بوم نقاشی لاک‌پشت ریسپانسیو */
+        .canvas-wrap {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
         #turtleCanvas {
             background: #ffffff;
-            border: 4px solid #38bdf8;
-            border-radius: 16px;
-            display: block;
-            margin: 0 auto;
-            max-width: 100%;
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.3);
+            border: 4px solid var(--neon-gold);
+            border-radius: 18px;
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            box-shadow: 0 0 30px rgba(250, 204, 21, 0.45), 0 0 15px rgba(0, 242, 254, 0.4);
         }
-        /* گزینه‌های آزمون */
+
+        /* آزمون و گزینه‌ها */
         .quiz-option {
             display: block;
             width: 100%;
             text-align: right;
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(19, 28, 56, 0.95);
             border: 2px solid #475569;
-            color: #f8fafc;
-            padding: 14px 18px;
+            color: #fff;
+            padding: 12px 16px;
             border-radius: 14px;
-            margin: 10px 0;
+            margin: 8px 0;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            font-weight: bold;
             transition: all 0.2s;
         }
         .quiz-option:hover {
-            border-color: #38bdf8;
-            background: rgba(56, 189, 248, 0.15);
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
         }
         .quiz-option.correct {
-            background: rgba(16, 185, 129, 0.3);
-            border-color: #10b981;
+            background: rgba(0, 255, 135, 0.25);
+            border-color: var(--neon-green);
+            box-shadow: 0 0 20px rgba(0, 255, 135, 0.5);
         }
         .quiz-option.wrong {
-            background: rgba(239, 68, 68, 0.3);
-            border-color: #ef4444;
+            background: rgba(255, 8, 68, 0.25);
+            border-color: var(--neon-pink);
         }
         .feedback-msg {
             margin-top: 10px;
-            padding: 12px;
-            border-radius: 10px;
+            padding: 10px 14px;
+            border-radius: 12px;
             font-weight: bold;
+            font-size: 0.9rem;
             display: none;
+        }
+
+        /* فوتر امضای دبیر */
+        footer {
+            position: relative;
+            z-index: 20;
+            text-align: center;
+            padding: 18px 10px;
+            background: rgba(6, 4, 18, 0.95);
+            border-top: 2px solid rgba(250, 204, 21, 0.4);
+            font-size: 0.85rem;
+            color: #cbd5e1;
+        }
+        footer strong {
+            color: var(--neon-gold);
+        }
+
+        /* ذرات کلیک */
+        .click-spark {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 1.2rem;
+            animation: sparkFly 0.8s ease-out forwards;
+        }
+        @keyframes sparkFly {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
         }
         .confetti {
             position: fixed;
-            width: 10px;
-            height: 10px;
-            z-index: 999;
+            width: 11px;
+            height: 11px;
+            z-index: 9998;
             pointer-events: none;
             animation: fall 3s linear forwards;
         }
         @keyframes fall {
-            to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+            to { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* بهینه‌سازی ویژه موبایل برای تمام‌صفحه شدن کامل */
+        @media (max-width: 768px) {
+            .container {
+                padding: 8px 6px 50px;
+            }
+            .nav-tabs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .nav-tabs .tab-btn:last-child {
+                grid-column: span 2;
+            }
+            .section-card {
+                padding: 12px 10px;
+                border-radius: 16px;
+            }
+            .brand-titles h1 {
+                font-size: 1rem;
+            }
+            .commander-orb {
+                width: 42px;
+                height: 42px;
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="bg-bubbles" id="bubbles"></div>
+    <div class="cyber-grid"></div>
+    <div class="floating-icons" id="floatingIcons"></div>
 
+    <!-- نوار متحرک بالای صفحه -->
+    <div class="marquee-bar">
+        <div class="marquee-content">
+            ⚡ به قرارگاه کهکشانی پایتون خوش آمدید! | 🌟 هدایت عملیات: فرمانده‌ی نور (استاد محمدحسن پورصالحی) | 🐍 پودمان ۶ کار و فناوری پایه هفتم | 🎮 بازی کن، کد بزن، امتیاز نوری جمع کن و لوح افتخار بگیر! ⚡
+        </div>
+    </div>
+
+    <!-- هدر اصلی -->
     <header>
-        <div class="logo-area">
-            <div class="snake-icon">🐍</div>
-            <div class="title-text">
-                <h1>آکادمی تعاملی پایتون (پودمان ۶ - پایه هفتم)</h1>
-                <p>یادگیری مفهومی، آزمایشگاه کد و بازی با لاک‌پشت طلایی</p>
+        <div class="header-top">
+            <div class="brand-box">
+                <div class="commander-orb">☀️</div>
+                <div class="brand-titles">
+                    <h1>کهکشان پایتون | قرارگاه فرمانده‌ی نور</h1>
+                    <div class="teacher-badge">👨‍🏫 استاد محمدحسن پورصالحی • پایه هفتم</div>
+                </div>
+            </div>
+            <div class="hud-controls">
+                <div class="xp-pill">⚡ نور: <span id="xpCount">0</span></div>
+                <div class="rank-pill" id="levelName">سرباز نور</div>
+                <button class="fs-btn" onclick="toggleFullScreen()">⛶ تمام‌صفحه</button>
             </div>
         </div>
-        <div class="stats-bar">
-            <div class="xp-badge">⭐ امتیاز: <span id="xpCount">0</span></div>
-            <div class="level-badge" id="levelName">نوآموز کدنویسی</div>
+        <div class="light-bar-wrap">
+            <div class="light-bar-fill" id="lightBar"></div>
         </div>
     </header>
 
     <div class="container">
-        <!-- منوی تب‌ها -->
-        <div class="nav-tabs">
-            <button class="tab-btn active" onclick="openTab('tab1', this)">🤖 ۱. زبان ماشین و شروع پایتون</button>
-            <button class="tab-btn" onclick="openTab('tab2', this)">📦 ۲. متغیرها و ورودی</button>
-            <button class="tab-btn" onclick="openTab('tab3', this)">🧮 ۳. عملگرها و شرط (if-else)</button>
-            <button class="tab-btn" onclick="openTab('tab4', this)">🐢 ۴. لاک‌پشت و حلقه تکرار</button>
-            <button class="tab-btn" onclick="openTab('tab5', this)">🏆 ۵. مسابقه بزرگ پودمان ۶</button>
+        <!-- پیام خوش‌آمدگویی فرمانده‌ی نور -->
+        <div class="commander-hero">
+            <div class="commander-hero-text">
+                ✨ <strong>پیام فرمانده‌ی نور (استاد محمدحسن پورصالحی):</strong> قهرمانان کلاس هفتم! در این آزمایشگاه نوری، تمام رازهای برنامه‌نویسی پایتون را با بازی و آزمایش کشف کنید. هر چالش را حل کنید تا درجه خودتان را ارتقا دهید!
+            </div>
         </div>
 
-        <!-- تب ۱: زبان ماشین و شروع پایتون -->
+        <!-- تب‌های ۵ گانه -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="openTab('tab1', this)">🤖 ۱. زبان ماشین و خطاها</button>
+            <button class="tab-btn" onclick="openTab('tab2', this)">📦 ۲. متغیرها و ورودی</button>
+            <button class="tab-btn" onclick="openTab('tab3', this)">🧮 ۳. عملگرها و شرط‌ها</button>
+            <button class="tab-btn" onclick="openTab('tab4', this)">🐢 ۴. لاک‌پشت نوری (Turtle)</button>
+            <button class="tab-btn" onclick="openTab('tab5', this)">🏆 ۵. نبرد نهایی و لوح افتخار</button>
+        </div>
+
+        <!-- ایستگاه ۱: زبان ماشین و خطای نحوی -->
         <div id="tab1" class="section-card active">
-            <h2 class="sec-title">🤖 بخش اول: چرا برنامه‌نویسی؟ و اولین کد در پایتون (صفحه ۵۴ تا ۵۹)</h2>
+            <h2 class="sec-title">🤖 ایستگاه اول: رمزگشای زبان ماشین و شکارچی خطا (صفحه ۵۴ تا ۵۹)</h2>
             <div class="grid-2">
                 <div class="box">
-                    <h3>💻 مترجم زبان ماشین (صفر و یک)</h3>
-                    <p>رایانه‌ها دستیاران قدرتمند ما هستند که کارهای تکراری و محاسبات سنگین را با سرعت و دقت بالا انجام می‌دهند. اما زبان رایانه <b>زبان ماشین (۰ و ۱)</b> است! متن خود را بنویسید تا ببینید رایانه آن را چگونه می‌بیند:</p>
-                    <input type="text" id="binInput" class="input-field" placeholder="مثلاً نام خود یا کلمه Python را بنویسید..." oninput="toBinary()">
+                    <h3>💻 رمزگشای نوری زبان ماشین (۰ و ۱)</h3>
+                    <p>رایانه‌ها دستیاران پرسرعت ما هستند اما فقط <b>زبان ماشین (۰ و ۱)</b> را می‌فهمند! زبان <b>پایتون</b> (محبوب در گوگل و ناسا) پل ارتباطی ما با رایانه است. نام خودتان را بنویسید تا کد باینری (صفر و یک) آن را ببینید:</p>
+                    <input type="text" id="binInput" class="input-field" placeholder="نام خود را تایپ کنید..." oninput="toBinary()">
                     <div class="binary-out" id="binOutput">01010000 01111001 01110100 01101000 01101111 01101110</div>
-                    <p style="margin-top:10px; font-size:0.85rem; color:#94a3b8;">
-                        💡 <b>چرا پایتون؟</b> چون گرامر ساده‌ای دارد، رایگان و متن‌باز (Open Source) است و شرکت‌های بزرگی مثل <b>گوگل، ناسا و دراپ‌باکس</b> از آن استفاده می‌کنند. پسوند فایل‌های پایتون <code>.py</code> و محیط پیش‌فرض آن <b>IDLE</b> است.
+                    <p style="margin-top:10px; font-size:0.84rem; color:#fde047;">
+                        🌟 <b>نکات طلایی فرمانده‌ی نور:</b> محیط برنامه‌نویسی پایتون <b>IDLE</b> نام دارد، پسوند فایل‌های آن <code>.py</code> است و با کلید <b>F5</b> اجرا می‌شود.
                     </p>
                 </div>
 
                 <div class="box">
-                    <h3>🔍 کارآگاه خطای نحوی (Syntax Error)</h3>
-                    <p>در محیط <b>IDLE</b> با دستور <code>print()</code> خروجی را چاپ می‌کنیم (با کلید <b>F5</b> برنامه اجرا می‌شود). در کار کلاسی صفحه ۵۹ و ۶۰ دو خطای معروف داریم. روی دکمه تعمیر کلیک کنید تا خطا برطرف شود!</p>
+                    <h3>🔍 شکارچی خطای نحوی (Syntax Error - ص ۵۹ و ۶۰)</h3>
+                    <p>در پایتون با دستور <code>print()</code> پیام را چاپ می‌کنیم. اگر قواعد نوشتاری را رعایت نکنیم، <b>خطای نحوی (Syntax Error)</b> رخ می‌دهد. با زدن دکمه‌ها، کدهای خراب کتاب را تعمیر کنید:</p>
                     
-                    <div class="code-block" id="bugCode1"><span class="fn">print</span>(<span style="color:#ef4444;">Hello World</span>)</div>
-                    <button class="btn btn-orange" onclick="fixBug(1)">🔧 تعمیر خطای ۱ (صفحه ۵۹)</button>
+                    <div class="code-block" id="bugCode1"><span class="fn">print</span>(<span style="color:#ff0844;">Hello World</span>)</div>
+                    <button class="btn btn-orange" onclick="fixBug(1)">🔧 تعمیر خطای کوتیشن (صفحه ۵۹)</button>
 
                     <div class="code-block" id="bugCode2"><span class="fn">print</span>(<span class="str">'Hello World'</span></div>
-                    <button class="btn btn-orange" onclick="fixBug(2)">🔧 تعمیر خطای ۲ (صفحه ۶۰)</button>
+                    <button class="btn btn-orange" onclick="fixBug(2)">🔧 تعمیر خطای پرانتز (صفحه ۶۰)</button>
 
                     <div id="bugMsg" class="feedback-msg"></div>
                 </div>
             </div>
         </div>
 
-        <!-- تب ۲: متغیرها و ورودی -->
+        <!-- ایستگاه ۲: متغیرها و ورودی -->
         <div id="tab2" class="section-card">
-            <h2 class="sec-title">📦 بخش دوم: متغیرها، رشته‌ها و دستور input (صفحه ۶۰ و ۶۱)</h2>
+            <h2 class="sec-title">📦 ایستگاه دوم: کارگاه متغیرها و دریافت ورودی (صفحه ۶۰ و ۶۱)</h2>
             <div class="grid-2">
                 <div class="box">
-                    <h3>🧠 شبیه‌ساز جعبه حافظه (Variable)</h3>
-                    <p>متغیر مثل یک برچسب روی خانه‌ای از حافظه رایانه است. نام متغیر سمت چپ <code>=</code> و مقدار آن سمت راست قرار می‌گیرد. نام و مقدار را عوض کنید:</p>
+                    <h3>🧠 شبیه‌ساز نوری خانه حافظه (Variable)</h3>
+                    <p>متغیر مانند برچسبی روی یکی از خانه‌های حافظه رایانه است. نام متغیر سمت چپ <code>=</code> و مقدار آن سمت راست نوشته می‌شود:</p>
                     <div style="display:flex; gap:8px;">
                         <input type="text" id="varNameIn" class="input-field" value="Age" placeholder="نام متغیر">
-                        <input type="text" id="varValIn" class="input-field" value="23" placeholder="مقدار متغیر">
+                        <input type="text" id="varValIn" class="input-field" value="23" placeholder="مقدار">
                     </div>
-                    <button class="btn btn-blue" onclick="updateMemoryBox()">📥 ذخیره در خانه حافظه</button>
+                    <button class="btn btn-blue" onclick="updateMemoryBox()">📥 ذخیره در حافظه نوری</button>
                     <div class="mem-box" id="memBox">
                         <div class="mem-label" id="memLabel">Age</div>
                         <div class="mem-val" id="memVal">23</div>
                     </div>
-                    <p style="font-size:0.85rem; color:#cbd5e1;">
-                        📌 <b>نکته مهم صفحه ۶۱:</b> خروجی دستور <code>input()</code> همیشه <b>رشته (متن)</b> است. برای دریافت عدد صحیح از تابع <code>int()</code> و برای عدد اعشاری از تابع <code>float()</code> استفاده می‌کنیم.
+                    <p style="font-size:0.84rem; color:#cbd5e1;">
+                        📌 <b>نکته صفحه ۶۱:</b> دستور <code>input()</code> مقدار ورودی را به صورت <b>رشته (متن)</b> می‌گیرد. برای عدد صحیح از <code>int()</code> و برای عدد اعشاری از <code>float()</code> استفاده می‌کنیم.
                     </p>
                 </div>
 
                 <div class="box">
-                    <h3>🎮 بازی: کدام نام متغیر مجاز است؟</h3>
-                    <p>طبق قوانین صفحه ۶۰: پایتون به حروف کوچک و بزرگ حساس است (<code>n</code> با <code>N</code> فرق دارد)، نام متغیر فقط شامل حروف انگلیسی، اعداد و زیرخط (<code>_</code>) است، <b>نباید با عدد شروع شود</b>، <b>فاصله (Space) غیرمجاز است</b> و <b>کلمات کلیدی (مثل if, for, while) غیرمجازند</b>. روی نام‌ها کلیک کنید:</p>
-                    <div id="varChips">
+                    <h3>🎮 چالش: کدام نام متغیر مجاز است؟ (صفحه ۶۰)</h3>
+                    <p>قوانین پایتون: ۱. حساس به حروف کوچک و بزرگ (<code>n</code> با <code>N</code> فرق دارد) ۲. شروع فقط با حروف انگلیسی یا زیرخط <code>_</code> (شروع با عدد ممنوع!) ۳. فاصله خالی (Space) ممنوع ۴. کلمات کلیدی (مثل <code>if, while, for</code>) ممنوع. روی نام‌ها بزنید:</p>
+                    <div>
                         <span class="var-chip" onclick="checkVar(this, true, 'آفرین! شروع با حرف انگلیسی و استفاده از زیرخط و عدد مجاز است.')">student_1</span>
-                        <span class="var-chip" onclick="checkVar(this, false, 'خطا! نام متغیر نباید با عدد شروع شود.')">2name</span>
+                        <span class="var-chip" onclick="checkVar(this, false, 'غیرمجاز! نام متغیر هرگز نباید با عدد شروع شود.')">2name</span>
                         <span class="var-chip" onclick="checkVar(this, true, 'عالی! شروع نام متغیر با زیرخط (_) کاملاً مجاز است.')">_score</span>
-                        <span class="var-chip" onclick="checkVar(this, false, 'خطا! استفاده از فاصله خالی (Space) در نام متغیر غیرمجاز است.')">first name</span>
-                        <span class="var-chip" onclick="checkVar(this, false, 'خطا! کلمه while جزو کلمات کلیدی پایتون است و نمی‌تواند نام متغیر باشد.')">while</span>
-                        <span class="var-chip" onclick="checkVar(this, true, 'درست است! حروف بزرگ و کوچک انگلیسی مجازند.')">TotalPrice</span>
+                        <span class="var-chip" onclick="checkVar(this, false, 'غیرمجاز! داشتن فاصله (Space) در نام متغیر خطاست.')">first name</span>
+                        <span class="var-chip" onclick="checkVar(this, false, 'غیرمجاز! کلمه while جزو کلمات کلیدی پایتون است.')">while</span>
+                        <span class="var-chip" onclick="checkVar(this, true, 'درست است! ترکیب حروف بزرگ و کوچک انگلیسی مجاز است.')">LightCommander</span>
                     </div>
                     <div id="varGameMsg" class="feedback-msg"></div>
 
-                    <hr style="margin:15px 0; border-color:#334155;">
-                    <h3>🧩 معمای کار غیرکلاسی صفحه ۶۱</h3>
-                    <p>فاطمه کتاب ۱۰۰ صفحه‌ای را در ۶ ساعت خواند و ۱۰ صفحه باقی ماند. در هر ساعت به طور متوسط چند صفحه خوانده است؟</p>
-                    <button class="btn btn-purple" onclick="solveFateme()">نمایش کد پایتون و پاسخ</button>
-                    <div id="fatemeAns" class="code-block" style="display:none;">
-                        pages = (<span class="num">100</span> - <span class="num">10</span>) / <span class="num">6</span><br>
-                        <span class="fn">print</span>(pages) <span style="color:#94a3b8;"># خروجی: 15.0 صفحه در ساعت</span>
-                    </div>
+                    <hr style="margin:12px 0; border-color:#334155;">
+                    <h3>🧩 حل کار غیرکلاسی صفحه ۶۱ (مسئله فاطمه و محمد)</h3>
+                    <button class="btn btn-purple" onclick="solvePage61(1)">📖 کد مطالعه کتاب فاطمه</button>
+                    <button class="btn btn-blue" onclick="solvePage61(2)">👜 کد قیمت کیف محمد</button>
+                    <div id="p61Ans" class="code-block" style="display:none;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- تب ۳: عملگرها و شرط -->
+        <!-- ایستگاه ۳: عملگرها، شرط و پروژه رمز عبور -->
         <div id="tab3" class="section-card">
-            <h2 class="sec-title">🧮 بخش سوم: عملگرهای ریاضی، مقایسه‌ای و شرط (صفحه ۶۲ تا ۶۵)</h2>
+            <h2 class="sec-title">🧮 ایستگاه سوم: عملگرهای ریاضی، شرط if-else و قفل امنیتی (صفحه ۶۲ تا ۶۵)</h2>
             <div class="grid-2">
                 <div class="box">
-                    <h3>⚡ آزمایشگاه عملگرهای ریاضی پایتون</h3>
-                    <p>دو عدد وارد کنید و ببینید عملگرهای ویژه پایتون (توان <code>**</code>، تقسیم صحیح <code>//</code> و باقیمانده تقسیم <code>%</code>) چه خروجی می‌دهند:</p>
-                    <div style="display:flex; gap:10px;">
+                    <h3>⚡ راکتور عملگرهای ریاضی پایتون (صفحه ۶۲)</h3>
+                    <p>دو عدد وارد کنید و عملگرهای ویژه پایتون را آزمایش کنید:</p>
+                    <div style="display:flex; gap:8px;">
                         <input type="number" id="numA" class="input-field" value="17">
                         <input type="number" id="numB" class="input-field" value="5">
                     </div>
-                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
-                        <button class="btn btn-blue" onclick="calcOp('+')">a + b</button>
-                        <button class="btn btn-blue" onclick="calcOp('*')">a * b</button>
-                        <button class="btn btn-purple" onclick="calcOp('**')">a ** b (توان)</button>
-                        <button class="btn btn-orange" onclick="calcOp('/')">a / b (تقسیم)</button>
-                        <button class="btn btn-orange" onclick="calcOp('//')">a // b (تقسیم صحیح)</button>
-                        <button class="btn btn-orange" onclick="calcOp('%')">a % b (باقیمانده)</button>
+                    <div>
+                        <button class="btn btn-purple" onclick="calcOp('**')">توان (**)</button>
+                        <button class="btn btn-orange" onclick="calcOp('//')">تقسیم صحیح (//)</button>
+                        <button class="btn btn-orange" onclick="calcOp('%')">باقیمانده (%)</button>
+                        <button class="btn btn-blue" onclick="calcOp('/')">تقسیم عادی (/)</button>
+                        <button class="btn" onclick="calcOp('*')">ضرب (*)</button>
                     </div>
-                    <div class="code-block" id="mathOut">17 // 5 = 3 (خارج قسمت صحیح) | 17 % 5 = 2 (باقیمانده)</div>
-                    <p style="font-size:0.85rem; color:#94a3b8;">
-                        🏆 <b>ترتیب اولویت عملگرها:</b> ۱. پرانتز <code>()</code> ۲. توان <code>**</code> ۳. ضرب و تقسیم‌ها <code>*, /, //, %</code> ۴. جمع و تفریق <code>+, -</code>
-                    </p>
+                    <div class="code-block" id="mathOut">17 // 5 = 3 (تقسیم صحیح) | 17 % 5 = 2 (باقیمانده)</div>
+
+                    <hr style="margin:12px 0; border-color:#334155;">
+                    <h3>🔐 پروژه صفحه ۶۵: قفل امنیتی قرارگاه</h3>
+                    <p>طبق پروژه کتاب، اگر نام کاربری <code>Admin</code> و گذرواژه <code>12345678</code> باشد پیام «خوش آمدید» چاپ می‌شود:</p>
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="uInp" class="input-field" placeholder="نام کاربری (Admin)" value="Admin">
+                        <input type="text" id="pInp" class="input-field" placeholder="گذرواژه (12345678)" value="12345678">
+                    </div>
+                    <button class="btn btn-blue" onclick="checkLogin()">🔓 بررسی ورود به سیستم</button>
+                    <div id="loginMsg" class="feedback-msg"></div>
                 </div>
 
                 <div class="box">
-                    <h3>🌡️ شبیه‌ساز هوشمند شرط (if - else)</h3>
-                    <p>در پایتون دستورات داخل بلاک <code>if</code> باید به اندازه <b>یک Tab یا ۴ فاصله خالی (Space)</b> تورفتگی (Indentation) داشته باشند. دمای هوا را تغییر دهید (مثال صفحه ۶۴):</p>
+                    <h3>🌡️ شبیه‌ساز هوشمند شرط دما (صفحه ۶۴)</h3>
+                    <p>تورفتگی (Indentation) دستورات داخل بلاک <code>if</code> باید به اندازه <b>یک Tab یا ۴ فاصله خالی (Space)</b> باشد. دمای هوا را تغییر دهید:</p>
                     <input type="range" id="tempSlider" min="-5" max="30" value="8" style="width:100%;" oninput="simWeather()">
-                    <div style="display:flex; justify-content:space-between; margin:8px 0;">
-                        <span>دمای فعلی: <b id="tempVal" style="color:#facc15;">8</b> درجه</span>
+                    <div style="display:flex; justify-content:space-between; margin:6px 0;">
+                        <span>دمای هوا: <b id="tempVal" style="color:var(--neon-gold);">8</b> درجه</span>
                         <span id="weatherEmoji" style="font-size:1.5rem;">🥶❄️</span>
                     </div>
                     <div class="code-block">
                         <span class="fn">print</span>(<span class="str">'سلام'</span>)<br>
                         temp = <span class="num" id="codeTemp">8</span><br>
                         <span class="kw">if</span> temp &lt; <span class="num">10</span> :<br>
-                        <span id="ifBlock" style="background:rgba(16,185,129,0.25); display:block; padding-left:24px;">
+                        <span id="ifBlock" style="background:rgba(0,255,135,0.22); display:block; padding-left:24px;">
                             <span class="fn">print</span>(<span class="str">'هوا سرد است'</span>)<br>
                             <span class="fn">print</span>(<span class="str">'لباس گرم بپوشید'</span>)
                         </span>
                         <span class="fn">print</span>(<span class="str">'خدانگهدار'</span>)
                     </div>
-                    <div class="code-block" id="weatherOutput" style="color:#38bdf8;">خروجی: سلام -> هوا سرد است -> لباس گرم بپوشید -> خدانگهدار</div>
+                    <div class="code-block" id="weatherOutput" style="color:var(--neon-blue);">خروجی: سلام -> هوا سرد است -> لباس گرم بپوشید -> خدانگهدار</div>
 
-                    <hr style="margin:12px 0; border-color:#334155;">
-                    <div style="display:flex; gap:8px; align-items:center;">
-                        <input type="number" id="evenInput" class="input-field" style="margin:0;" placeholder="یک عدد وارد کنید..." value="14">
-                        <button class="btn" onclick="checkEvenOdd()">بررسی زوج یا فرد (ص ۶۴)</button>
+                    <div style="display:flex; gap:6px; align-items:center; margin-top:10px;">
+                        <input type="number" id="evenInput" class="input-field" style="margin:0;" value="14">
+                        <button class="btn" onclick="checkEvenOdd()">زوج یا فرد؟ (ص ۶۴)</button>
                     </div>
-                    <div id="evenResult" style="margin-top:8px; color:#4ade80; font-weight:bold;"></div>
+                    <div id="evenResult" style="margin-top:6px; color:var(--neon-green); font-weight:bold; font-size:0.88rem;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- تب ۴: لاک‌پشت و حلقه تکرار -->
+        <!-- ایستگاه ۴: لاک‌پشت و حلقه تکرار -->
         <div id="tab4" class="section-card">
-            <h2 class="sec-title">🐢 بخش چهارم: کارگاه زنده لاک‌پشت (Turtle) و حلقه‌های تکرار (صفحه ۶۶ تا ۷۰)</h2>
+            <h2 class="sec-title">🐢 ایستگاه چهارم: میدان نوری لاک‌پشت (Turtle) و حلقه‌های تکرار (صفحه ۶۶ تا ۷۰)</h2>
             <div class="grid-2">
-                <div>
-                    <canvas id="turtleCanvas" width="420" height="380"></canvas>
-                    <div style="text-align:center; margin-top:10px;">
-                        <span style="font-size:0.85rem; color:#94a3b8;">کوچک‌ترین عنصر صفحه نمایش <b>پیکسل (Pixel)</b> است. مرکز صفحه مختصات (0,0) است.</span>
-                    </div>
+                <div class="canvas-wrap">
+                    <canvas id="turtleCanvas" width="400" height="400"></canvas>
+                    <p style="font-size:0.82rem; color:#fde047; margin-top:8px; text-align:center;">
+                        ✨ کوچک‌ترین عنصر تصویر <b>پیکسل (Pixel)</b> است. لاکی از مرکز مختصات (0,0) حرکت می‌کند!
+                    </p>
                 </div>
 
                 <div class="box">
-                    <h3>🎮 کنترلر لاکی (Laki) و پروژه‌های کتاب</h3>
-                    <p>هر دکمه را بزنید تا لاکی با پویانمایی زنده شکل‌های کتاب درسی را بکشد و هم‌زمان کد پایتون آن را ببینید!</p>
-                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px;">
+                    <h3>🎨 فرمان به لاک‌پشت نوری (لاکی)</h3>
+                    <p>روی هر دکمه بزنید تا لاکی شکل‌های کتاب درسی را به صورت زنده رسم کند:</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px;">
                         <button class="btn btn-blue" onclick="drawIDCard()">🪪 کارت شناسایی (ص ۶۷)</button>
-                        <button class="btn" onclick="drawPolygon(4, 110)">⬛ مربع با حلقه for (ص ۶۹)</button>
+                        <button class="btn" onclick="drawPolygon(4, 110)">⬛ مربع با for (ص ۶۹)</button>
                         <button class="btn" onclick="drawPolygon(6, 75)">⬢ شش‌ضلعی (ص ۶۹)</button>
-                        <button class="btn" onclick="drawPolygon(8, 60)">🛑 هشت‌ضلعی (ص ۶۹)</button>
-                        <button class="btn btn-purple" onclick="drawNested(8, 4, 85)">🌸 ۸ مربع چرخشی (ص ۶۹)</button>
-                        <button class="btn btn-orange" onclick="drawNested(12, 8, 42)">☀️ پروژه پایانی: ۱۲ هشت‌ضلعی (ص ۷۰)</button>
-                        <button class="btn btn-red" onclick="clearTurtle()">🧹 پاک کردن صفحه</button>
+                        <button class="btn" onclick="drawPolygon(8, 58)">🛑 هشت‌ضلعی (ص ۶۹)</button>
+                        <button class="btn btn-purple" onclick="drawSpiralSquares()">🌀 مربع‌های تودرتو (ص ۶۸)</button>
+                        <button class="btn btn-purple" onclick="drawNested(8, 4, 80, true)">🌈 ۸ مربع چرخشی (ص ۶۹)</button>
+                        <button class="btn btn-orange" onclick="drawNested(12, 8, 42, true)">☀️ ۱۲ هشت‌ضلعی نوری (ص ۷۰)</button>
+                        <button class="btn btn-red" onclick="clearTurtle()">🧹 پاک کردن بوم</button>
                     </div>
 
-                    <div style="background:rgba(255,255,255,0.05); padding:12px; border-radius:12px; margin-top:10px;">
-                        <h4 style="color:#38bdf8; margin-bottom:8px;">🎨 ساخت شکل دلخواه با حلقه تودرتو (پروژه صفحه ۷۰):</h4>
-                        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                            <label>اضلاع: <input type="number" id="customSides" value="5" min="3" max="12" style="width:55px; padding:4px; border-radius:6px;"></label>
-                            <label>تکرار: <input type="number" id="customRep" value="10" min="1" max="36" style="width:55px; padding:4px; border-radius:6px;"></label>
-                            <label>رنگ: <input type="color" id="customCol" value="#10b981"></label>
-                            <button class="btn" onclick="runCustomNested()">🚀 ترسیم کن!</button>
+                    <div style="background:rgba(255,255,255,0.06); padding:10px; border-radius:12px; border:1px solid rgba(0,242,254,0.3);">
+                        <h4 style="color:var(--neon-gold); margin-bottom:6px; font-size:0.9rem;">🛠️ کارگاه طراحی دلخواه (پروژه صفحه ۷۰):</h4>
+                        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-size:0.85rem;">
+                            <label>اضلاع: <input type="number" id="customSides" value="6" min="3" max="12" style="width:48px; padding:4px; border-radius:6px;"></label>
+                            <label>تکرار: <input type="number" id="customRep" value="12" min="1" max="36" style="width:48px; padding:4px; border-radius:6px;"></label>
+                            <button class="btn btn-orange" onclick="runCustomNested()">🚀 ترسیم طرح رنگین‌کمانی!</button>
                         </div>
                     </div>
 
@@ -569,40 +803,72 @@
             </div>
         </div>
 
-        <!-- تب ۵: آزمون چهارگزینه‌ای -->
+        <!-- ایستگاه ۵: آزمون و لوح افتخار فرمانده‌ی نور -->
         <div id="tab5" class="section-card">
-            <h2 class="sec-title">🏆 بخش پنجم: آزمون قهرمانان برنامه‌نویسی (ویژه کلاس هفتم)</h2>
+            <h2 class="sec-title">🏆 ایستگاه پنجم: نبرد نهایی پودمان ۶ و دریافت لوح افتخار</h2>
             <div id="quizContainer">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                    <span id="qProgress" style="color:#facc15; font-weight:bold;">سؤال ۱ از ۸</span>
-                    <span id="qScore" style="color:#4ade80; font-weight:bold;">پاسخ صحیح: ۰</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <span id="qProgress" style="color:var(--neon-gold); font-weight:bold;">سؤال ۱ از ۸</span>
+                    <span id="qScore" style="color:var(--neon-green); font-weight:bold;">پاسخ صحیح: ۰</span>
                 </div>
                 <div class="box">
-                    <h3 id="qText" style="font-size:1.2rem; color:#fff; margin-bottom:16px;"></h3>
+                    <h3 id="qText" style="font-size:1.1rem; color:#fff; margin-bottom:14px;"></h3>
                     <div id="qOptions"></div>
                     <div id="qFeedback" class="feedback-msg"></div>
-                    <button id="nextQBtn" class="btn btn-blue" style="display:none; margin-top:15px;" onclick="nextQuestion()">سؤال بعدی ⬅️</button>
+                    <button id="nextQBtn" class="btn btn-blue" style="display:none; margin-top:12px;" onclick="nextQuestion()">سؤال بعدی ⬅️</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <footer>
+        🌟 طراحی و توسعه ویژه دانش‌آموزان پایه هفتم | <strong>فرمانده‌ی نور • استاد محمدحسن پورصالحی</strong> 🌟
+    </footer>
+
     <script>
+        /* سیستم امتیاز و درجه نوری */
         let xp = 0;
         function addXP(amount) {
             xp += amount;
             document.getElementById('xpCount').innerText = xp;
+            const pct = Math.min(100, 15 + (xp / 180) * 85);
+            document.getElementById('lightBar').style.width = pct + '%';
             const lvl = document.getElementById('levelName');
             if (xp >= 150) {
-                lvl.innerText = '👑 استاد بزرگ پایتون';
-            } else if (xp >= 80) {
-                lvl.innerText = '🚀 برنامه‌نویس ماهر';
-            } else if (xp >= 30) {
-                lvl.innerText = '⚡ کشف‌کننده کد';
+                lvl.innerText = '👑 جانشین فرمانده‌ی نور';
+            } else if (xp >= 90) {
+                lvl.innerText = '🚀 شوالیه پایتون';
+            } else if (xp >= 40) {
+                lvl.innerText = '⚡ کاشف کدهای نوری';
             }
         }
 
-        /* تولید افکت صوتی بدون نیاز به فایل خارجی */
+        /* تمام‌صفحه کردن واقعی روی موبایل و کامپیوتر */
+        function toggleFullScreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen().catch(() => {});
+            }
+        }
+
+        /* پرتاب ستاره‌های نوری با هر بار کلیک یا لمس صفحه */
+        document.addEventListener('click', function(e) {
+            const sparks = ['✨', '⚡', '🌟', '💎', '🐍'];
+            for (let i = 0; i < 5; i++) {
+                const sp = document.createElement('div');
+                sp.className = 'click-spark';
+                sp.innerText = sparks[Math.floor(Math.random() * sparks.length)];
+                sp.style.left = e.clientX + 'px';
+                sp.style.top = e.clientY + 'px';
+                sp.style.setProperty('--dx', (Math.random() * 90 - 45) + 'px');
+                sp.style.setProperty('--dy', (Math.random() * -90 - 20) + 'px');
+                document.body.appendChild(sp);
+                setTimeout(() => sp.remove(), 800);
+            }
+        });
+
+        /* تولید افکت صوتی */
         function playTone(freq, type, dur) {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -619,10 +885,10 @@
             } catch (e) {}
         }
 
-        /* جشن کاغذرنگی */
+        /* کاغذرنگی جشن */
         function fireConfetti() {
-            const colors = ['#38bdf8', '#facc15', '#4ade80', '#f472b6', '#a855f7'];
-            for (let i = 0; i < 35; i++) {
+            const colors = ['#00f2fe', '#facc15', '#00ff87', '#ff0844', '#b721ff'];
+            for (let i = 0; i < 40; i++) {
                 const c = document.createElement('div');
                 c.className = 'confetti';
                 c.style.left = Math.random() * 100 + 'vw';
@@ -634,35 +900,34 @@
             }
         }
 
-        /* ایجاد حباب‌های متحرک پس‌زمینه */
-        const bCont = document.getElementById('bubbles');
-        for (let i = 0; i < 14; i++) {
-            const b = document.createElement('div');
-            b.className = 'bubble';
-            const sz = Math.random() * 60 + 20;
-            b.style.width = sz + 'px';
-            b.style.height = sz + 'px';
-            b.style.left = Math.random() * 100 + '%';
-            b.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            b.style.animationDelay = (Math.random() * 5) + 's';
-            bCont.appendChild(b);
+        /* نمادهای معلق پس‌زمینه */
+        const fCont = document.getElementById('floatingIcons');
+        const icons = ['🐍', '🐢', '⚡', '☀️', '🚀', '💻', '✨'];
+        for (let i = 0; i < 16; i++) {
+            const el = document.createElement('div');
+            el.className = 'float-item';
+            el.innerText = icons[i % icons.length];
+            el.style.left = (Math.random() * 95) + '%';
+            el.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            el.style.animationDelay = (Math.random() * 6) + 's';
+            fCont.appendChild(el);
         }
 
-        /* جابه‌جایی بین تب‌ها */
+        /* جابه‌جایی تب‌ها */
         let turtleInitialized = false;
         function openTab(id, btn) {
             document.querySelectorAll('.section-card').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             btn.classList.add('active');
-            playTone(520, 'sine', 0.12);
+            playTone(540, 'sine', 0.12);
             if (id === 'tab4' && !turtleInitialized) {
                 turtleInitialized = true;
-                drawPolygon(4, 110);
+                drawNested(12, 8, 42, true);
             }
         }
 
-        /* بخش ۱: تبدیل به صفر و یک و رفع خطای نحوی */
+        /* ایستگاه ۱ */
         function toBinary() {
             const txt = document.getElementById('binInput').value || 'Python';
             let res = [];
@@ -676,20 +941,20 @@
         function fixBug(num) {
             const msg = document.getElementById('bugMsg');
             msg.style.display = 'block';
-            msg.style.background = 'rgba(16, 185, 129, 0.2)';
-            msg.style.color = '#4ade80';
-            playTone(660, 'triangle', 0.25);
+            msg.style.background = 'rgba(0, 255, 135, 0.2)';
+            msg.style.color = '#00ff87';
+            playTone(680, 'triangle', 0.25);
             addXP(10);
             if (num === 1) {
-                document.getElementById('bugCode1').innerHTML = "<span class='fn'>print</span>(<span class='str'>'Hello World'</span>) <span style='color:#4ade80;'># آفرین! کوتیشن دو طرف متن قرار گرفت</span>";
-                msg.innerText = "✅ عالی! در دستور print برای چاپ رشته حتماً باید در دو طرف متن از علامت کوتیشن (' ' یا \" \") استفاده شود.";
+                document.getElementById('bugCode1').innerHTML = "<span class='fn'>print</span>(<span class='str'>'Hello World'</span>) <span style='color:#00ff87;'># آفرین! کوتیشن قرار گرفت</span>";
+                msg.innerText = "✅ آفرین قهرمان! در دو طرف متن رشته حتماً باید علامت کوتیشن (' ' یا \" \") قرار بگیرد.";
             } else {
-                document.getElementById('bugCode2').innerHTML = "<span class='fn'>print</span>(<span class='str'>'Hello World'</span>) <span style='color:#4ade80;'># عالی! پرانتز بسته شد</span>";
-                msg.innerText = "✅ احسنت! هر پرانتز باز در پایتون حتماً باید در انتهای دستور بسته شود.";
+                document.getElementById('bugCode2').innerHTML = "<span class='fn'>print</span>(<span class='str'>'Hello World'</span>) <span style='color:#00ff87;'># عالی! پرانتز بسته شد</span>";
+                msg.innerText = "✅ احسنت! پرانتز باز شده در دستور print با موفقیت بسته شد.";
             }
         }
 
-        /* بخش ۲: متغیرها */
+        /* ایستگاه ۲ */
         function updateMemoryBox() {
             const n = document.getElementById('varNameIn').value.trim() || 'x';
             const v = document.getElementById('varValIn').value.trim() || '0';
@@ -698,7 +963,7 @@
             const box = document.getElementById('memBox');
             box.style.transform = 'scale(1.12)';
             setTimeout(() => box.style.transform = 'scale(1)', 250);
-            playTone(580, 'sine', 0.2);
+            playTone(600, 'sine', 0.2);
             addXP(5);
         }
 
@@ -706,45 +971,70 @@
             const msg = document.getElementById('varGameMsg');
             msg.style.display = 'block';
             if (isValid) {
-                el.style.borderColor = '#10b981';
-                el.style.background = 'rgba(16, 185, 129, 0.25)';
-                msg.style.background = 'rgba(16, 185, 129, 0.2)';
-                msg.style.color = '#4ade80';
+                el.style.borderColor = '#00ff87';
+                el.style.background = 'rgba(0, 255, 135, 0.25)';
+                msg.style.background = 'rgba(0, 255, 135, 0.2)';
+                msg.style.color = '#00ff87';
                 msg.innerText = '✅ متغیر مجاز: ' + reason;
-                playTone(700, 'sine', 0.2);
+                playTone(720, 'sine', 0.2);
                 addXP(5);
             } else {
-                el.style.borderColor = '#ef4444';
-                el.style.background = 'rgba(239, 68, 68, 0.25)';
-                msg.style.background = 'rgba(239, 68, 68, 0.2)';
-                msg.style.color = '#f87171';
+                el.style.borderColor = '#ff0844';
+                el.style.background = 'rgba(255, 8, 68, 0.25)';
+                msg.style.background = 'rgba(255, 8, 68, 0.2)';
+                msg.style.color = '#ff6b8b';
                 msg.innerText = '❌ متغیر غیرمجاز: ' + reason;
-                playTone(250, 'sawtooth', 0.25);
+                playTone(240, 'sawtooth', 0.25);
                 addXP(5);
             }
         }
 
-        function solveFateme() {
-            document.getElementById('fatemeAns').style.display = 'block';
-            playTone(620, 'sine', 0.2);
+        function solvePage61(num) {
+            const box = document.getElementById('p61Ans');
+            box.style.display = 'block';
+            playTone(640, 'sine', 0.2);
             addXP(5);
+            if (num === 1) {
+                box.innerHTML = "pages = (<span class='num'>100</span> - <span class='num'>10</span>) / <span class='num'>6</span><br><span class='fn'>print</span>(pages) <span style='color:#fde047;'># خروجی: 15.0 صفحه در هر ساعت</span>";
+            } else {
+                box.innerHTML = "saved = <span class='num'>5</span> * <span class='num'>3000</span><br>bag_price = saved * <span class='num'>2</span><br><span class='fn'>print</span>(bag_price) <span style='color:#fde047;'># خروجی: 30000 تومان</span>";
+            }
         }
 
-        /* بخش ۳: عملگرها و شرط */
+        /* ایستگاه ۳ */
         function calcOp(op) {
             const a = parseFloat(document.getElementById('numA').value) || 0;
             const b = parseFloat(document.getElementById('numB').value) || 1;
-            let res = 0;
-            let desc = '';
-            if (op === '+') { res = a + b; desc = 'جمع دو عدد'; }
-            else if (op === '*') { res = a * b; desc = 'ضرب دو عدد'; }
-            else if (op === '**') { res = Math.pow(a, b); desc = 'توان (a به توان b)'; }
+            let res = 0, desc = '';
+            if (op === '+') { res = a + b; desc = 'جمع'; }
+            else if (op === '*') { res = a * b; desc = 'ضرب'; }
+            else if (op === '**') { res = Math.pow(a, b); desc = 'توان'; }
             else if (op === '/') { res = (a / b).toFixed(2); desc = 'تقسیم اعشاری'; }
-            else if (op === '//') { res = Math.floor(a / b); desc = 'تقسیم صحیح (بدون اعشار)'; }
+            else if (op === '//') { res = Math.floor(a / b); desc = 'تقسیم صحیح بدون اعشار'; }
             else if (op === '%') { res = a % b; desc = 'باقیمانده تقسیم'; }
             document.getElementById('mathOut').innerText = a + ' ' + op + ' ' + b + ' = ' + res + ' (' + desc + ')';
-            playTone(540, 'sine', 0.15);
-            addXP(3);
+            playTone(560, 'sine', 0.15);
+            addXP(4);
+        }
+
+        function checkLogin() {
+            const u = document.getElementById('uInp').value.trim();
+            const p = document.getElementById('pInp').value.trim();
+            const m = document.getElementById('loginMsg');
+            m.style.display = 'block';
+            if (u === 'Admin' && p === '12345678') {
+                m.style.background = 'rgba(0, 255, 135, 0.2)';
+                m.style.color = '#00ff87';
+                m.innerText = '🔓 «خوش آمدید!» - رمز قرارگاه فرمانده‌ی نور باز شد!';
+                playTone(750, 'triangle', 0.3);
+                fireConfetti();
+                addXP(10);
+            } else {
+                m.style.background = 'rgba(255, 8, 68, 0.2)';
+                m.style.color = '#ff6b8b';
+                m.innerText = '⛔ «دسترسی غیر مجاز است!» (نام کاربری Admin و رمز 12345678 را امتحان کن)';
+                playTone(220, 'sawtooth', 0.25);
+            }
         }
 
         function simWeather() {
@@ -756,14 +1046,14 @@
             const em = document.getElementById('weatherEmoji');
             if (t < 10) {
                 em.innerText = '🥶❄️🧣';
-                ifBlk.style.background = 'rgba(16, 185, 129, 0.3)';
+                ifBlk.style.background = 'rgba(0, 255, 135, 0.25)';
                 ifBlk.style.opacity = '1';
                 out.innerText = 'خروجی: سلام -> هوا سرد است -> لباس گرم بپوشید -> خدانگهدار';
             } else {
                 em.innerText = '😎☀️🌸';
                 ifBlk.style.background = 'transparent';
                 ifBlk.style.opacity = '0.35';
-                out.innerText = 'خروجی: سلام -> خدانگهدار (چون شرط temp < 10 برقرار نیست، بلاک داخل if اجرا نشد!)';
+                out.innerText = 'خروجی: سلام -> خدانگهدار (چون شرط temp < 10 برقرار نیست، بلاک if اجرا نشد)';
             }
         }
 
@@ -771,17 +1061,17 @@
             const n = parseInt(document.getElementById('evenInput').value) || 0;
             const r = document.getElementById('evenResult');
             if (n % 2 === 0) {
-                r.innerText = '✅ عدد ' + n + ' بر ۲ بخش‌پذیر است (باقیمانده صفر: ' + n + ' % 2 == 0)، پس زوج است!';
-                r.style.color = '#4ade80';
+                r.innerText = '✅ عدد ' + n + ' بر ۲ بخش‌پذیر است (باقیمانده صفر)، پس زوج است!';
+                r.style.color = '#00ff87';
             } else {
-                r.innerText = '🔹 عدد ' + n + ' بر ۲ بخش‌پذیر نیست (' + n + ' % 2 == 1)، پس فرد است!';
+                r.innerText = '🔸 عدد ' + n + ' بر ۲ بخش‌پذیر نیست (باقیمانده ۱)، پس فرد است!';
                 r.style.color = '#facc15';
             }
-            playTone(600, 'sine', 0.2);
+            playTone(620, 'sine', 0.2);
             addXP(5);
         }
 
-        /* بخش ۴: شبیه‌ساز لاک‌پشت (Turtle) */
+        /* ایستگاه ۴: لاک‌پشت نوری */
         let animTimer = null;
         function clearTurtle() {
             if (animTimer) clearInterval(animTimer);
@@ -798,20 +1088,21 @@
             ctx.stroke();
         }
 
-        function animateSegments(segments, color, width) {
+        function animateSegments(segments, color, width, rainbow = false) {
             clearTurtle();
             const cv = document.getElementById('turtleCanvas');
             const ctx = cv.getContext('2d');
+            const palette = ['#ff0844', '#b721ff', '#0072ff', '#00b09b', '#f7971e', '#db2777'];
             let idx = 0;
             animTimer = setInterval(() => {
                 if (idx >= segments.length) {
                     clearInterval(animTimer);
-                    addXP(10);
-                    playTone(750, 'triangle', 0.25);
+                    addXP(12);
+                    playTone(760, 'triangle', 0.25);
                     return;
                 }
                 const seg = segments[idx];
-                ctx.strokeStyle = color;
+                ctx.strokeStyle = rainbow ? palette[idx % palette.length] : color;
                 ctx.lineWidth = width;
                 ctx.lineCap = 'round';
                 if (seg.draw) {
@@ -830,17 +1121,17 @@
                 ctx.arc(seg.x2, seg.y2, 5, 0, Math.PI * 2);
                 ctx.fill();
                 idx++;
-            }, 55);
+            }, 45);
         }
 
         function drawIDCard() {
             const cv = document.getElementById('turtleCanvas');
-            const cx = cv.width / 2 - 110;
+            const cx = cv.width / 2 - 115;
             const cy = cv.height / 2 - 70;
             const segs = [
-                { x1: cx, y1: cy, x2: cx + 220, y2: cy, draw: true },
-                { x1: cx + 220, y1: cy, x2: cx + 220, y2: cy + 140, draw: true },
-                { x1: cx + 220, y1: cy + 140, x2: cx, y2: cy + 140, draw: true },
+                { x1: cx, y1: cy, x2: cx + 230, y2: cy, draw: true },
+                { x1: cx + 230, y1: cy, x2: cx + 230, y2: cy + 140, draw: true },
+                { x1: cx + 230, y1: cy + 140, x2: cx, y2: cy + 140, draw: true },
                 { x1: cx, y1: cy + 140, x2: cx, y2: cy, draw: true },
                 { x1: cx, y1: cy, x2: cx + 15, y2: cy + 35, draw: false, text: 'Name: Ali' },
                 { x1: cx + 15, y1: cy + 35, x2: cx + 15, y2: cy + 65, draw: false, text: 'Last Name: Bahrami' },
@@ -849,7 +1140,7 @@
             ];
             animateSegments(segs, '#db2777', 3);
             document.getElementById('turtleCodeBox').innerHTML =
-                "<span class='kw'>import</span> turtle<br>laki = turtle.Turtle()<br>laki.color(<span class='str'>'deeppink'</span>)<br><span class='kw'>for</span> i <span class='kw'>in</span> <span class='fn'>range</span>(<span class='num'>2</span>):<br>&nbsp;&nbsp;&nbsp;&nbsp;laki.forward(<span class='num'>220</span>); laki.right(<span class='num'>90</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;laki.forward(<span class='num'>140</span>); laki.right(<span class='num'>90</span>)<br>laki.penup(); laki.goto(<span class='num'>-95</span>, <span class='num'>35</span>)<br>laki.write(<span class='str'>'Name: Ali'</span>)";
+                "<span class='kw'>import</span> turtle<br>laki = turtle.Turtle()<br>laki.penup(); laki.goto(<span class='num'>-100</span>, <span class='num'>40</span>)<br>laki.write(<span class='str'>'Name: Ali'</span>)";
         }
 
         function drawPolygon(sides, len) {
@@ -864,16 +1155,34 @@
                 const nx = x + len * Math.cos(rad);
                 const ny = y - len * Math.sin(rad);
                 segs.push({ x1: x, y1: y, x2: nx, y2: ny, draw: true });
-                x = nx;
-                y = ny;
-                angle += turn;
+                x = nx; y = ny; angle += turn;
             }
-            animateSegments(segs, '#0284c7', 3);
+            animateSegments(segs, '#0072ff', 3, true);
             document.getElementById('turtleCodeBox').innerHTML =
-                "<span class='kw'>import</span> turtle<br>laki = turtle.Turtle()<br>laki.width(<span class='num'>3</span>)<br><span class='kw'>for</span> i <span class='kw'>in</span> <span class='fn'>range</span>(<span class='num'>" + sides + "</span>):<br>&nbsp;&nbsp;&nbsp;&nbsp;laki.forward(<span class='num'>" + len + "</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;laki.left(<span class='num'>" + Math.round(turn) + "</span>)";
+                "<span class='kw'>for</span> i <span class='kw'>in</span> <span class='fn'>range</span>(<span class='num'>" + sides + "</span>):<br>&nbsp;&nbsp;&nbsp;&nbsp;laki.forward(<span class='num'>" + len + "</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;laki.left(<span class='num'>" + Math.round(turn) + "</span>)";
         }
 
-        function drawNested(repeats, sides, len, col = '#16a34a') {
+        function drawSpiralSquares() {
+            const cv = document.getElementById('turtleCanvas');
+            const ox = cv.width / 2 - 90;
+            const oy = cv.height / 2 + 90;
+            let segs = [];
+            [40, 80, 120, 160, 190].forEach(sz => {
+                let x = ox, y = oy, angle = 0;
+                for (let i = 0; i < 4; i++) {
+                    const rad = angle * Math.PI / 180;
+                    const nx = x + sz * Math.cos(rad);
+                    const ny = y - sz * Math.sin(rad);
+                    segs.push({ x1: x, y1: y, x2: nx, y2: ny, draw: true });
+                    x = nx; y = ny; angle += 90;
+                }
+            });
+            animateSegments(segs, '#b721ff', 2.5, true);
+            document.getElementById('turtleCodeBox').innerHTML =
+                "<span class='kw'>for</span> size <span class='kw'>in</span> [<span class='num'>40, 80, 120, 160, 190</span>]:<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class='kw'>for</span> i <span class='kw'>in</span> <span class='fn'>range</span>(<span class='num'>4</span>):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laki.forward(size); laki.left(<span class='num'>90</span>)";
+        }
+
+        function drawNested(repeats, sides, len, rainbow = true) {
             const cv = document.getElementById('turtleCanvas');
             let x = cv.width / 2;
             let y = cv.height / 2;
@@ -887,74 +1196,31 @@
                     const nx = x + len * Math.cos(rad);
                     const ny = y - len * Math.sin(rad);
                     segs.push({ x1: x, y1: y, x2: nx, y2: ny, draw: true });
-                    x = nx;
-                    y = ny;
-                    angle += innerTurn;
+                    x = nx; y = ny; angle += innerTurn;
                 }
                 angle += outerTurn;
             }
-            animateSegments(segs, col, 2);
+            animateSegments(segs, '#16a34a', 2, rainbow);
             document.getElementById('turtleCodeBox').innerHTML =
-                "<span class='kw'>import</span> turtle<br>laki = turtle.Turtle()<br>laki.speed(<span class='num'>0</span>)<br><span class='kw'>for</span> i <span class='kw'>in</span> <span class='fn'>range</span>(<span class='num'>" + repeats + "</span>):<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class='kw'>for</span> j <span class='kw'>in</span> <span class='fn'>range</span>(<span class='num'>" + sides + "</span>):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laki.forward(<span class='num'>" + len + "</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laki.left(<span class='num'>" + Math.round(innerTurn) + "</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;laki.left(<span class='num'>" + Math.round(outerTurn) + "</span>)";
+                "<span class='kw'>for</span> i <span class='kw'>in</span> <span class='fn'>range</span>(<span class='num'>" + repeats + "</span>):<br>&nbsp;&nbsp;&nbsp;&nbsp;<span class='kw'>for</span> j <span class='kw'>in</span> <span class='fn'>range</span>(<span class='num'>" + sides + "</span>):<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;laki.forward(<span class='num'>" + len + "</span>); laki.left(<span class='num'>" + Math.round(innerTurn) + "</span>)<br>&nbsp;&nbsp;&nbsp;&nbsp;laki.left(<span class='num'>" + Math.round(outerTurn) + "</span>)";
         }
 
         function runCustomNested() {
-            const s = parseInt(document.getElementById('customSides').value) || 5;
-            const r = parseInt(document.getElementById('customRep').value) || 10;
-            const c = document.getElementById('customCol').value;
-            drawNested(r, s, 50, c);
+            const s = parseInt(document.getElementById('customSides').value) || 6;
+            const r = parseInt(document.getElementById('customRep').value) || 12;
+            drawNested(r, s, 45, true);
         }
 
-        /* بخش ۵: بانک سؤالات آزمون پودمان ۶ */
+        /* ایستگاه ۵: آزمون و لوح افتخار */
         const questions = [
-            {
-                q: '۱. پسوند فایل‌های ذخیره شده در زبان برنامه‌نویسی پایتون چیست؟ (صفحه ۵۸)',
-                opts: ['.doc', '.py', '.html', '.txt'],
-                ans: 1,
-                exp: 'پسوند تمام فایل‌های کد پایتون .py است.'
-            },
-            {
-                q: '۲. کدام کلید میان‌بر در محیط IDLE برای اجرای برنامه (Run Module) استفاده می‌شود؟ (صفحه ۵۸)',
-                opts: ['F1', 'F5', 'Ctrl + C', 'Alt + F4'],
-                ans: 1,
-                exp: 'از فهرست Run گزینه Run Module یا کلید F5 برنامه را اجرا می‌کند.'
-            },
-            {
-                q: '۳. طبق قوانین نام‌گذاری متغیرها در پایتون، کدام گزینه یک نام مجاز است؟ (صفحه ۶۰)',
-                opts: ['2student', 'my name', '_age1', 'import'],
-                ans: 2,
-                exp: 'نام متغیر می‌تواند با زیرخط (_) یا حروف انگلیسی شروع شود؛ اما فاصله، شروع با عدد و کلمات کلیدی غیرمجازند.'
-            },
-            {
-                q: '۴. خروجی دستور input() به چه صورتی است و برای تبدیل آن به عدد صحیح از چه تابعی استفاده می‌کنیم؟ (صفحه ۶۱)',
-                opts: ['رشته است - تابع int()', 'عدد است - تابع str()', 'اعشاری است - تابع float()', 'منطقی است - تابع print()'],
-                ans: 0,
-                exp: 'مقادیر دریافتی توسط input() همیشه رشته هستند و با int() به عدد صحیح تبدیل می‌شوند.'
-            },
-            {
-                q: '۵. در پایتون حاصل عبارت 19 // 5 و 19 % 5 به ترتیب کدام است؟ (صفحه ۶۲)',
-                opts: ['3.8 و 4', '3 و 4', '4 و 3', '3 و 5'],
-                ans: 1,
-                exp: 'عملگر // خارج قسمت صحیح (۳) و عملگر % باقیمانده تقسیم (۴) را محاسبه می‌کند.'
-            },
-            {
-                q: '۶. میزان استاندارد تورفتگی (Indentation) برای دستورات داخل بلاک if چقدر است؟ (صفحه ۶۴)',
-                opts: ['۱ فاصله خالی', 'یک Tab یا ۴ فاصله خالی (Space)', '۱۰ فاصله خالی', 'نیازی به تورفتگی نیست'],
-                ans: 1,
-                exp: 'طبق نکته صفحه ۶۴، میزان تورفتگی به اندازه یک Tab یا ۴ فاصله خالی (space) است.'
-            },
-            {
-                q: '۷. در کتابخانه لاک‌پشت (turtle)، کدام متد قلم را از روی زمین برمی‌دارد تا لاکی هنگام حرکت خط نکشد؟ (صفحه ۶۷)',
-                opts: ['laki.pendown()', 'laki.penup()', 'laki.hideturtle()', 'laki.forward()'],
-                ans: 1,
-                exp: 'متد penup() قلم را بالا می‌برد و pendown() دوباره قلم را روی زمین می‌گذارد.'
-            },
-            {
-                q: '۸. در دستور for i in range(5): متغیر شمارنده i چه اعدادی را به خود می‌گیرد؟ (صفحه ۶۹)',
-                opts: ['۱ تا ۵', '۰ تا ۵', '۰، ۱، ۲، ۳ و ۴ (۵ مرتبه)', 'فقط عدد ۵'],
-                ans: 2,
-                exp: 'تابع range(5) اعداد از صفر تا یک کمتر از ۵ یعنی ۰، ۱، ۲، ۳ و ۴ را تولید می‌کند.'
-            }
+            { q: '۱. پسوند فایل‌های ذخیره شده در زبان برنامه‌نویسی پایتون چیست؟ (صفحه ۵۸)', opts: ['.doc', '.py', '.html', '.txt'], ans: 1, exp: 'پسوند تمام فایل‌های کد پایتون .py است.' },
+            { q: '۲. کدام کلید در محیط IDLE برای اجرای برنامه (Run Module) استفاده می‌شود؟ (صفحه ۵۸)', opts: ['F1', 'F5', 'Ctrl + C', 'Alt + F4'], ans: 1, exp: 'کلید میان‌بر F5 برنامه را اجرا می‌کند.' },
+            { q: '۳. طبق قوانین نام‌گذاری متغیرها در پایتون، کدام گزینه یک نام مجاز است؟ (صفحه ۶۰)', opts: ['2student', 'my name', '_age1', 'import'], ans: 2, exp: 'نام متغیر می‌تواند با زیرخط (_) یا حروف انگلیسی شروع شود.' },
+            { q: '۴. خروجی دستور input() چیست و برای تبدیل آن به عدد صحیح از چه تابعی استفاده می‌کنیم؟ (صفحه ۶۱)', opts: ['رشته است - تابع int()', 'عدد است - تابع str()', 'اعشاری است - تابع float()', 'منطقی است - تابع print()'], ans: 0, exp: 'ورودی input() رشته است و با int() به عدد صحیح تبدیل می‌شود.' },
+            { q: '۵. در پایتون حاصل عبارت 19 // 5 و 19 % 5 به ترتیب کدام است؟ (صفحه ۶۲)', opts: ['3.8 و 4', '3 و 4', '4 و 3', '3 و 5'], ans: 1, exp: 'عملگر // خارج قسمت صحیح (۳) و عملگر % باقیمانده (۴) را می‌دهد.' },
+            { q: '۶. میزان استاندارد تورفتگی (Indentation) برای دستورات داخل بلاک if چقدر است؟ (صفحه ۶۴)', opts: ['۱ فاصله خالی', 'یک Tab یا ۴ فاصله خالی (Space)', '۱۰ فاصله خالی', 'نیازی به تورفتگی نیست'], ans: 1, exp: 'تورفتگی استاندارد یک Tab یا ۴ فاصله خالی (space) است.' },
+            { q: '۷. در کتابخانه لاک‌پشت (turtle)، کدام متد قلم را از روی زمین برمی‌دارد تا خط نکشد؟ (صفحه ۶۷)', opts: ['laki.pendown()', 'laki.penup()', 'laki.hideturtle()', 'laki.forward()'], ans: 1, exp: 'متد penup() قلم را بالا می‌برد.' },
+            { q: '۸. در دستور for i in range(5): متغیر شمارنده i چه اعدادی را به خود می‌گیرد؟ (صفحه ۶۹)', opts: ['۱ تا ۵', '۰ تا ۵', '۰، ۱، ۲، ۳ و ۴ (۵ مرتبه)', 'فقط عدد ۵'], ans: 2, exp: 'تابع range(5) اعداد ۰، ۱، ۲، ۳ و ۴ را تولید می‌کند.' }
         ];
 
         let curQ = 0;
@@ -989,17 +1255,17 @@
                 btn.classList.add('correct');
                 score++;
                 document.getElementById('qScore').innerText = 'پاسخ صحیح: ' + score;
-                fb.style.background = 'rgba(16, 185, 129, 0.2)';
-                fb.style.color = '#4ade80';
-                fb.innerText = '🎉 آفرین! کاملاً درست است. ' + qObj.exp;
-                playTone(720, 'sine', 0.3);
+                fb.style.background = 'rgba(0, 255, 135, 0.2)';
+                fb.style.color = '#00ff87';
+                fb.innerText = '🎉 آفرین قهرمان نور! ' + qObj.exp;
+                playTone(740, 'sine', 0.3);
                 addXP(15);
                 fireConfetti();
             } else {
                 btn.classList.add('wrong');
                 allBtns[qObj.ans].classList.add('correct');
-                fb.style.background = 'rgba(239, 68, 68, 0.2)';
-                fb.style.color = '#f87171';
+                fb.style.background = 'rgba(255, 8, 68, 0.2)';
+                fb.style.color = '#ff6b8b';
                 fb.innerText = '💡 دقت کن! ' + qObj.exp;
                 playTone(220, 'sawtooth', 0.3);
             }
@@ -1013,10 +1279,15 @@
             } else {
                 const cont = document.getElementById('quizContainer');
                 cont.innerHTML =
-                    "<div class='box' style='text-align:center; padding:40px;'>" +
-                    "<h2 style='color:#facc15; font-size:2rem; margin-bottom:15px;'>🏆 پایان مسابقه پودمان ۶!</h2>" +
-                    "<p style='font-size:1.2rem;'>شما به <b>" + score + "</b> سؤال از <b>" + questions.length + "</b> سؤال پاسخ صحیح دادید و مجموعاً <b>" + xp + " امتیاز</b> کسب کردید!</p>" +
-                    "<button class='btn btn-blue' style='margin-top:20px;' onclick='location.reload()'>🔄 شروع دوباره بازی و آزمون</button>" +
+                    "<div class='box' style='text-align:center; padding:25px; border:3px solid #facc15; box-shadow:0 0 35px rgba(250,204,21,0.4);'>" +
+                    "<div style='font-size:3rem;'>👑🏆✨</div>" +
+                    "<h2 style='color:#facc15; font-size:1.5rem; margin:10px 0;'>لوح افتخار قرارگاه فرمانده‌ی نور</h2>" +
+                    "<p style='font-size:1rem;'>دانش‌آموز گرامی، شما با کسب <b>" + score + " پاسخ صحیح</b> از " + questions.length + " سؤال و مجموع <b>" + xp + " امتیاز نوری</b>، مأموریت پودمان ۶ (برنامه‌نویسی پایتون) را با موفقیت به پایان رساندید!</p>" +
+                    "<div style='background:rgba(250,204,21,0.12); border:1px dashed #facc15; padding:12px; border-radius:14px; margin:15px 0; color:#fde047; font-weight:bold;'>" +
+                    "🌟 صادر شده از قرارگاه آموزشی فرمانده‌ی نور<br>👨‍🏫 استاد محمدحسن پورصالحی" +
+                    "</div>" +
+                    "<p style='font-size:0.85rem; color:#00f2fe;'>📸 از این لوح افتخار اسکرین‌شات بگیرید و در کانال کلاس ارسال کنید!</p>" +
+                    "<button class='btn btn-blue' style='margin-top:15px;' onclick='location.reload()'>🔄 شروع مجدد مأموریت</button>" +
                     "</div>";
                 fireConfetti();
             }
